@@ -15371,7 +15371,11 @@ var _fizwidget$game_of_life$Main$view = function (model) {
 					ctor: '::',
 					_0: _rtfeldman$elm_css$Css$margin(
 						_rtfeldman$elm_css$Css$px(0)),
-					_1: {ctor: '[]'}
+					_1: {
+						ctor: '::',
+						_0: _rtfeldman$elm_css$Css$backgroundColor(_rtfeldman$elm_css$Css_Colors$black),
+						_1: {ctor: '[]'}
+					}
 				}),
 			_1: {ctor: '[]'}
 		});
