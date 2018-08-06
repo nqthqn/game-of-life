@@ -8646,142 +8646,6 @@ var _elm_lang$html$Html$summary = _elm_lang$html$Html$node('summary');
 var _elm_lang$html$Html$menuitem = _elm_lang$html$Html$node('menuitem');
 var _elm_lang$html$Html$menu = _elm_lang$html$Html$node('menu');
 
-var _fizwidget$game_of_life$Data_Matrix$offsetBy = F2(
-	function (_p1, _p0) {
-		var _p2 = _p1;
-		var _p3 = _p0;
-		return {x: _p2.x + _p3._0, y: _p2.y + _p3._1};
-	});
-var _fizwidget$game_of_life$Data_Matrix$getRows = function (_p4) {
-	var _p5 = _p4;
-	var _p6 = _p5._0;
-	return A2(
-		_elm_lang$core$List$map,
-		_elm_lang$core$Array$toList,
-		A2(
-			_elm_lang$core$List$map,
-			function (y) {
-				return A3(_elm_lang$core$Array$slice, y * _p6.width, (y + 1) * _p6.width, _p5._1);
-			},
-			A2(_elm_lang$core$List$range, 0, _p6.height - 1)));
-};
-var _fizwidget$game_of_life$Data_Matrix$toCoordinate = F2(
-	function (_p7, index) {
-		var _p8 = _p7;
-		var _p9 = _p8.width;
-		return {
-			x: A2(_elm_lang$core$Basics_ops['%'], index, _p9),
-			y: (index / _p9) | 0
-		};
-	});
-var _fizwidget$game_of_life$Data_Matrix$toIndex = F2(
-	function (_p11, _p10) {
-		var _p12 = _p11;
-		var _p13 = _p10;
-		return (_p13.y * _p12.width) + _p13.x;
-	});
-var _fizwidget$game_of_life$Data_Matrix$get = F2(
-	function (_p14, coordinate) {
-		var _p15 = _p14;
-		var index = A2(_fizwidget$game_of_life$Data_Matrix$toIndex, _p15._0, coordinate);
-		return A2(_elm_lang$core$Array$get, index, _p15._1);
-	});
-var _fizwidget$game_of_life$Data_Matrix$getNeighbours = F2(
-	function (coordinate, matrix) {
-		return A2(
-			_elm_lang$core$List$filterMap,
-			_fizwidget$game_of_life$Data_Matrix$get(matrix),
-			A2(
-				_elm_lang$core$List$map,
-				_fizwidget$game_of_life$Data_Matrix$offsetBy(coordinate),
-				{
-					ctor: '::',
-					_0: {ctor: '_Tuple2', _0: 1, _1: 1},
-					_1: {
-						ctor: '::',
-						_0: {ctor: '_Tuple2', _0: 1, _1: 0},
-						_1: {
-							ctor: '::',
-							_0: {ctor: '_Tuple2', _0: 1, _1: -1},
-							_1: {
-								ctor: '::',
-								_0: {ctor: '_Tuple2', _0: 0, _1: -1},
-								_1: {
-									ctor: '::',
-									_0: {ctor: '_Tuple2', _0: -1, _1: -1},
-									_1: {
-										ctor: '::',
-										_0: {ctor: '_Tuple2', _0: -1, _1: 0},
-										_1: {
-											ctor: '::',
-											_0: {ctor: '_Tuple2', _0: -1, _1: 1},
-											_1: {
-												ctor: '::',
-												_0: {ctor: '_Tuple2', _0: 0, _1: 1},
-												_1: {ctor: '[]'}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}));
-	});
-var _fizwidget$game_of_life$Data_Matrix$Dimensions = F2(
-	function (a, b) {
-		return {width: a, height: b};
-	});
-var _fizwidget$game_of_life$Data_Matrix$Coordinate = F2(
-	function (a, b) {
-		return {x: a, y: b};
-	});
-var _fizwidget$game_of_life$Data_Matrix$Matrix = F2(
-	function (a, b) {
-		return {ctor: 'Matrix', _0: a, _1: b};
-	});
-var _fizwidget$game_of_life$Data_Matrix$create = F2(
-	function (_p16, value) {
-		var _p17 = _p16;
-		return A2(
-			_fizwidget$game_of_life$Data_Matrix$Matrix,
-			_p17,
-			A2(_elm_lang$core$Array$repeat, _p17.width * _p17.height, value));
-	});
-var _fizwidget$game_of_life$Data_Matrix$set = F3(
-	function (coordinate, value, _p18) {
-		var _p19 = _p18;
-		var _p20 = _p19._0;
-		var index = A2(_fizwidget$game_of_life$Data_Matrix$toIndex, _p20, coordinate);
-		return A2(
-			_fizwidget$game_of_life$Data_Matrix$Matrix,
-			_p20,
-			A3(_elm_lang$core$Array$set, index, value, _p19._1));
-	});
-var _fizwidget$game_of_life$Data_Matrix$map = F2(
-	function (f, _p21) {
-		var _p22 = _p21;
-		return A2(
-			_fizwidget$game_of_life$Data_Matrix$Matrix,
-			_p22._0,
-			A2(_elm_lang$core$Array$map, f, _p22._1));
-	});
-var _fizwidget$game_of_life$Data_Matrix$indexedMap = F2(
-	function (f, _p23) {
-		var _p24 = _p23;
-		var _p26 = _p24._0;
-		return A2(
-			_fizwidget$game_of_life$Data_Matrix$Matrix,
-			_p26,
-			A2(
-				_elm_lang$core$Array$indexedMap,
-				function (_p25) {
-					return f(
-						A2(_fizwidget$game_of_life$Data_Matrix$toCoordinate, _p26, _p25));
-				},
-				_p24._1));
-	});
-
 var _rtfeldman$elm_css_util$Css_Helpers$toCssIdentifier = function (identifier) {
 	return A4(
 		_elm_lang$core$Regex$replace,
@@ -14316,6 +14180,121 @@ var _rtfeldman$elm_css$Html_Styled$summary = _rtfeldman$elm_css$Html_Styled$node
 var _rtfeldman$elm_css$Html_Styled$menuitem = _rtfeldman$elm_css$Html_Styled$node('menuitem');
 var _rtfeldman$elm_css$Html_Styled$menu = _rtfeldman$elm_css$Html_Styled$node('menu');
 
+var _rtfeldman$elm_css$Html_Styled_Events$keyCode = A2(_elm_lang$core$Json_Decode$field, 'keyCode', _elm_lang$core$Json_Decode$int);
+var _rtfeldman$elm_css$Html_Styled_Events$targetChecked = A2(
+	_elm_lang$core$Json_Decode$at,
+	{
+		ctor: '::',
+		_0: 'target',
+		_1: {
+			ctor: '::',
+			_0: 'checked',
+			_1: {ctor: '[]'}
+		}
+	},
+	_elm_lang$core$Json_Decode$bool);
+var _rtfeldman$elm_css$Html_Styled_Events$targetValue = A2(
+	_elm_lang$core$Json_Decode$at,
+	{
+		ctor: '::',
+		_0: 'target',
+		_1: {
+			ctor: '::',
+			_0: 'value',
+			_1: {ctor: '[]'}
+		}
+	},
+	_elm_lang$core$Json_Decode$string);
+var _rtfeldman$elm_css$Html_Styled_Events$defaultOptions = _elm_lang$virtual_dom$VirtualDom$defaultOptions;
+var _rtfeldman$elm_css$Html_Styled_Events$onWithOptions = _rtfeldman$elm_css$VirtualDom_Styled$onWithOptions;
+var _rtfeldman$elm_css$Html_Styled_Events$on = _rtfeldman$elm_css$VirtualDom_Styled$on;
+var _rtfeldman$elm_css$Html_Styled_Events$onFocus = function (msg) {
+	return A2(
+		_rtfeldman$elm_css$Html_Styled_Events$on,
+		'focus',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _rtfeldman$elm_css$Html_Styled_Events$onBlur = function (msg) {
+	return A2(
+		_rtfeldman$elm_css$Html_Styled_Events$on,
+		'blur',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _rtfeldman$elm_css$Html_Styled_Events$onSubmitOptions = _elm_lang$core$Native_Utils.update(
+	_rtfeldman$elm_css$Html_Styled_Events$defaultOptions,
+	{preventDefault: true});
+var _rtfeldman$elm_css$Html_Styled_Events$onSubmit = function (msg) {
+	return A3(
+		_rtfeldman$elm_css$Html_Styled_Events$onWithOptions,
+		'submit',
+		_rtfeldman$elm_css$Html_Styled_Events$onSubmitOptions,
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _rtfeldman$elm_css$Html_Styled_Events$onCheck = function (tagger) {
+	return A2(
+		_rtfeldman$elm_css$Html_Styled_Events$on,
+		'change',
+		A2(_elm_lang$core$Json_Decode$map, tagger, _rtfeldman$elm_css$Html_Styled_Events$targetChecked));
+};
+var _rtfeldman$elm_css$Html_Styled_Events$onInput = function (tagger) {
+	return A2(
+		_rtfeldman$elm_css$Html_Styled_Events$on,
+		'input',
+		A2(_elm_lang$core$Json_Decode$map, tagger, _rtfeldman$elm_css$Html_Styled_Events$targetValue));
+};
+var _rtfeldman$elm_css$Html_Styled_Events$onMouseOut = function (msg) {
+	return A2(
+		_rtfeldman$elm_css$Html_Styled_Events$on,
+		'mouseout',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _rtfeldman$elm_css$Html_Styled_Events$onMouseOver = function (msg) {
+	return A2(
+		_rtfeldman$elm_css$Html_Styled_Events$on,
+		'mouseover',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _rtfeldman$elm_css$Html_Styled_Events$onMouseLeave = function (msg) {
+	return A2(
+		_rtfeldman$elm_css$Html_Styled_Events$on,
+		'mouseleave',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _rtfeldman$elm_css$Html_Styled_Events$onMouseEnter = function (msg) {
+	return A2(
+		_rtfeldman$elm_css$Html_Styled_Events$on,
+		'mouseenter',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _rtfeldman$elm_css$Html_Styled_Events$onMouseUp = function (msg) {
+	return A2(
+		_rtfeldman$elm_css$Html_Styled_Events$on,
+		'mouseup',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _rtfeldman$elm_css$Html_Styled_Events$onMouseDown = function (msg) {
+	return A2(
+		_rtfeldman$elm_css$Html_Styled_Events$on,
+		'mousedown',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _rtfeldman$elm_css$Html_Styled_Events$onDoubleClick = function (msg) {
+	return A2(
+		_rtfeldman$elm_css$Html_Styled_Events$on,
+		'dblclick',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _rtfeldman$elm_css$Html_Styled_Events$onClick = function (msg) {
+	return A2(
+		_rtfeldman$elm_css$Html_Styled_Events$on,
+		'click',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _rtfeldman$elm_css$Html_Styled_Events$Options = F2(
+	function (a, b) {
+		return {stopPropagation: a, preventDefault: b};
+	});
+
 var _rtfeldman$elm_css$Html_Styled_Attributes$css = _rtfeldman$elm_css$Html_Styled_Internal$css;
 var _rtfeldman$elm_css$Html_Styled_Attributes$map = _rtfeldman$elm_css$VirtualDom_Styled$mapProperty;
 var _rtfeldman$elm_css$Html_Styled_Attributes$attribute = _rtfeldman$elm_css$VirtualDom_Styled$attribute;
@@ -15295,174 +15274,280 @@ var _rtfeldman$elm_css$Css_Colors$aqua = _rtfeldman$elm_css$Css$hex('7FDBFF');
 var _rtfeldman$elm_css$Css_Colors$blue = _rtfeldman$elm_css$Css$hex('0074D9');
 var _rtfeldman$elm_css$Css_Colors$navy = _rtfeldman$elm_css$Css$hex('001F3F');
 
+var _fizwidget$game_of_life$Matrix$offsetBy = F2(
+	function (_p1, _p0) {
+		var _p2 = _p1;
+		var _p3 = _p0;
+		return {x: _p2.x + _p3._0, y: _p2.y + _p3._1};
+	});
+var _fizwidget$game_of_life$Matrix$getRows = function (_p4) {
+	var _p5 = _p4;
+	var _p6 = _p5._0;
+	return A2(
+		_elm_lang$core$List$map,
+		_elm_lang$core$Array$toList,
+		A2(
+			_elm_lang$core$List$map,
+			function (y) {
+				return A3(_elm_lang$core$Array$slice, y * _p6.width, (y + 1) * _p6.width, _p5._1);
+			},
+			A2(_elm_lang$core$List$range, 0, _p6.height - 1)));
+};
+var _fizwidget$game_of_life$Matrix$toCoordinate = F2(
+	function (_p7, index) {
+		var _p8 = _p7;
+		var _p9 = _p8.width;
+		return {
+			x: A2(_elm_lang$core$Basics_ops['%'], index, _p9),
+			y: (index / _p9) | 0
+		};
+	});
+var _fizwidget$game_of_life$Matrix$toListWithCoordinates = function (_p10) {
+	var _p11 = _p10;
+	return _elm_lang$core$Array$toList(
+		A2(
+			_elm_lang$core$Array$indexedMap,
+			F2(
+				function (index, value) {
+					return {
+						ctor: '_Tuple2',
+						_0: A2(_fizwidget$game_of_life$Matrix$toCoordinate, _p11._0, index),
+						_1: value
+					};
+				}),
+			_p11._1));
+};
+var _fizwidget$game_of_life$Matrix$toIndex = F2(
+	function (_p13, _p12) {
+		var _p14 = _p13;
+		var _p15 = _p12;
+		return (_p15.y * _p14.width) + _p15.x;
+	});
+var _fizwidget$game_of_life$Matrix$get = F2(
+	function (_p16, coordinate) {
+		var _p17 = _p16;
+		var index = A2(_fizwidget$game_of_life$Matrix$toIndex, _p17._0, coordinate);
+		return A2(_elm_lang$core$Array$get, index, _p17._1);
+	});
+var _fizwidget$game_of_life$Matrix$getNeighbours = F2(
+	function (coordinate, matrix) {
+		return A2(
+			_elm_lang$core$List$filterMap,
+			_fizwidget$game_of_life$Matrix$get(matrix),
+			A2(
+				_elm_lang$core$List$map,
+				_fizwidget$game_of_life$Matrix$offsetBy(coordinate),
+				{
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: 1, _1: 1},
+					_1: {
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: 1, _1: 0},
+						_1: {
+							ctor: '::',
+							_0: {ctor: '_Tuple2', _0: 1, _1: -1},
+							_1: {
+								ctor: '::',
+								_0: {ctor: '_Tuple2', _0: 0, _1: -1},
+								_1: {
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: -1, _1: -1},
+									_1: {
+										ctor: '::',
+										_0: {ctor: '_Tuple2', _0: -1, _1: 0},
+										_1: {
+											ctor: '::',
+											_0: {ctor: '_Tuple2', _0: -1, _1: 1},
+											_1: {
+												ctor: '::',
+												_0: {ctor: '_Tuple2', _0: 0, _1: 1},
+												_1: {ctor: '[]'}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}));
+	});
+var _fizwidget$game_of_life$Matrix$height = function (_p18) {
+	var _p19 = _p18;
+	return _p19._0.height;
+};
+var _fizwidget$game_of_life$Matrix$width = function (_p20) {
+	var _p21 = _p20;
+	return _p21._0.width;
+};
+var _fizwidget$game_of_life$Matrix$Dimensions = F2(
+	function (a, b) {
+		return {width: a, height: b};
+	});
+var _fizwidget$game_of_life$Matrix$Coordinate = F2(
+	function (a, b) {
+		return {x: a, y: b};
+	});
+var _fizwidget$game_of_life$Matrix$Matrix = F2(
+	function (a, b) {
+		return {ctor: 'Matrix', _0: a, _1: b};
+	});
+var _fizwidget$game_of_life$Matrix$create = F2(
+	function (_p22, value) {
+		var _p23 = _p22;
+		return A2(
+			_fizwidget$game_of_life$Matrix$Matrix,
+			_p23,
+			A2(_elm_lang$core$Array$repeat, _p23.width * _p23.height, value));
+	});
+var _fizwidget$game_of_life$Matrix$set = F3(
+	function (coordinate, value, _p24) {
+		var _p25 = _p24;
+		var _p26 = _p25._0;
+		var index = A2(_fizwidget$game_of_life$Matrix$toIndex, _p26, coordinate);
+		return A2(
+			_fizwidget$game_of_life$Matrix$Matrix,
+			_p26,
+			A3(_elm_lang$core$Array$set, index, value, _p25._1));
+	});
+var _fizwidget$game_of_life$Matrix$map = F2(
+	function (f, _p27) {
+		var _p28 = _p27;
+		return A2(
+			_fizwidget$game_of_life$Matrix$Matrix,
+			_p28._0,
+			A2(_elm_lang$core$Array$map, f, _p28._1));
+	});
+var _fizwidget$game_of_life$Matrix$indexedMap = F2(
+	function (f, _p29) {
+		var _p30 = _p29;
+		var _p32 = _p30._0;
+		return A2(
+			_fizwidget$game_of_life$Matrix$Matrix,
+			_p32,
+			A2(
+				_elm_lang$core$Array$indexedMap,
+				function (_p31) {
+					return f(
+						A2(_fizwidget$game_of_life$Matrix$toCoordinate, _p32, _p31));
+				},
+				_p30._1));
+	});
+
 var _fizwidget$game_of_life$Main$cellColor = function (cell) {
 	var _p0 = cell;
 	if (_p0.ctor === 'Alive') {
-		return _rtfeldman$elm_css$Css_Colors$white;
-	} else {
 		return _rtfeldman$elm_css$Css_Colors$black;
+	} else {
+		return _rtfeldman$elm_css$Css_Colors$white;
 	}
 };
 var _fizwidget$game_of_life$Main$cellSize = function (cells) {
 	return 100.0 / _elm_lang$core$Basics$toFloat(
-		_elm_lang$core$List$length(cells));
+		_fizwidget$game_of_life$Matrix$width(cells));
 };
-var _fizwidget$game_of_life$Main$viewCell = F2(
-	function (cellSize, cell) {
-		return A2(
-			_rtfeldman$elm_css$Html_Styled$div,
+var _fizwidget$game_of_life$Main$globalStyles = _rtfeldman$elm_css$Css_Foreign$global(
+	{
+		ctor: '::',
+		_0: _rtfeldman$elm_css$Css_Foreign$body(
 			{
 				ctor: '::',
-				_0: _rtfeldman$elm_css$Html_Styled_Attributes$css(
-					{
-						ctor: '::',
-						_0: _rtfeldman$elm_css$Css$width(
-							_rtfeldman$elm_css$Css$vw(cellSize)),
-						_1: {
-							ctor: '::',
-							_0: _rtfeldman$elm_css$Css$height(
-								_rtfeldman$elm_css$Css$vw(cellSize)),
-							_1: {
-								ctor: '::',
-								_0: _rtfeldman$elm_css$Css$backgroundColor(
-									_fizwidget$game_of_life$Main$cellColor(cell)),
-								_1: {
-									ctor: '::',
-									_0: _rtfeldman$elm_css$Css$display(_rtfeldman$elm_css$Css$inlineBlock),
-									_1: {ctor: '[]'}
-								}
-							}
-						}
-					}),
-				_1: {ctor: '[]'}
-			},
-			{ctor: '[]'});
-	});
-var _fizwidget$game_of_life$Main$viewRow = function (cells) {
-	return A2(
-		_rtfeldman$elm_css$Html_Styled$div,
-		{
-			ctor: '::',
-			_0: _rtfeldman$elm_css$Html_Styled_Attributes$css(
-				{
+				_0: _rtfeldman$elm_css$Css$margin(
+					_rtfeldman$elm_css$Css$px(0)),
+				_1: {
 					ctor: '::',
-					_0: _rtfeldman$elm_css$Css$lineHeight(
-						_rtfeldman$elm_css$Css$px(0)),
+					_0: _rtfeldman$elm_css$Css$backgroundColor(_rtfeldman$elm_css$Css_Colors$black),
 					_1: {ctor: '[]'}
-				}),
-			_1: {ctor: '[]'}
-		},
-		A2(
-			_elm_lang$core$List$map,
-			_fizwidget$game_of_life$Main$viewCell(
-				_fizwidget$game_of_life$Main$cellSize(cells)),
-			cells));
-};
-var _fizwidget$game_of_life$Main$view = function (model) {
-	var modelView = A2(
-		_elm_lang$core$List$map,
-		_fizwidget$game_of_life$Main$viewRow,
-		_fizwidget$game_of_life$Data_Matrix$getRows(model.matrix));
-	var globalStyles = _rtfeldman$elm_css$Css_Foreign$global(
-		{
-			ctor: '::',
-			_0: _rtfeldman$elm_css$Css_Foreign$body(
-				{
-					ctor: '::',
-					_0: _rtfeldman$elm_css$Css$margin(
-						_rtfeldman$elm_css$Css$px(0)),
-					_1: {
-						ctor: '::',
-						_0: _rtfeldman$elm_css$Css$backgroundColor(_rtfeldman$elm_css$Css_Colors$black),
-						_1: {ctor: '[]'}
-					}
-				}),
-			_1: {ctor: '[]'}
-		});
-	return A2(
-		_rtfeldman$elm_css$Html_Styled$div,
-		{ctor: '[]'},
-		{ctor: '::', _0: globalStyles, _1: modelView});
-};
-var _fizwidget$game_of_life$Main$countLiveCells = F2(
-	function (cell, currentCount) {
-		var _p1 = cell;
-		if (_p1.ctor === 'Alive') {
-			return currentCount + 1;
-		} else {
-			return currentCount;
-		}
+				}
+			}),
+		_1: {ctor: '[]'}
+	});
+var _fizwidget$game_of_life$Main$countNeighbours = F2(
+	function (cells, coordinate) {
+		var countLiveCell = F2(
+			function (cell, currentCount) {
+				var _p1 = cell;
+				if (_p1.ctor === 'Alive') {
+					return currentCount + 1;
+				} else {
+					return currentCount;
+				}
+			});
+		return A3(
+			_elm_lang$core$List$foldl,
+			countLiveCell,
+			0,
+			A2(_fizwidget$game_of_life$Matrix$getNeighbours, coordinate, cells));
 	});
 var _fizwidget$game_of_life$Main$Model = function (a) {
-	return {matrix: a};
-};
-var _fizwidget$game_of_life$Main$Tick = {ctor: 'Tick'};
-var _fizwidget$game_of_life$Main$subscriptions = function (_p2) {
-	return A2(
-		_elm_lang$core$Time$every,
-		_elm_lang$core$Time$millisecond * 150,
-		_elm_lang$core$Basics$always(_fizwidget$game_of_life$Main$Tick));
+	return {cells: a};
 };
 var _fizwidget$game_of_life$Main$Dead = {ctor: 'Dead'};
 var _fizwidget$game_of_life$Main$Alive = {ctor: 'Alive'};
-var _fizwidget$game_of_life$Main$initialMatrix = A3(
-	_fizwidget$game_of_life$Data_Matrix$set,
+var _fizwidget$game_of_life$Main$initialCells = A3(
+	_fizwidget$game_of_life$Matrix$set,
 	{x: 15 + 8, y: 15 + 8},
 	_fizwidget$game_of_life$Main$Alive,
 	A3(
-		_fizwidget$game_of_life$Data_Matrix$set,
+		_fizwidget$game_of_life$Matrix$set,
 		{x: 15 + 7, y: 15 + 9},
 		_fizwidget$game_of_life$Main$Alive,
 		A3(
-			_fizwidget$game_of_life$Data_Matrix$set,
+			_fizwidget$game_of_life$Matrix$set,
 			{x: 15 + 4, y: 15 + 10},
 			_fizwidget$game_of_life$Main$Alive,
 			A3(
-				_fizwidget$game_of_life$Data_Matrix$set,
+				_fizwidget$game_of_life$Matrix$set,
 				{x: 15 + 4, y: 15 + 7},
 				_fizwidget$game_of_life$Main$Alive,
 				A3(
-					_fizwidget$game_of_life$Data_Matrix$set,
+					_fizwidget$game_of_life$Matrix$set,
 					{x: 15 + 8, y: 15 + 3},
 					_fizwidget$game_of_life$Main$Alive,
 					A3(
-						_fizwidget$game_of_life$Data_Matrix$set,
+						_fizwidget$game_of_life$Matrix$set,
 						{x: 15 + 6, y: 15 + 4},
 						_fizwidget$game_of_life$Main$Alive,
 						A3(
-							_fizwidget$game_of_life$Data_Matrix$set,
+							_fizwidget$game_of_life$Matrix$set,
 							{x: 15 + 2, y: 15 + 5},
 							_fizwidget$game_of_life$Main$Alive,
 							A3(
-								_fizwidget$game_of_life$Data_Matrix$set,
+								_fizwidget$game_of_life$Matrix$set,
 								{x: 15 + 3, y: 15 + 5},
 								_fizwidget$game_of_life$Main$Alive,
 								A3(
-									_fizwidget$game_of_life$Data_Matrix$set,
+									_fizwidget$game_of_life$Matrix$set,
 									{x: 15 + 3, y: 15 + 4},
 									_fizwidget$game_of_life$Main$Alive,
 									A3(
-										_fizwidget$game_of_life$Data_Matrix$set,
+										_fizwidget$game_of_life$Matrix$set,
 										{x: 15 + 3, y: 15 + 3},
 										_fizwidget$game_of_life$Main$Alive,
 										A2(
-											_fizwidget$game_of_life$Data_Matrix$create,
+											_fizwidget$game_of_life$Matrix$create,
 											{width: 30, height: 30},
 											_fizwidget$game_of_life$Main$Dead)))))))))));
 var _fizwidget$game_of_life$Main$init = {
 	ctor: '_Tuple2',
-	_0: {matrix: _fizwidget$game_of_life$Main$initialMatrix},
+	_0: {cells: _fizwidget$game_of_life$Main$initialCells},
 	_1: _elm_lang$core$Platform_Cmd$none
 };
+var _fizwidget$game_of_life$Main$toggle = function (cell) {
+	var _p2 = cell;
+	if (_p2.ctor === 'Alive') {
+		return _fizwidget$game_of_life$Main$Dead;
+	} else {
+		return _fizwidget$game_of_life$Main$Alive;
+	}
+};
 var _fizwidget$game_of_life$Main$updateCell = F3(
-	function (matrix, coordinate, cell) {
-		var neighbourCount = A3(
-			_elm_lang$core$List$foldl,
-			_fizwidget$game_of_life$Main$countLiveCells,
-			0,
-			A2(_fizwidget$game_of_life$Data_Matrix$getNeighbours, coordinate, matrix));
-		var _p3 = {ctor: '_Tuple2', _0: cell, _1: neighbourCount};
-		_v2_3:
+	function (cells, coordinate, cell) {
+		var _p3 = {
+			ctor: '_Tuple2',
+			_0: cell,
+			_1: A2(_fizwidget$game_of_life$Main$countNeighbours, cells, coordinate)
+		};
+		_v3_3:
 		do {
 			if (_p3.ctor === '_Tuple2') {
 				if (_p3._0.ctor === 'Alive') {
@@ -15472,44 +15557,170 @@ var _fizwidget$game_of_life$Main$updateCell = F3(
 						case 3:
 							return _fizwidget$game_of_life$Main$Alive;
 						default:
-							break _v2_3;
+							break _v3_3;
 					}
 				} else {
 					if (_p3._1 === 3) {
 						return _fizwidget$game_of_life$Main$Alive;
 					} else {
-						break _v2_3;
+						break _v3_3;
 					}
 				}
 			} else {
-				break _v2_3;
+				break _v3_3;
 			}
 		} while(false);
 		return _fizwidget$game_of_life$Main$Dead;
 	});
-var _fizwidget$game_of_life$Main$iterate = function (matrix) {
+var _fizwidget$game_of_life$Main$step = function (cells) {
 	return A2(
-		_fizwidget$game_of_life$Data_Matrix$indexedMap,
-		_fizwidget$game_of_life$Main$updateCell(matrix),
-		matrix);
+		_fizwidget$game_of_life$Matrix$indexedMap,
+		_fizwidget$game_of_life$Main$updateCell(cells),
+		cells);
 };
 var _fizwidget$game_of_life$Main$update = F2(
 	function (msg, model) {
 		var _p4 = msg;
-		return {
-			ctor: '_Tuple2',
-			_0: {
-				matrix: _fizwidget$game_of_life$Main$iterate(model.matrix)
-			},
-			_1: _elm_lang$core$Platform_Cmd$none
-		};
+		if (_p4.ctor === 'Tick') {
+			return {
+				ctor: '_Tuple2',
+				_0: {
+					cells: _fizwidget$game_of_life$Main$step(model.cells)
+				},
+				_1: _elm_lang$core$Platform_Cmd$none
+			};
+		} else {
+			var _p5 = _p4._0;
+			return function (model) {
+				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+			}(
+				A2(
+					_elm_lang$core$Maybe$withDefault,
+					model,
+					A2(
+						_elm_lang$core$Maybe$map,
+						function (cells) {
+							return {cells: cells};
+						},
+						A2(
+							_elm_lang$core$Maybe$map,
+							function (cell) {
+								return A3(_fizwidget$game_of_life$Matrix$set, _p5, cell, model.cells);
+							},
+							A2(
+								_elm_lang$core$Maybe$map,
+								_fizwidget$game_of_life$Main$toggle,
+								A2(_fizwidget$game_of_life$Matrix$get, model.cells, _p5))))));
+		}
 	});
+var _fizwidget$game_of_life$Main$Toggle = function (a) {
+	return {ctor: 'Toggle', _0: a};
+};
+var _fizwidget$game_of_life$Main$viewCell = F2(
+	function (size, _p6) {
+		var _p7 = _p6;
+		return A2(
+			_rtfeldman$elm_css$Html_Styled$div,
+			{
+				ctor: '::',
+				_0: _rtfeldman$elm_css$Html_Styled_Attributes$css(
+					{
+						ctor: '::',
+						_0: _rtfeldman$elm_css$Css$width(
+							_rtfeldman$elm_css$Css$vh(size)),
+						_1: {
+							ctor: '::',
+							_0: _rtfeldman$elm_css$Css$height(
+								_rtfeldman$elm_css$Css$vh(size)),
+							_1: {
+								ctor: '::',
+								_0: _rtfeldman$elm_css$Css$backgroundColor(
+									_fizwidget$game_of_life$Main$cellColor(_p7._1)),
+								_1: {
+									ctor: '::',
+									_0: _rtfeldman$elm_css$Css$displayFlex,
+									_1: {
+										ctor: '::',
+										_0: A3(
+											_rtfeldman$elm_css$Css$flex3,
+											_rtfeldman$elm_css$Css$int(0),
+											_rtfeldman$elm_css$Css$int(0),
+											_rtfeldman$elm_css$Css$pct(size)),
+										_1: {ctor: '[]'}
+									}
+								}
+							}
+						}
+					}),
+				_1: {
+					ctor: '::',
+					_0: _rtfeldman$elm_css$Html_Styled_Events$onClick(
+						_fizwidget$game_of_life$Main$Toggle(_p7._0)),
+					_1: {ctor: '[]'}
+				}
+			},
+			{ctor: '[]'});
+	});
+var _fizwidget$game_of_life$Main$viewModel = function (_p8) {
+	var _p9 = _p8;
+	var _p10 = _p9.cells;
+	return A2(
+		_rtfeldman$elm_css$Html_Styled$div,
+		{
+			ctor: '::',
+			_0: _rtfeldman$elm_css$Html_Styled_Attributes$css(
+				{
+					ctor: '::',
+					_0: _rtfeldman$elm_css$Css$displayFlex,
+					_1: {
+						ctor: '::',
+						_0: _rtfeldman$elm_css$Css$alignItems(_rtfeldman$elm_css$Css$center),
+						_1: {
+							ctor: '::',
+							_0: _rtfeldman$elm_css$Css$justifyContent(_rtfeldman$elm_css$Css$center),
+							_1: {
+								ctor: '::',
+								_0: _rtfeldman$elm_css$Css$flexWrap(_rtfeldman$elm_css$Css$wrap),
+								_1: {ctor: '[]'}
+							}
+						}
+					}
+				}),
+			_1: {ctor: '[]'}
+		},
+		A2(
+			_elm_lang$core$List$map,
+			_fizwidget$game_of_life$Main$viewCell(
+				_fizwidget$game_of_life$Main$cellSize(_p10)),
+			_fizwidget$game_of_life$Matrix$toListWithCoordinates(_p10)));
+};
+var _fizwidget$game_of_life$Main$view = function (model) {
+	return A2(
+		_rtfeldman$elm_css$Html_Styled$div,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: _fizwidget$game_of_life$Main$globalStyles,
+			_1: {
+				ctor: '::',
+				_0: _fizwidget$game_of_life$Main$viewModel(model),
+				_1: {ctor: '[]'}
+			}
+		});
+};
+var _fizwidget$game_of_life$Main$Tick = {ctor: 'Tick'};
+var _fizwidget$game_of_life$Main$subscriptions = function (_p11) {
+	return A2(
+		_elm_lang$core$Time$every,
+		_elm_lang$core$Time$millisecond * 150,
+		_elm_lang$core$Basics$always(_fizwidget$game_of_life$Main$Tick));
+};
 var _fizwidget$game_of_life$Main$main = _elm_lang$html$Html$program(
 	{
 		init: _fizwidget$game_of_life$Main$init,
-		view: function (_p5) {
+		view: function (_p12) {
 			return _rtfeldman$elm_css$Html_Styled$toUnstyled(
-				_fizwidget$game_of_life$Main$view(_p5));
+				_fizwidget$game_of_life$Main$view(_p12));
 		},
 		update: _fizwidget$game_of_life$Main$update,
 		subscriptions: _fizwidget$game_of_life$Main$subscriptions
