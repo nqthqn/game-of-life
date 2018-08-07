@@ -15436,7 +15436,7 @@ var _fizwidget$game_of_life$Matrix$indexedMap = F2(
 var _fizwidget$game_of_life$Main$cellColor = function (cell) {
 	var _p0 = cell;
 	if (_p0.ctor === 'Alive') {
-		return _rtfeldman$elm_css$Css$hex('2684FF');
+		return A4(_rtfeldman$elm_css$Css$rgba, 38, 132, 255, 0.8);
 	} else {
 		return _rtfeldman$elm_css$Css_Colors$white;
 	}
@@ -15756,57 +15756,61 @@ var _fizwidget$game_of_life$Main$viewCell = F2(
 			_rtfeldman$elm_css$Html_Styled$div,
 			{
 				ctor: '::',
-				_0: _rtfeldman$elm_css$Html_Styled_Attributes$css(
-					{
-						ctor: '::',
-						_0: _rtfeldman$elm_css$Css$width(
-							_rtfeldman$elm_css$Css$vw(size)),
-						_1: {
+				_0: _rtfeldman$elm_css$Html_Styled_Attributes$class('cell'),
+				_1: {
+					ctor: '::',
+					_0: _rtfeldman$elm_css$Html_Styled_Attributes$css(
+						{
 							ctor: '::',
-							_0: _rtfeldman$elm_css$Css$height(
+							_0: _rtfeldman$elm_css$Css$width(
 								_rtfeldman$elm_css$Css$vw(size)),
 							_1: {
 								ctor: '::',
-								_0: _rtfeldman$elm_css$Css$backgroundColor(
-									_fizwidget$game_of_life$Main$cellColor(_p8._1)),
+								_0: _rtfeldman$elm_css$Css$height(
+									_rtfeldman$elm_css$Css$vw(size)),
 								_1: {
 									ctor: '::',
-									_0: _rtfeldman$elm_css$Css$displayFlex,
+									_0: _rtfeldman$elm_css$Css$backgroundColor(
+										_fizwidget$game_of_life$Main$cellColor(_p8._1)),
 									_1: {
 										ctor: '::',
-										_0: A3(
-											_rtfeldman$elm_css$Css$flex3,
-											_rtfeldman$elm_css$Css$int(0),
-											_rtfeldman$elm_css$Css$int(0),
-											_rtfeldman$elm_css$Css$pct(size)),
+										_0: _rtfeldman$elm_css$Css$displayFlex,
 										_1: {
 											ctor: '::',
-											_0: _rtfeldman$elm_css$Css$borderRadius(
-												_rtfeldman$elm_css$Css$pct(50)),
+											_0: A3(
+												_rtfeldman$elm_css$Css$flex3,
+												_rtfeldman$elm_css$Css$int(0),
+												_rtfeldman$elm_css$Css$int(0),
+												_rtfeldman$elm_css$Css$pct(size)),
 											_1: {
 												ctor: '::',
-												_0: A3(
-													_rtfeldman$elm_css$Css$border3,
-													_rtfeldman$elm_css$Css$px(2),
-													_rtfeldman$elm_css$Css$solid,
-													_rtfeldman$elm_css$Css_Colors$white),
+												_0: _rtfeldman$elm_css$Css$borderRadius(
+													_rtfeldman$elm_css$Css$pct(50)),
 												_1: {
 													ctor: '::',
-													_0: _rtfeldman$elm_css$Css$boxSizing(_rtfeldman$elm_css$Css$borderBox),
-													_1: {ctor: '[]'}
+													_0: A3(
+														_rtfeldman$elm_css$Css$border3,
+														_rtfeldman$elm_css$Css$px(2),
+														_rtfeldman$elm_css$Css$solid,
+														_rtfeldman$elm_css$Css_Colors$white),
+													_1: {
+														ctor: '::',
+														_0: _rtfeldman$elm_css$Css$boxSizing(_rtfeldman$elm_css$Css$borderBox),
+														_1: {ctor: '[]'}
+													}
 												}
 											}
 										}
 									}
 								}
 							}
-						}
-					}),
-				_1: {
-					ctor: '::',
-					_0: _rtfeldman$elm_css$Html_Styled_Events$onClick(
-						_fizwidget$game_of_life$Main$Toggle(_p8._0)),
-					_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: _rtfeldman$elm_css$Html_Styled_Events$onClick(
+							_fizwidget$game_of_life$Main$Toggle(_p8._0)),
+						_1: {ctor: '[]'}
+					}
 				}
 			},
 			{ctor: '[]'});
