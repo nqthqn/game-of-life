@@ -15490,47 +15490,47 @@ var _fizwidget$game_of_life$Main$emptyMatrix = A2(
 var _fizwidget$game_of_life$Main$Alive = {ctor: 'Alive'};
 var _fizwidget$game_of_life$Main$initialCells = A3(
 	_fizwidget$game_of_life$Matrix$set,
-	{x: 15 + 8, y: 15 + 8},
+	{x: 7 + 8, y: 7 + 8},
 	_fizwidget$game_of_life$Main$Alive,
 	A3(
 		_fizwidget$game_of_life$Matrix$set,
-		{x: 15 + 7, y: 15 + 9},
+		{x: 7 + 7, y: 7 + 9},
 		_fizwidget$game_of_life$Main$Alive,
 		A3(
 			_fizwidget$game_of_life$Matrix$set,
-			{x: 15 + 4, y: 15 + 10},
+			{x: 7 + 4, y: 7 + 10},
 			_fizwidget$game_of_life$Main$Alive,
 			A3(
 				_fizwidget$game_of_life$Matrix$set,
-				{x: 15 + 4, y: 15 + 7},
+				{x: 7 + 4, y: 7 + 7},
 				_fizwidget$game_of_life$Main$Alive,
 				A3(
 					_fizwidget$game_of_life$Matrix$set,
-					{x: 15 + 8, y: 15 + 3},
+					{x: 7 + 8, y: 7 + 3},
 					_fizwidget$game_of_life$Main$Alive,
 					A3(
 						_fizwidget$game_of_life$Matrix$set,
-						{x: 15 + 6, y: 15 + 4},
+						{x: 7 + 6, y: 7 + 4},
 						_fizwidget$game_of_life$Main$Alive,
 						A3(
 							_fizwidget$game_of_life$Matrix$set,
-							{x: 15 + 2, y: 15 + 5},
+							{x: 7 + 2, y: 7 + 5},
 							_fizwidget$game_of_life$Main$Alive,
 							A3(
 								_fizwidget$game_of_life$Matrix$set,
-								{x: 15 + 3, y: 15 + 5},
+								{x: 7 + 3, y: 7 + 5},
 								_fizwidget$game_of_life$Main$Alive,
 								A3(
 									_fizwidget$game_of_life$Matrix$set,
-									{x: 15 + 3, y: 15 + 4},
+									{x: 7 + 3, y: 7 + 4},
 									_fizwidget$game_of_life$Main$Alive,
 									A3(
 										_fizwidget$game_of_life$Matrix$set,
-										{x: 15 + 3, y: 15 + 3},
+										{x: 7 + 3, y: 7 + 3},
 										_fizwidget$game_of_life$Main$Alive,
 										A2(
 											_fizwidget$game_of_life$Matrix$create,
-											{width: 30, height: 30},
+											{width: 20, height: 20},
 											_fizwidget$game_of_life$Main$Dead)))))))))));
 var _fizwidget$game_of_life$Main$toggle = function (cell) {
 	var _p2 = cell;
@@ -15582,7 +15582,7 @@ var _fizwidget$game_of_life$Main$Playing = {ctor: 'Playing'};
 var _fizwidget$game_of_life$Main$Paused = {ctor: 'Paused'};
 var _fizwidget$game_of_life$Main$init = {
 	ctor: '_Tuple2',
-	_0: {cells: _fizwidget$game_of_life$Main$emptyMatrix, status: _fizwidget$game_of_life$Main$Paused},
+	_0: {cells: _fizwidget$game_of_life$Main$initialCells, status: _fizwidget$game_of_life$Main$Paused},
 	_1: _elm_lang$core$Platform_Cmd$none
 };
 var _fizwidget$game_of_life$Main$update = F2(
@@ -15790,7 +15790,7 @@ var _fizwidget$game_of_life$Main$viewCell = F2(
 													ctor: '::',
 													_0: A3(
 														_rtfeldman$elm_css$Css$border3,
-														_rtfeldman$elm_css$Css$px(2),
+														_rtfeldman$elm_css$Css$px(4),
 														_rtfeldman$elm_css$Css$solid,
 														_rtfeldman$elm_css$Css_Colors$white),
 													_1: {
@@ -15882,7 +15882,7 @@ var _fizwidget$game_of_life$Main$subscriptions = function (_p11) {
 	if (_p13.ctor === 'Playing') {
 		return A2(
 			_elm_lang$core$Time$every,
-			_elm_lang$core$Time$millisecond * 150,
+			_elm_lang$core$Time$millisecond * 200,
 			_elm_lang$core$Basics$always(_fizwidget$game_of_life$Main$Tick));
 	} else {
 		return _elm_lang$core$Platform_Sub$none;
