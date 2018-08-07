@@ -15490,43 +15490,43 @@ var _fizwidget$game_of_life$Main$emptyMatrix = A2(
 var _fizwidget$game_of_life$Main$Alive = {ctor: 'Alive'};
 var _fizwidget$game_of_life$Main$initialCells = A3(
 	_fizwidget$game_of_life$Matrix$set,
-	{x: 7 + 8, y: 7 + 8},
+	{x: 8, y: 8},
 	_fizwidget$game_of_life$Main$Alive,
 	A3(
 		_fizwidget$game_of_life$Matrix$set,
-		{x: 7 + 7, y: 7 + 9},
+		{x: 7, y: 9},
 		_fizwidget$game_of_life$Main$Alive,
 		A3(
 			_fizwidget$game_of_life$Matrix$set,
-			{x: 7 + 4, y: 7 + 10},
+			{x: 4, y: 10},
 			_fizwidget$game_of_life$Main$Alive,
 			A3(
 				_fizwidget$game_of_life$Matrix$set,
-				{x: 7 + 4, y: 7 + 7},
+				{x: 4, y: 7},
 				_fizwidget$game_of_life$Main$Alive,
 				A3(
 					_fizwidget$game_of_life$Matrix$set,
-					{x: 7 + 8, y: 7 + 3},
+					{x: 8, y: 3},
 					_fizwidget$game_of_life$Main$Alive,
 					A3(
 						_fizwidget$game_of_life$Matrix$set,
-						{x: 7 + 6, y: 7 + 4},
+						{x: 6, y: 4},
 						_fizwidget$game_of_life$Main$Alive,
 						A3(
 							_fizwidget$game_of_life$Matrix$set,
-							{x: 7 + 2, y: 7 + 5},
+							{x: 2, y: 5},
 							_fizwidget$game_of_life$Main$Alive,
 							A3(
 								_fizwidget$game_of_life$Matrix$set,
-								{x: 7 + 3, y: 7 + 5},
+								{x: 3, y: 5},
 								_fizwidget$game_of_life$Main$Alive,
 								A3(
 									_fizwidget$game_of_life$Matrix$set,
-									{x: 7 + 3, y: 7 + 4},
+									{x: 3, y: 4},
 									_fizwidget$game_of_life$Main$Alive,
 									A3(
 										_fizwidget$game_of_life$Matrix$set,
-										{x: 7 + 3, y: 7 + 3},
+										{x: 3, y: 3},
 										_fizwidget$game_of_life$Main$Alive,
 										A2(
 											_fizwidget$game_of_life$Matrix$create,
