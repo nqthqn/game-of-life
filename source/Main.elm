@@ -11,7 +11,7 @@ import Time as Time exposing (millisecond)
 import Matrix as Matrix exposing (Matrix, Coordinate)
 
 
--- Model
+-- MODEL
 
 
 type Cell
@@ -33,12 +33,12 @@ type alias Model =
 
 
 
--- Init
+-- INIT
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( { cells = initialCells, status = Paused }
+    ( { cells = line, status = Paused }
     , Cmd.none
     )
 
@@ -48,8 +48,22 @@ emptyMatrix =
     Matrix.create { width = 30, height = 30 } Dead
 
 
-initialCells : Cells
-initialCells =
+line : Cells
+line =
+    Matrix.create { width = 20, height = 20 } Dead
+        |> Matrix.set { x = 7, y = 6 } Alive
+        |> Matrix.set { x = 8, y = 6 } Alive
+        |> Matrix.set { x = 9, y = 6 } Alive
+        |> Matrix.set { x = 10, y = 6 } Alive
+        |> Matrix.set { x = 11, y = 6 } Alive
+        |> Matrix.set { x = 12, y = 6 } Alive
+        |> Matrix.set { x = 13, y = 6 } Alive
+        |> Matrix.set { x = 14, y = 6 } Alive
+        |> Matrix.set { x = 15, y = 6 } Alive
+
+
+oddPattern : Cells
+oddPattern =
     Matrix.create { width = 20, height = 20 } Dead
         |> Matrix.set { x = 3, y = 3 } Alive
         |> Matrix.set { x = 3, y = 4 } Alive
@@ -64,7 +78,7 @@ initialCells =
 
 
 
--- Update
+-- UPDATE
 
 
 type Msg
@@ -78,25 +92,34 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         Play ->
-            ( { model | status = Playing }, Cmd.none )
+            { model | status = Playing }
+                |> noCmd
 
         Pause ->
-            ( { model | status = Paused }, Cmd.none )
+            { model | status = Paused }
+                |> noCmd
 
         Tick ->
-            ( { model | cells = step model.cells }, Cmd.none )
+            { model | cells = step model.cells }
+                |> noCmd
 
         Toggle coordinate ->
-            Matrix.get model.cells coordinate
-                |> Maybe.map toggle
-                |> Maybe.map (\cell -> Matrix.set coordinate cell model.cells)
-                |> Maybe.map (\cells -> { model | cells = cells })
-                |> Maybe.withDefault model
-                |> (\model -> ( model, Cmd.none ))
+            { model | cells = toggle model.cells coordinate }
+                |> noCmd
 
 
-toggle : Cell -> Cell
-toggle cell =
+noCmd : Model -> ( Model, Cmd Msg )
+noCmd model =
+    ( model, Cmd.none )
+
+
+toggle : Cells -> Coordinate -> Cells
+toggle cells coordinate =
+    Matrix.update coordinate cells toggleCell
+
+
+toggleCell : Cell -> Cell
+toggleCell cell =
     case cell of
         Alive ->
             Dead
@@ -142,7 +165,7 @@ countNeighbours cells coordinate =
 
 
 
--- View
+-- VIEW
 
 
 view : Model -> Html Msg
@@ -211,7 +234,7 @@ viewCell size ( coordinate, cell ) =
         [ class "cell"
         , css
             [ width (vw size)
-            , height (vw size)
+            , height (vh size)
             , backgroundColor (cellColor cell)
             , displayFlex
             , flex3 (int 0) (int 0) (pct size)
@@ -239,6 +262,10 @@ cellColor cell =
             Colors.white
 
 
+
+-- SUBSCRIPTIONS
+
+
 subscriptions : Model -> Sub Msg
 subscriptions { status } =
     case status of
@@ -250,7 +277,7 @@ subscriptions { status } =
 
 
 
--- Main
+-- MAIN
 
 
 main : Program Never Model Msg
