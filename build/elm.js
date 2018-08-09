@@ -15409,6 +15409,21 @@ var _fizwidget$game_of_life$Matrix$set = F3(
 			_p26,
 			A3(_elm_lang$core$Array$set, index, value, _p25._1));
 	});
+var _fizwidget$game_of_life$Matrix$update = F3(
+	function (coordinate, matrix, f) {
+		return A2(
+			_elm_lang$core$Maybe$withDefault,
+			matrix,
+			A2(
+				_elm_lang$core$Maybe$map,
+				function (cell) {
+					return A3(_fizwidget$game_of_life$Matrix$set, coordinate, cell, matrix);
+				},
+				A2(
+					_elm_lang$core$Maybe$map,
+					f,
+					A2(_fizwidget$game_of_life$Matrix$get, matrix, coordinate))));
+	});
 var _fizwidget$game_of_life$Matrix$map = F2(
 	function (f, _p27) {
 		var _p28 = _p27;
@@ -15478,6 +15493,9 @@ var _fizwidget$game_of_life$Main$countNeighbours = F2(
 			0,
 			A2(_fizwidget$game_of_life$Matrix$getNeighbours, coordinate, cells));
 	});
+var _fizwidget$game_of_life$Main$noCmd = function (model) {
+	return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+};
 var _fizwidget$game_of_life$Main$Model = F2(
 	function (a, b) {
 		return {cells: a, status: b};
@@ -15488,7 +15506,47 @@ var _fizwidget$game_of_life$Main$emptyMatrix = A2(
 	{width: 30, height: 30},
 	_fizwidget$game_of_life$Main$Dead);
 var _fizwidget$game_of_life$Main$Alive = {ctor: 'Alive'};
-var _fizwidget$game_of_life$Main$initialCells = A3(
+var _fizwidget$game_of_life$Main$line = A3(
+	_fizwidget$game_of_life$Matrix$set,
+	{x: 15, y: 6},
+	_fizwidget$game_of_life$Main$Alive,
+	A3(
+		_fizwidget$game_of_life$Matrix$set,
+		{x: 14, y: 6},
+		_fizwidget$game_of_life$Main$Alive,
+		A3(
+			_fizwidget$game_of_life$Matrix$set,
+			{x: 13, y: 6},
+			_fizwidget$game_of_life$Main$Alive,
+			A3(
+				_fizwidget$game_of_life$Matrix$set,
+				{x: 12, y: 6},
+				_fizwidget$game_of_life$Main$Alive,
+				A3(
+					_fizwidget$game_of_life$Matrix$set,
+					{x: 11, y: 6},
+					_fizwidget$game_of_life$Main$Alive,
+					A3(
+						_fizwidget$game_of_life$Matrix$set,
+						{x: 10, y: 6},
+						_fizwidget$game_of_life$Main$Alive,
+						A3(
+							_fizwidget$game_of_life$Matrix$set,
+							{x: 9, y: 6},
+							_fizwidget$game_of_life$Main$Alive,
+							A3(
+								_fizwidget$game_of_life$Matrix$set,
+								{x: 8, y: 6},
+								_fizwidget$game_of_life$Main$Alive,
+								A3(
+									_fizwidget$game_of_life$Matrix$set,
+									{x: 7, y: 6},
+									_fizwidget$game_of_life$Main$Alive,
+									A2(
+										_fizwidget$game_of_life$Matrix$create,
+										{width: 20, height: 20},
+										_fizwidget$game_of_life$Main$Dead))))))))));
+var _fizwidget$game_of_life$Main$oddPattern = A3(
 	_fizwidget$game_of_life$Matrix$set,
 	{x: 8, y: 8},
 	_fizwidget$game_of_life$Main$Alive,
@@ -15532,7 +15590,7 @@ var _fizwidget$game_of_life$Main$initialCells = A3(
 											_fizwidget$game_of_life$Matrix$create,
 											{width: 20, height: 20},
 											_fizwidget$game_of_life$Main$Dead)))))))))));
-var _fizwidget$game_of_life$Main$toggle = function (cell) {
+var _fizwidget$game_of_life$Main$toggleCell = function (cell) {
 	var _p2 = cell;
 	if (_p2.ctor === 'Alive') {
 		return _fizwidget$game_of_life$Main$Dead;
@@ -15540,6 +15598,10 @@ var _fizwidget$game_of_life$Main$toggle = function (cell) {
 		return _fizwidget$game_of_life$Main$Alive;
 	}
 };
+var _fizwidget$game_of_life$Main$toggle = F2(
+	function (cells, coordinate) {
+		return A3(_fizwidget$game_of_life$Matrix$update, coordinate, cells, _fizwidget$game_of_life$Main$toggleCell);
+	});
 var _fizwidget$game_of_life$Main$updateCell = F3(
 	function (cells, coordinate, cell) {
 		var _p3 = {
@@ -15582,7 +15644,7 @@ var _fizwidget$game_of_life$Main$Playing = {ctor: 'Playing'};
 var _fizwidget$game_of_life$Main$Paused = {ctor: 'Paused'};
 var _fizwidget$game_of_life$Main$init = {
 	ctor: '_Tuple2',
-	_0: {cells: _fizwidget$game_of_life$Main$initialCells, status: _fizwidget$game_of_life$Main$Paused},
+	_0: {cells: _fizwidget$game_of_life$Main$line, status: _fizwidget$game_of_life$Main$Paused},
 	_1: _elm_lang$core$Platform_Cmd$none
 };
 var _fizwidget$game_of_life$Main$update = F2(
@@ -15590,55 +15652,29 @@ var _fizwidget$game_of_life$Main$update = F2(
 		var _p4 = msg;
 		switch (_p4.ctor) {
 			case 'Play':
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
+				return _fizwidget$game_of_life$Main$noCmd(
+					_elm_lang$core$Native_Utils.update(
 						model,
-						{status: _fizwidget$game_of_life$Main$Playing}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
+						{status: _fizwidget$game_of_life$Main$Playing}));
 			case 'Pause':
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
+				return _fizwidget$game_of_life$Main$noCmd(
+					_elm_lang$core$Native_Utils.update(
 						model,
-						{status: _fizwidget$game_of_life$Main$Paused}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
+						{status: _fizwidget$game_of_life$Main$Paused}));
 			case 'Tick':
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
+				return _fizwidget$game_of_life$Main$noCmd(
+					_elm_lang$core$Native_Utils.update(
 						model,
 						{
 							cells: _fizwidget$game_of_life$Main$step(model.cells)
-						}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
+						}));
 			default:
-				var _p5 = _p4._0;
-				return function (model) {
-					return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
-				}(
-					A2(
-						_elm_lang$core$Maybe$withDefault,
+				return _fizwidget$game_of_life$Main$noCmd(
+					_elm_lang$core$Native_Utils.update(
 						model,
-						A2(
-							_elm_lang$core$Maybe$map,
-							function (cells) {
-								return _elm_lang$core$Native_Utils.update(
-									model,
-									{cells: cells});
-							},
-							A2(
-								_elm_lang$core$Maybe$map,
-								function (cell) {
-									return A3(_fizwidget$game_of_life$Matrix$set, _p5, cell, model.cells);
-								},
-								A2(
-									_elm_lang$core$Maybe$map,
-									_fizwidget$game_of_life$Main$toggle,
-									A2(_fizwidget$game_of_life$Matrix$get, model.cells, _p5))))));
+						{
+							cells: A2(_fizwidget$game_of_life$Main$toggle, model.cells, _p4._0)
+						}));
 		}
 	});
 var _fizwidget$game_of_life$Main$Pause = {ctor: 'Pause'};
@@ -15709,8 +15745,8 @@ var _fizwidget$game_of_life$Main$viewPlayPauseButton = function (status) {
 				}
 			}
 		});
-	var _p6 = status;
-	if (_p6.ctor === 'Playing') {
+	var _p5 = status;
+	if (_p5.ctor === 'Playing') {
 		return A2(
 			_rtfeldman$elm_css$Html_Styled$button,
 			{
@@ -15750,8 +15786,8 @@ var _fizwidget$game_of_life$Main$Toggle = function (a) {
 	return {ctor: 'Toggle', _0: a};
 };
 var _fizwidget$game_of_life$Main$viewCell = F2(
-	function (size, _p7) {
-		var _p8 = _p7;
+	function (size, _p6) {
+		var _p7 = _p6;
 		return A2(
 			_rtfeldman$elm_css$Html_Styled$div,
 			{
@@ -15767,11 +15803,11 @@ var _fizwidget$game_of_life$Main$viewCell = F2(
 							_1: {
 								ctor: '::',
 								_0: _rtfeldman$elm_css$Css$height(
-									_rtfeldman$elm_css$Css$vw(size)),
+									_rtfeldman$elm_css$Css$vh(size)),
 								_1: {
 									ctor: '::',
 									_0: _rtfeldman$elm_css$Css$backgroundColor(
-										_fizwidget$game_of_life$Main$cellColor(_p8._1)),
+										_fizwidget$game_of_life$Main$cellColor(_p7._1)),
 									_1: {
 										ctor: '::',
 										_0: _rtfeldman$elm_css$Css$displayFlex,
@@ -15808,7 +15844,7 @@ var _fizwidget$game_of_life$Main$viewCell = F2(
 					_1: {
 						ctor: '::',
 						_0: _rtfeldman$elm_css$Html_Styled_Events$onClick(
-							_fizwidget$game_of_life$Main$Toggle(_p8._0)),
+							_fizwidget$game_of_life$Main$Toggle(_p7._0)),
 						_1: {ctor: '[]'}
 					}
 				}
@@ -15846,17 +15882,17 @@ var _fizwidget$game_of_life$Main$viewCells = function (cells) {
 				_fizwidget$game_of_life$Main$cellSize(cells)),
 			_fizwidget$game_of_life$Matrix$toListWithCoordinates(cells)));
 };
-var _fizwidget$game_of_life$Main$viewModel = function (_p9) {
-	var _p10 = _p9;
+var _fizwidget$game_of_life$Main$viewModel = function (_p8) {
+	var _p9 = _p8;
 	return A2(
 		_rtfeldman$elm_css$Html_Styled$div,
 		{ctor: '[]'},
 		{
 			ctor: '::',
-			_0: _fizwidget$game_of_life$Main$viewCells(_p10.cells),
+			_0: _fizwidget$game_of_life$Main$viewCells(_p9.cells),
 			_1: {
 				ctor: '::',
-				_0: _fizwidget$game_of_life$Main$viewPlayPauseButton(_p10.status),
+				_0: _fizwidget$game_of_life$Main$viewPlayPauseButton(_p9.status),
 				_1: {ctor: '[]'}
 			}
 		});
@@ -15876,10 +15912,10 @@ var _fizwidget$game_of_life$Main$view = function (model) {
 		});
 };
 var _fizwidget$game_of_life$Main$Tick = {ctor: 'Tick'};
-var _fizwidget$game_of_life$Main$subscriptions = function (_p11) {
-	var _p12 = _p11;
-	var _p13 = _p12.status;
-	if (_p13.ctor === 'Playing') {
+var _fizwidget$game_of_life$Main$subscriptions = function (_p10) {
+	var _p11 = _p10;
+	var _p12 = _p11.status;
+	if (_p12.ctor === 'Playing') {
 		return A2(
 			_elm_lang$core$Time$every,
 			_elm_lang$core$Time$millisecond * 200,
@@ -15891,9 +15927,9 @@ var _fizwidget$game_of_life$Main$subscriptions = function (_p11) {
 var _fizwidget$game_of_life$Main$main = _elm_lang$html$Html$program(
 	{
 		init: _fizwidget$game_of_life$Main$init,
-		view: function (_p14) {
+		view: function (_p13) {
 			return _rtfeldman$elm_css$Html_Styled$toUnstyled(
-				_fizwidget$game_of_life$Main$view(_p14));
+				_fizwidget$game_of_life$Main$view(_p13));
 		},
 		update: _fizwidget$game_of_life$Main$update,
 		subscriptions: _fizwidget$game_of_life$Main$subscriptions
