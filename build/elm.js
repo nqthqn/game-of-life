@@ -15274,6 +15274,736 @@ var _rtfeldman$elm_css$Css_Colors$aqua = _rtfeldman$elm_css$Css$hex('7FDBFF');
 var _rtfeldman$elm_css$Css_Colors$blue = _rtfeldman$elm_css$Css$hex('0074D9');
 var _rtfeldman$elm_css$Css_Colors$navy = _rtfeldman$elm_css$Css$hex('001F3F');
 
+var _rtfeldman$elm_css$Css_Transitions$timingFunctionToString = function (tf) {
+	var _p0 = tf;
+	switch (_p0.ctor) {
+		case 'Ease':
+			return 'ease';
+		case 'Linear':
+			return 'linear';
+		case 'EaseIn':
+			return 'ease-in';
+		case 'EaseOut':
+			return 'ease-out';
+		case 'EaseInOut':
+			return 'ease-in-out';
+		case 'StepStart':
+			return 'step-start';
+		case 'StepEnd':
+			return 'step-end';
+		default:
+			return A2(
+				_elm_lang$core$Basics_ops['++'],
+				'cubic-bezier(',
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					_elm_lang$core$Basics$toString(_p0._0),
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						' , ',
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							_elm_lang$core$Basics$toString(_p0._1),
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								' , ',
+								A2(
+									_elm_lang$core$Basics_ops['++'],
+									_elm_lang$core$Basics$toString(_p0._2),
+									A2(
+										_elm_lang$core$Basics_ops['++'],
+										' , ',
+										A2(
+											_elm_lang$core$Basics_ops['++'],
+											_elm_lang$core$Basics$toString(_p0._3),
+											')'))))))));
+	}
+};
+var _rtfeldman$elm_css$Css_Transitions$timeToString = function (time) {
+	return A2(
+		_elm_lang$core$Basics_ops['++'],
+		_elm_lang$core$Basics$toString(time),
+		'ms');
+};
+var _rtfeldman$elm_css$Css_Transitions$propToString = function (prop) {
+	var _p1 = prop;
+	switch (_p1.ctor) {
+		case 'Background':
+			return 'background';
+		case 'BackgroundColor':
+			return 'background-color';
+		case 'BackgroundPosition':
+			return 'background-position';
+		case 'BackgroundSize':
+			return 'background-size';
+		case 'Border':
+			return 'border';
+		case 'BorderBottom':
+			return 'border-bottom';
+		case 'BorderBottomColor':
+			return 'border-bottom-color';
+		case 'BorderBottomLeftRadius':
+			return 'border-bottom-left-radius';
+		case 'BorderBottomRightRadius':
+			return 'border-bottom-right-radius';
+		case 'BorderBottomWidth':
+			return 'border-bottom-width';
+		case 'BorderColor':
+			return 'border-color';
+		case 'BorderLeft':
+			return 'border-left';
+		case 'BorderLeftColor':
+			return 'border-left-color';
+		case 'BorderLeftWidth':
+			return 'border-left-width';
+		case 'BorderRadius':
+			return 'border-radius';
+		case 'BorderRight':
+			return 'border-right';
+		case 'BorderRightColor':
+			return 'border-right-color';
+		case 'BorderRightWidth':
+			return 'border-right-width';
+		case 'BorderTop':
+			return 'border-top';
+		case 'BorderTopColor':
+			return 'border-top-color';
+		case 'BorderTopLeftRadius':
+			return 'border-top-left-radius';
+		case 'BorderTopRightRadius':
+			return 'border-top-right-radius';
+		case 'BorderTopWidth':
+			return 'border-top-width';
+		case 'BorderWidth':
+			return 'border-width';
+		case 'Bottom':
+			return 'bottom';
+		case 'BoxShadow':
+			return 'box-shadow';
+		case 'CaretColor':
+			return 'caret-color';
+		case 'Clip':
+			return 'clip';
+		case 'ClipPath':
+			return 'clip-path';
+		case 'Color':
+			return 'color';
+		case 'ColumnCount':
+			return 'column-count';
+		case 'ColumnGap':
+			return 'column-gap';
+		case 'ColumnRule':
+			return 'column-rule';
+		case 'ColumnRuleColor':
+			return 'column-rule-color';
+		case 'ColumnRuleWidth':
+			return 'column-rule-width';
+		case 'ColumnWidth':
+			return 'column-width';
+		case 'Columns':
+			return 'columns';
+		case 'Filter':
+			return 'filter';
+		case 'Flex':
+			return 'flex';
+		case 'FlexBasis':
+			return 'flex-basis';
+		case 'FlexGrow':
+			return 'flex-grow';
+		case 'FlexShrink':
+			return 'flex-shrink';
+		case 'Font':
+			return 'font';
+		case 'FontSize':
+			return 'font-size';
+		case 'FontSizeAdjust':
+			return 'font-size-adjust';
+		case 'FontStretch':
+			return 'font-stretch';
+		case 'FontVariationSettings':
+			return 'font-variation-settings';
+		case 'FontWeight':
+			return 'font-weight';
+		case 'GridColumnGap':
+			return 'grid-column-gap';
+		case 'GridGap':
+			return 'grid-gap';
+		case 'GridRowGap':
+			return 'grid-row-gap';
+		case 'Height':
+			return 'height';
+		case 'Left':
+			return 'left';
+		case 'LetterSpacing':
+			return 'letter-spacing';
+		case 'LineHeight':
+			return 'line-height';
+		case 'Margin':
+			return 'margin';
+		case 'MarginBottom':
+			return 'margin-bottom';
+		case 'MarginLeft':
+			return 'margin-left';
+		case 'MarginRight':
+			return 'margin-right';
+		case 'MarginTop':
+			return 'margin-top';
+		case 'Mask':
+			return 'mask';
+		case 'MaskPosition':
+			return 'mask-position';
+		case 'MaskSize':
+			return 'mask-size';
+		case 'MaxHeight':
+			return 'max-height';
+		case 'MaxWidth':
+			return 'max-width';
+		case 'MinHeight':
+			return 'min-height';
+		case 'MinWidth':
+			return 'min-width';
+		case 'ObjectPosition':
+			return 'object-position';
+		case 'Offset':
+			return 'offset';
+		case 'OffsetAnchor':
+			return 'offset-anchor';
+		case 'OffsetDistance':
+			return 'offset-distance';
+		case 'OffsetPath':
+			return 'offset-path';
+		case 'OffsetRotate':
+			return 'offset-rotate';
+		case 'Opacity':
+			return 'opacity';
+		case 'Order':
+			return 'order';
+		case 'Outline':
+			return 'outline';
+		case 'OutlineColor':
+			return 'outline-color';
+		case 'OutlineOffset':
+			return 'outline-offset';
+		case 'OutlineWidth':
+			return 'outline-width';
+		case 'Padding':
+			return 'padding';
+		case 'PaddingBottom':
+			return 'padding-bottom';
+		case 'PaddingLeft':
+			return 'padding-left';
+		case 'PaddingRight':
+			return 'padding-right';
+		case 'PaddingTop':
+			return 'padding-top';
+		case 'Right':
+			return 'right';
+		case 'TabSize':
+			return 'tab-size';
+		case 'TextIndent':
+			return 'text-indent';
+		case 'TextShadow':
+			return 'text-shadow';
+		case 'Top':
+			return 'top';
+		case 'Transform':
+			return 'transform';
+		case 'TransformOrigin':
+			return 'transform-origin';
+		case 'VerticalAlign':
+			return 'vertical-align';
+		case 'Visibility':
+			return 'visibility';
+		case 'Width':
+			return 'width';
+		case 'WordSpacing':
+			return 'word-spacing';
+		default:
+			return 'z-index';
+	}
+};
+var _rtfeldman$elm_css$Css_Transitions$transition = function (options) {
+	var v = A3(
+		_elm_lang$core$String$slice,
+		0,
+		-1,
+		A3(
+			_elm_lang$core$List$foldl,
+			F2(
+				function (_p2, s) {
+					var _p3 = _p2;
+					return A2(
+						_elm_lang$core$Basics_ops['++'],
+						s,
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							A2(
+								_elm_lang$core$String$join,
+								' ',
+								{
+									ctor: '::',
+									_0: _rtfeldman$elm_css$Css_Transitions$propToString(_p3._0.animation),
+									_1: {
+										ctor: '::',
+										_0: _rtfeldman$elm_css$Css_Transitions$timeToString(_p3._0.duration),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_elm_lang$core$Maybe$withDefault,
+												'',
+												A2(_elm_lang$core$Maybe$map, _rtfeldman$elm_css$Css_Transitions$timeToString, _p3._0.delay)),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_elm_lang$core$Maybe$withDefault,
+													'',
+													A2(_elm_lang$core$Maybe$map, _rtfeldman$elm_css$Css_Transitions$timingFunctionToString, _p3._0.timing)),
+												_1: {ctor: '[]'}
+											}
+										}
+									}
+								}),
+							','));
+				}),
+			'',
+			options));
+	return A2(_rtfeldman$elm_css$Css$property, 'transition', v);
+};
+var _rtfeldman$elm_css$Css_Transitions$CubicBezier = F4(
+	function (a, b, c, d) {
+		return {ctor: 'CubicBezier', _0: a, _1: b, _2: c, _3: d};
+	});
+var _rtfeldman$elm_css$Css_Transitions$cubicBezier = F4(
+	function (f1, f2, f3, f4) {
+		return A4(_rtfeldman$elm_css$Css_Transitions$CubicBezier, f1, f2, f3, f4);
+	});
+var _rtfeldman$elm_css$Css_Transitions$StepEnd = {ctor: 'StepEnd'};
+var _rtfeldman$elm_css$Css_Transitions$stepEnd = _rtfeldman$elm_css$Css_Transitions$StepEnd;
+var _rtfeldman$elm_css$Css_Transitions$StepStart = {ctor: 'StepStart'};
+var _rtfeldman$elm_css$Css_Transitions$stepStart = _rtfeldman$elm_css$Css_Transitions$StepStart;
+var _rtfeldman$elm_css$Css_Transitions$EaseInOut = {ctor: 'EaseInOut'};
+var _rtfeldman$elm_css$Css_Transitions$easeInOut = _rtfeldman$elm_css$Css_Transitions$EaseInOut;
+var _rtfeldman$elm_css$Css_Transitions$EaseOut = {ctor: 'EaseOut'};
+var _rtfeldman$elm_css$Css_Transitions$easeOut = _rtfeldman$elm_css$Css_Transitions$EaseOut;
+var _rtfeldman$elm_css$Css_Transitions$EaseIn = {ctor: 'EaseIn'};
+var _rtfeldman$elm_css$Css_Transitions$easeIn = _rtfeldman$elm_css$Css_Transitions$EaseIn;
+var _rtfeldman$elm_css$Css_Transitions$Linear = {ctor: 'Linear'};
+var _rtfeldman$elm_css$Css_Transitions$linear = _rtfeldman$elm_css$Css_Transitions$Linear;
+var _rtfeldman$elm_css$Css_Transitions$Ease = {ctor: 'Ease'};
+var _rtfeldman$elm_css$Css_Transitions$ease = _rtfeldman$elm_css$Css_Transitions$Ease;
+var _rtfeldman$elm_css$Css_Transitions$Transition = function (a) {
+	return {ctor: 'Transition', _0: a};
+};
+var _rtfeldman$elm_css$Css_Transitions$fullTransition = F4(
+	function (animation, duration, delay, timing) {
+		return _rtfeldman$elm_css$Css_Transitions$Transition(
+			{
+				animation: animation,
+				duration: duration,
+				delay: _elm_lang$core$Maybe$Just(delay),
+				timing: _elm_lang$core$Maybe$Just(timing)
+			});
+	});
+var _rtfeldman$elm_css$Css_Transitions$durationDelayTransition = F3(
+	function (animation, duration, delay) {
+		return _rtfeldman$elm_css$Css_Transitions$Transition(
+			{
+				animation: animation,
+				duration: duration,
+				delay: _elm_lang$core$Maybe$Just(delay),
+				timing: _elm_lang$core$Maybe$Nothing
+			});
+	});
+var _rtfeldman$elm_css$Css_Transitions$durationTransition = F2(
+	function (animation, duration) {
+		return _rtfeldman$elm_css$Css_Transitions$Transition(
+			{animation: animation, duration: duration, delay: _elm_lang$core$Maybe$Nothing, timing: _elm_lang$core$Maybe$Nothing});
+	});
+var _rtfeldman$elm_css$Css_Transitions$ZIndex = {ctor: 'ZIndex'};
+var _rtfeldman$elm_css$Css_Transitions$zIndex3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$ZIndex);
+var _rtfeldman$elm_css$Css_Transitions$zIndex2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$ZIndex);
+var _rtfeldman$elm_css$Css_Transitions$zIndex = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$ZIndex);
+var _rtfeldman$elm_css$Css_Transitions$WordSpacing = {ctor: 'WordSpacing'};
+var _rtfeldman$elm_css$Css_Transitions$wordSpacing3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$WordSpacing);
+var _rtfeldman$elm_css$Css_Transitions$wordSpacing2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$WordSpacing);
+var _rtfeldman$elm_css$Css_Transitions$wordSpacing = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$WordSpacing);
+var _rtfeldman$elm_css$Css_Transitions$Width = {ctor: 'Width'};
+var _rtfeldman$elm_css$Css_Transitions$width3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$Width);
+var _rtfeldman$elm_css$Css_Transitions$width2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$Width);
+var _rtfeldman$elm_css$Css_Transitions$width = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$Width);
+var _rtfeldman$elm_css$Css_Transitions$Visibility = {ctor: 'Visibility'};
+var _rtfeldman$elm_css$Css_Transitions$visibility3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$Visibility);
+var _rtfeldman$elm_css$Css_Transitions$visibility2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$Visibility);
+var _rtfeldman$elm_css$Css_Transitions$visibility = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$Visibility);
+var _rtfeldman$elm_css$Css_Transitions$VerticalAlign = {ctor: 'VerticalAlign'};
+var _rtfeldman$elm_css$Css_Transitions$verticalAlign3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$VerticalAlign);
+var _rtfeldman$elm_css$Css_Transitions$verticalAlign2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$VerticalAlign);
+var _rtfeldman$elm_css$Css_Transitions$verticalAlign = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$VerticalAlign);
+var _rtfeldman$elm_css$Css_Transitions$TransformOrigin = {ctor: 'TransformOrigin'};
+var _rtfeldman$elm_css$Css_Transitions$transformOrigin3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$TransformOrigin);
+var _rtfeldman$elm_css$Css_Transitions$transformOrigin2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$TransformOrigin);
+var _rtfeldman$elm_css$Css_Transitions$transformOrigin = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$TransformOrigin);
+var _rtfeldman$elm_css$Css_Transitions$Transform = {ctor: 'Transform'};
+var _rtfeldman$elm_css$Css_Transitions$transform3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$Transform);
+var _rtfeldman$elm_css$Css_Transitions$transform2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$Transform);
+var _rtfeldman$elm_css$Css_Transitions$transform = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$Transform);
+var _rtfeldman$elm_css$Css_Transitions$Top = {ctor: 'Top'};
+var _rtfeldman$elm_css$Css_Transitions$top3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$Top);
+var _rtfeldman$elm_css$Css_Transitions$top2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$Top);
+var _rtfeldman$elm_css$Css_Transitions$top = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$Top);
+var _rtfeldman$elm_css$Css_Transitions$TextShadow = {ctor: 'TextShadow'};
+var _rtfeldman$elm_css$Css_Transitions$textShadow3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$TextShadow);
+var _rtfeldman$elm_css$Css_Transitions$textShadow2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$TextShadow);
+var _rtfeldman$elm_css$Css_Transitions$textShadow = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$TextShadow);
+var _rtfeldman$elm_css$Css_Transitions$TextIndent = {ctor: 'TextIndent'};
+var _rtfeldman$elm_css$Css_Transitions$textIndent3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$TextIndent);
+var _rtfeldman$elm_css$Css_Transitions$textIndent2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$TextIndent);
+var _rtfeldman$elm_css$Css_Transitions$textIndent = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$TextIndent);
+var _rtfeldman$elm_css$Css_Transitions$TabSize = {ctor: 'TabSize'};
+var _rtfeldman$elm_css$Css_Transitions$tabSize3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$TabSize);
+var _rtfeldman$elm_css$Css_Transitions$tabSize2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$TabSize);
+var _rtfeldman$elm_css$Css_Transitions$tabSize = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$TabSize);
+var _rtfeldman$elm_css$Css_Transitions$Right = {ctor: 'Right'};
+var _rtfeldman$elm_css$Css_Transitions$right3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$Right);
+var _rtfeldman$elm_css$Css_Transitions$right2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$Right);
+var _rtfeldman$elm_css$Css_Transitions$right = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$Right);
+var _rtfeldman$elm_css$Css_Transitions$PaddingTop = {ctor: 'PaddingTop'};
+var _rtfeldman$elm_css$Css_Transitions$paddingTop3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$PaddingTop);
+var _rtfeldman$elm_css$Css_Transitions$paddingTop2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$PaddingTop);
+var _rtfeldman$elm_css$Css_Transitions$paddingTop = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$PaddingTop);
+var _rtfeldman$elm_css$Css_Transitions$PaddingRight = {ctor: 'PaddingRight'};
+var _rtfeldman$elm_css$Css_Transitions$paddingRight3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$PaddingRight);
+var _rtfeldman$elm_css$Css_Transitions$paddingRight2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$PaddingRight);
+var _rtfeldman$elm_css$Css_Transitions$paddingRight = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$PaddingRight);
+var _rtfeldman$elm_css$Css_Transitions$PaddingLeft = {ctor: 'PaddingLeft'};
+var _rtfeldman$elm_css$Css_Transitions$paddingLeft3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$PaddingLeft);
+var _rtfeldman$elm_css$Css_Transitions$paddingLeft2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$PaddingLeft);
+var _rtfeldman$elm_css$Css_Transitions$paddingLeft = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$PaddingLeft);
+var _rtfeldman$elm_css$Css_Transitions$PaddingBottom = {ctor: 'PaddingBottom'};
+var _rtfeldman$elm_css$Css_Transitions$paddingBottom3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$PaddingBottom);
+var _rtfeldman$elm_css$Css_Transitions$paddingBottom2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$PaddingBottom);
+var _rtfeldman$elm_css$Css_Transitions$paddingBottom = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$PaddingBottom);
+var _rtfeldman$elm_css$Css_Transitions$Padding = {ctor: 'Padding'};
+var _rtfeldman$elm_css$Css_Transitions$padding3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$Padding);
+var _rtfeldman$elm_css$Css_Transitions$padding2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$Padding);
+var _rtfeldman$elm_css$Css_Transitions$padding = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$Padding);
+var _rtfeldman$elm_css$Css_Transitions$OutlineWidth = {ctor: 'OutlineWidth'};
+var _rtfeldman$elm_css$Css_Transitions$outlineWidth3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$OutlineWidth);
+var _rtfeldman$elm_css$Css_Transitions$outlineWidth2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$OutlineWidth);
+var _rtfeldman$elm_css$Css_Transitions$outlineWidth = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$OutlineWidth);
+var _rtfeldman$elm_css$Css_Transitions$OutlineOffset = {ctor: 'OutlineOffset'};
+var _rtfeldman$elm_css$Css_Transitions$outlineOffset3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$OutlineOffset);
+var _rtfeldman$elm_css$Css_Transitions$outlineOffset2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$OutlineOffset);
+var _rtfeldman$elm_css$Css_Transitions$outlineOffset = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$OutlineOffset);
+var _rtfeldman$elm_css$Css_Transitions$OutlineColor = {ctor: 'OutlineColor'};
+var _rtfeldman$elm_css$Css_Transitions$outlineColor3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$OutlineColor);
+var _rtfeldman$elm_css$Css_Transitions$outlineColor2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$OutlineColor);
+var _rtfeldman$elm_css$Css_Transitions$outlineColor = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$OutlineColor);
+var _rtfeldman$elm_css$Css_Transitions$Outline = {ctor: 'Outline'};
+var _rtfeldman$elm_css$Css_Transitions$outline3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$Outline);
+var _rtfeldman$elm_css$Css_Transitions$outline2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$Outline);
+var _rtfeldman$elm_css$Css_Transitions$outline = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$Outline);
+var _rtfeldman$elm_css$Css_Transitions$Order = {ctor: 'Order'};
+var _rtfeldman$elm_css$Css_Transitions$order3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$Order);
+var _rtfeldman$elm_css$Css_Transitions$order2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$Order);
+var _rtfeldman$elm_css$Css_Transitions$order = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$Order);
+var _rtfeldman$elm_css$Css_Transitions$Opacity = {ctor: 'Opacity'};
+var _rtfeldman$elm_css$Css_Transitions$opacity3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$Opacity);
+var _rtfeldman$elm_css$Css_Transitions$opacity2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$Opacity);
+var _rtfeldman$elm_css$Css_Transitions$opacity = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$Opacity);
+var _rtfeldman$elm_css$Css_Transitions$OffsetRotate = {ctor: 'OffsetRotate'};
+var _rtfeldman$elm_css$Css_Transitions$offsetRotate3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$OffsetRotate);
+var _rtfeldman$elm_css$Css_Transitions$offsetRotate2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$OffsetRotate);
+var _rtfeldman$elm_css$Css_Transitions$offsetRotate = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$OffsetRotate);
+var _rtfeldman$elm_css$Css_Transitions$OffsetPath = {ctor: 'OffsetPath'};
+var _rtfeldman$elm_css$Css_Transitions$offsetPath3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$OffsetPath);
+var _rtfeldman$elm_css$Css_Transitions$offsetPath2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$OffsetPath);
+var _rtfeldman$elm_css$Css_Transitions$offsetPath = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$OffsetPath);
+var _rtfeldman$elm_css$Css_Transitions$OffsetDistance = {ctor: 'OffsetDistance'};
+var _rtfeldman$elm_css$Css_Transitions$offsetDistance3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$OffsetDistance);
+var _rtfeldman$elm_css$Css_Transitions$offsetDistance2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$OffsetDistance);
+var _rtfeldman$elm_css$Css_Transitions$offsetDistance = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$OffsetDistance);
+var _rtfeldman$elm_css$Css_Transitions$OffsetAnchor = {ctor: 'OffsetAnchor'};
+var _rtfeldman$elm_css$Css_Transitions$offsetAnchor3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$OffsetAnchor);
+var _rtfeldman$elm_css$Css_Transitions$offsetAnchor2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$OffsetAnchor);
+var _rtfeldman$elm_css$Css_Transitions$offsetAnchor = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$OffsetAnchor);
+var _rtfeldman$elm_css$Css_Transitions$Offset = {ctor: 'Offset'};
+var _rtfeldman$elm_css$Css_Transitions$offset3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$Offset);
+var _rtfeldman$elm_css$Css_Transitions$offset2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$Offset);
+var _rtfeldman$elm_css$Css_Transitions$offset = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$Offset);
+var _rtfeldman$elm_css$Css_Transitions$ObjectPosition = {ctor: 'ObjectPosition'};
+var _rtfeldman$elm_css$Css_Transitions$objectPosition3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$ObjectPosition);
+var _rtfeldman$elm_css$Css_Transitions$objectPosition2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$ObjectPosition);
+var _rtfeldman$elm_css$Css_Transitions$objectPosition = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$ObjectPosition);
+var _rtfeldman$elm_css$Css_Transitions$MinWidth = {ctor: 'MinWidth'};
+var _rtfeldman$elm_css$Css_Transitions$minWidth3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$MinWidth);
+var _rtfeldman$elm_css$Css_Transitions$minWidth2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$MinWidth);
+var _rtfeldman$elm_css$Css_Transitions$minWidth = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$MinWidth);
+var _rtfeldman$elm_css$Css_Transitions$MinHeight = {ctor: 'MinHeight'};
+var _rtfeldman$elm_css$Css_Transitions$minHeight3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$MinHeight);
+var _rtfeldman$elm_css$Css_Transitions$minHeight2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$MinHeight);
+var _rtfeldman$elm_css$Css_Transitions$minHeight = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$MinHeight);
+var _rtfeldman$elm_css$Css_Transitions$MaxWidth = {ctor: 'MaxWidth'};
+var _rtfeldman$elm_css$Css_Transitions$maxWidth3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$MaxWidth);
+var _rtfeldman$elm_css$Css_Transitions$maxWidth2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$MaxWidth);
+var _rtfeldman$elm_css$Css_Transitions$maxWidth = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$MaxWidth);
+var _rtfeldman$elm_css$Css_Transitions$MaxHeight = {ctor: 'MaxHeight'};
+var _rtfeldman$elm_css$Css_Transitions$maxHeight3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$MaxHeight);
+var _rtfeldman$elm_css$Css_Transitions$maxHeight2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$MaxHeight);
+var _rtfeldman$elm_css$Css_Transitions$maxHeight = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$MaxHeight);
+var _rtfeldman$elm_css$Css_Transitions$MaskSize = {ctor: 'MaskSize'};
+var _rtfeldman$elm_css$Css_Transitions$maskSize3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$MaskSize);
+var _rtfeldman$elm_css$Css_Transitions$maskSize2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$MaskSize);
+var _rtfeldman$elm_css$Css_Transitions$maskSize = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$MaskSize);
+var _rtfeldman$elm_css$Css_Transitions$MaskPosition = {ctor: 'MaskPosition'};
+var _rtfeldman$elm_css$Css_Transitions$maskPosition3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$MaskPosition);
+var _rtfeldman$elm_css$Css_Transitions$maskPosition2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$MaskPosition);
+var _rtfeldman$elm_css$Css_Transitions$maskPosition = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$MaskPosition);
+var _rtfeldman$elm_css$Css_Transitions$Mask = {ctor: 'Mask'};
+var _rtfeldman$elm_css$Css_Transitions$mask3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$Mask);
+var _rtfeldman$elm_css$Css_Transitions$mask2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$Mask);
+var _rtfeldman$elm_css$Css_Transitions$mask = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$Mask);
+var _rtfeldman$elm_css$Css_Transitions$MarginTop = {ctor: 'MarginTop'};
+var _rtfeldman$elm_css$Css_Transitions$marginTop3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$MarginTop);
+var _rtfeldman$elm_css$Css_Transitions$marginTop2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$MarginTop);
+var _rtfeldman$elm_css$Css_Transitions$marginTop = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$MarginTop);
+var _rtfeldman$elm_css$Css_Transitions$MarginRight = {ctor: 'MarginRight'};
+var _rtfeldman$elm_css$Css_Transitions$marginRight3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$MarginRight);
+var _rtfeldman$elm_css$Css_Transitions$marginRight2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$MarginRight);
+var _rtfeldman$elm_css$Css_Transitions$marginRight = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$MarginRight);
+var _rtfeldman$elm_css$Css_Transitions$MarginLeft = {ctor: 'MarginLeft'};
+var _rtfeldman$elm_css$Css_Transitions$marginLeft3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$MarginLeft);
+var _rtfeldman$elm_css$Css_Transitions$marginLeft2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$MarginLeft);
+var _rtfeldman$elm_css$Css_Transitions$marginLeft = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$MarginLeft);
+var _rtfeldman$elm_css$Css_Transitions$MarginBottom = {ctor: 'MarginBottom'};
+var _rtfeldman$elm_css$Css_Transitions$marginBottom3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$MarginBottom);
+var _rtfeldman$elm_css$Css_Transitions$marginBottom2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$MarginBottom);
+var _rtfeldman$elm_css$Css_Transitions$marginBottom = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$MarginBottom);
+var _rtfeldman$elm_css$Css_Transitions$Margin = {ctor: 'Margin'};
+var _rtfeldman$elm_css$Css_Transitions$margin3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$Margin);
+var _rtfeldman$elm_css$Css_Transitions$margin2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$Margin);
+var _rtfeldman$elm_css$Css_Transitions$margin = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$Margin);
+var _rtfeldman$elm_css$Css_Transitions$LineHeight = {ctor: 'LineHeight'};
+var _rtfeldman$elm_css$Css_Transitions$lineHeight3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$LineHeight);
+var _rtfeldman$elm_css$Css_Transitions$lineHeight2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$LineHeight);
+var _rtfeldman$elm_css$Css_Transitions$lineHeight = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$LineHeight);
+var _rtfeldman$elm_css$Css_Transitions$LetterSpacing = {ctor: 'LetterSpacing'};
+var _rtfeldman$elm_css$Css_Transitions$letterSpacing3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$LetterSpacing);
+var _rtfeldman$elm_css$Css_Transitions$letterSpacing2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$LetterSpacing);
+var _rtfeldman$elm_css$Css_Transitions$letterSpacing = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$LetterSpacing);
+var _rtfeldman$elm_css$Css_Transitions$Left = {ctor: 'Left'};
+var _rtfeldman$elm_css$Css_Transitions$left3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$Left);
+var _rtfeldman$elm_css$Css_Transitions$left2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$Left);
+var _rtfeldman$elm_css$Css_Transitions$left = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$Left);
+var _rtfeldman$elm_css$Css_Transitions$Height = {ctor: 'Height'};
+var _rtfeldman$elm_css$Css_Transitions$height3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$Height);
+var _rtfeldman$elm_css$Css_Transitions$height2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$Height);
+var _rtfeldman$elm_css$Css_Transitions$height = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$Height);
+var _rtfeldman$elm_css$Css_Transitions$GridRowGap = {ctor: 'GridRowGap'};
+var _rtfeldman$elm_css$Css_Transitions$gridRowGap3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$GridRowGap);
+var _rtfeldman$elm_css$Css_Transitions$gridRowGap2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$GridRowGap);
+var _rtfeldman$elm_css$Css_Transitions$gridRowGap = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$GridRowGap);
+var _rtfeldman$elm_css$Css_Transitions$GridGap = {ctor: 'GridGap'};
+var _rtfeldman$elm_css$Css_Transitions$gridGap3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$GridGap);
+var _rtfeldman$elm_css$Css_Transitions$gridGap2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$GridGap);
+var _rtfeldman$elm_css$Css_Transitions$gridGap = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$GridGap);
+var _rtfeldman$elm_css$Css_Transitions$GridColumnGap = {ctor: 'GridColumnGap'};
+var _rtfeldman$elm_css$Css_Transitions$gridColumnGap3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$GridColumnGap);
+var _rtfeldman$elm_css$Css_Transitions$gridColumnGap2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$GridColumnGap);
+var _rtfeldman$elm_css$Css_Transitions$gridColumnGap = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$GridColumnGap);
+var _rtfeldman$elm_css$Css_Transitions$FontWeight = {ctor: 'FontWeight'};
+var _rtfeldman$elm_css$Css_Transitions$fontWeight3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$FontWeight);
+var _rtfeldman$elm_css$Css_Transitions$fontWeight2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$FontWeight);
+var _rtfeldman$elm_css$Css_Transitions$fontWeight = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$FontWeight);
+var _rtfeldman$elm_css$Css_Transitions$FontVariationSettings = {ctor: 'FontVariationSettings'};
+var _rtfeldman$elm_css$Css_Transitions$fontVariationSettings3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$FontVariationSettings);
+var _rtfeldman$elm_css$Css_Transitions$fontVariationSettings2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$FontVariationSettings);
+var _rtfeldman$elm_css$Css_Transitions$fontVariationSettings = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$FontVariationSettings);
+var _rtfeldman$elm_css$Css_Transitions$FontStretch = {ctor: 'FontStretch'};
+var _rtfeldman$elm_css$Css_Transitions$fontStretch3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$FontStretch);
+var _rtfeldman$elm_css$Css_Transitions$fontStretch2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$FontStretch);
+var _rtfeldman$elm_css$Css_Transitions$fontStretch = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$FontStretch);
+var _rtfeldman$elm_css$Css_Transitions$FontSizeAdjust = {ctor: 'FontSizeAdjust'};
+var _rtfeldman$elm_css$Css_Transitions$fontSizeAdjust3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$FontSizeAdjust);
+var _rtfeldman$elm_css$Css_Transitions$fontSizeAdjust2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$FontSizeAdjust);
+var _rtfeldman$elm_css$Css_Transitions$fontSizeAdjust = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$FontSizeAdjust);
+var _rtfeldman$elm_css$Css_Transitions$FontSize = {ctor: 'FontSize'};
+var _rtfeldman$elm_css$Css_Transitions$fontSize3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$FontSize);
+var _rtfeldman$elm_css$Css_Transitions$fontSize2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$FontSize);
+var _rtfeldman$elm_css$Css_Transitions$fontSize = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$FontSize);
+var _rtfeldman$elm_css$Css_Transitions$Font = {ctor: 'Font'};
+var _rtfeldman$elm_css$Css_Transitions$font3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$Font);
+var _rtfeldman$elm_css$Css_Transitions$font2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$Font);
+var _rtfeldman$elm_css$Css_Transitions$font = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$Font);
+var _rtfeldman$elm_css$Css_Transitions$FlexShrink = {ctor: 'FlexShrink'};
+var _rtfeldman$elm_css$Css_Transitions$flexShrink3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$FlexShrink);
+var _rtfeldman$elm_css$Css_Transitions$flexShrink2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$FlexShrink);
+var _rtfeldman$elm_css$Css_Transitions$flexShrink = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$FlexShrink);
+var _rtfeldman$elm_css$Css_Transitions$FlexGrow = {ctor: 'FlexGrow'};
+var _rtfeldman$elm_css$Css_Transitions$flexGrow3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$FlexGrow);
+var _rtfeldman$elm_css$Css_Transitions$flexGrow2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$FlexGrow);
+var _rtfeldman$elm_css$Css_Transitions$flexGrow = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$FlexGrow);
+var _rtfeldman$elm_css$Css_Transitions$FlexBasis = {ctor: 'FlexBasis'};
+var _rtfeldman$elm_css$Css_Transitions$flexBasis3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$FlexBasis);
+var _rtfeldman$elm_css$Css_Transitions$flexBasis2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$FlexBasis);
+var _rtfeldman$elm_css$Css_Transitions$flexBasis = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$FlexBasis);
+var _rtfeldman$elm_css$Css_Transitions$Flex = {ctor: 'Flex'};
+var _rtfeldman$elm_css$Css_Transitions$flex3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$Flex);
+var _rtfeldman$elm_css$Css_Transitions$flex2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$Flex);
+var _rtfeldman$elm_css$Css_Transitions$flex = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$Flex);
+var _rtfeldman$elm_css$Css_Transitions$Filter = {ctor: 'Filter'};
+var _rtfeldman$elm_css$Css_Transitions$filter3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$Filter);
+var _rtfeldman$elm_css$Css_Transitions$filter2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$Filter);
+var _rtfeldman$elm_css$Css_Transitions$filter = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$Filter);
+var _rtfeldman$elm_css$Css_Transitions$Columns = {ctor: 'Columns'};
+var _rtfeldman$elm_css$Css_Transitions$columns3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$Columns);
+var _rtfeldman$elm_css$Css_Transitions$columns2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$Columns);
+var _rtfeldman$elm_css$Css_Transitions$columns = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$Columns);
+var _rtfeldman$elm_css$Css_Transitions$ColumnWidth = {ctor: 'ColumnWidth'};
+var _rtfeldman$elm_css$Css_Transitions$columnWidth3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$ColumnWidth);
+var _rtfeldman$elm_css$Css_Transitions$columnWidth2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$ColumnWidth);
+var _rtfeldman$elm_css$Css_Transitions$columnWidth = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$ColumnWidth);
+var _rtfeldman$elm_css$Css_Transitions$ColumnRuleWidth = {ctor: 'ColumnRuleWidth'};
+var _rtfeldman$elm_css$Css_Transitions$columnRuleWidth3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$ColumnRuleWidth);
+var _rtfeldman$elm_css$Css_Transitions$columnRuleWidth2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$ColumnRuleWidth);
+var _rtfeldman$elm_css$Css_Transitions$columnRuleWidth = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$ColumnRuleWidth);
+var _rtfeldman$elm_css$Css_Transitions$ColumnRuleColor = {ctor: 'ColumnRuleColor'};
+var _rtfeldman$elm_css$Css_Transitions$columnRuleColor3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$ColumnRuleColor);
+var _rtfeldman$elm_css$Css_Transitions$columnRuleColor2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$ColumnRuleColor);
+var _rtfeldman$elm_css$Css_Transitions$columnRuleColor = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$ColumnRuleColor);
+var _rtfeldman$elm_css$Css_Transitions$ColumnRule = {ctor: 'ColumnRule'};
+var _rtfeldman$elm_css$Css_Transitions$columnRule3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$ColumnRule);
+var _rtfeldman$elm_css$Css_Transitions$columnRule2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$ColumnRule);
+var _rtfeldman$elm_css$Css_Transitions$columnRule = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$ColumnRule);
+var _rtfeldman$elm_css$Css_Transitions$ColumnGap = {ctor: 'ColumnGap'};
+var _rtfeldman$elm_css$Css_Transitions$columnGap3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$ColumnGap);
+var _rtfeldman$elm_css$Css_Transitions$columnGap2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$ColumnGap);
+var _rtfeldman$elm_css$Css_Transitions$columnGap = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$ColumnGap);
+var _rtfeldman$elm_css$Css_Transitions$ColumnCount = {ctor: 'ColumnCount'};
+var _rtfeldman$elm_css$Css_Transitions$columnCount3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$ColumnCount);
+var _rtfeldman$elm_css$Css_Transitions$columnCount2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$ColumnCount);
+var _rtfeldman$elm_css$Css_Transitions$columnCount = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$ColumnCount);
+var _rtfeldman$elm_css$Css_Transitions$Color = {ctor: 'Color'};
+var _rtfeldman$elm_css$Css_Transitions$color3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$Color);
+var _rtfeldman$elm_css$Css_Transitions$color2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$Color);
+var _rtfeldman$elm_css$Css_Transitions$color = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$Color);
+var _rtfeldman$elm_css$Css_Transitions$ClipPath = {ctor: 'ClipPath'};
+var _rtfeldman$elm_css$Css_Transitions$clipPath3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$ClipPath);
+var _rtfeldman$elm_css$Css_Transitions$clipPath2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$ClipPath);
+var _rtfeldman$elm_css$Css_Transitions$clipPath = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$ClipPath);
+var _rtfeldman$elm_css$Css_Transitions$Clip = {ctor: 'Clip'};
+var _rtfeldman$elm_css$Css_Transitions$clip3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$Clip);
+var _rtfeldman$elm_css$Css_Transitions$clip2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$Clip);
+var _rtfeldman$elm_css$Css_Transitions$clip = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$Clip);
+var _rtfeldman$elm_css$Css_Transitions$CaretColor = {ctor: 'CaretColor'};
+var _rtfeldman$elm_css$Css_Transitions$caretColor3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$CaretColor);
+var _rtfeldman$elm_css$Css_Transitions$caretColor2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$CaretColor);
+var _rtfeldman$elm_css$Css_Transitions$caretColor = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$CaretColor);
+var _rtfeldman$elm_css$Css_Transitions$BoxShadow = {ctor: 'BoxShadow'};
+var _rtfeldman$elm_css$Css_Transitions$boxShadow3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$BoxShadow);
+var _rtfeldman$elm_css$Css_Transitions$boxShadow2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$BoxShadow);
+var _rtfeldman$elm_css$Css_Transitions$boxShadow = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$BoxShadow);
+var _rtfeldman$elm_css$Css_Transitions$Bottom = {ctor: 'Bottom'};
+var _rtfeldman$elm_css$Css_Transitions$bottom3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$Bottom);
+var _rtfeldman$elm_css$Css_Transitions$bottom2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$Bottom);
+var _rtfeldman$elm_css$Css_Transitions$bottom = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$Bottom);
+var _rtfeldman$elm_css$Css_Transitions$BorderWidth = {ctor: 'BorderWidth'};
+var _rtfeldman$elm_css$Css_Transitions$borderWidth3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$BorderWidth);
+var _rtfeldman$elm_css$Css_Transitions$borderWidth2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$BorderWidth);
+var _rtfeldman$elm_css$Css_Transitions$borderWidth = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$BorderWidth);
+var _rtfeldman$elm_css$Css_Transitions$BorderTopWidth = {ctor: 'BorderTopWidth'};
+var _rtfeldman$elm_css$Css_Transitions$borderTopWidth3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$BorderTopWidth);
+var _rtfeldman$elm_css$Css_Transitions$borderTopWidth2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$BorderTopWidth);
+var _rtfeldman$elm_css$Css_Transitions$borderTopWidth = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$BorderTopWidth);
+var _rtfeldman$elm_css$Css_Transitions$BorderTopRightRadius = {ctor: 'BorderTopRightRadius'};
+var _rtfeldman$elm_css$Css_Transitions$borderTopRightRadius3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$BorderTopRightRadius);
+var _rtfeldman$elm_css$Css_Transitions$borderTopRightRadius2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$BorderTopRightRadius);
+var _rtfeldman$elm_css$Css_Transitions$borderTopRightRadius = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$BorderTopRightRadius);
+var _rtfeldman$elm_css$Css_Transitions$BorderTopLeftRadius = {ctor: 'BorderTopLeftRadius'};
+var _rtfeldman$elm_css$Css_Transitions$borderTopLeftRadius3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$BorderTopLeftRadius);
+var _rtfeldman$elm_css$Css_Transitions$borderTopLeftRadius2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$BorderTopLeftRadius);
+var _rtfeldman$elm_css$Css_Transitions$borderTopLeftRadius = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$BorderTopLeftRadius);
+var _rtfeldman$elm_css$Css_Transitions$BorderTopColor = {ctor: 'BorderTopColor'};
+var _rtfeldman$elm_css$Css_Transitions$borderTopColor3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$BorderTopColor);
+var _rtfeldman$elm_css$Css_Transitions$borderTopColor2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$BorderTopColor);
+var _rtfeldman$elm_css$Css_Transitions$borderTopColor = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$BorderTopColor);
+var _rtfeldman$elm_css$Css_Transitions$BorderTop = {ctor: 'BorderTop'};
+var _rtfeldman$elm_css$Css_Transitions$borderTop3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$BorderTop);
+var _rtfeldman$elm_css$Css_Transitions$borderTop2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$BorderTop);
+var _rtfeldman$elm_css$Css_Transitions$borderTop = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$BorderTop);
+var _rtfeldman$elm_css$Css_Transitions$BorderRightWidth = {ctor: 'BorderRightWidth'};
+var _rtfeldman$elm_css$Css_Transitions$borderRightWidth3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$BorderRightWidth);
+var _rtfeldman$elm_css$Css_Transitions$borderRightWidth2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$BorderRightWidth);
+var _rtfeldman$elm_css$Css_Transitions$borderRightWidth = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$BorderRightWidth);
+var _rtfeldman$elm_css$Css_Transitions$BorderRightColor = {ctor: 'BorderRightColor'};
+var _rtfeldman$elm_css$Css_Transitions$borderRightColor3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$BorderRightColor);
+var _rtfeldman$elm_css$Css_Transitions$borderRightColor2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$BorderRightColor);
+var _rtfeldman$elm_css$Css_Transitions$borderRightColor = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$BorderRightColor);
+var _rtfeldman$elm_css$Css_Transitions$BorderRight = {ctor: 'BorderRight'};
+var _rtfeldman$elm_css$Css_Transitions$borderRight3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$BorderRight);
+var _rtfeldman$elm_css$Css_Transitions$borderRight2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$BorderRight);
+var _rtfeldman$elm_css$Css_Transitions$borderRight = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$BorderRight);
+var _rtfeldman$elm_css$Css_Transitions$BorderRadius = {ctor: 'BorderRadius'};
+var _rtfeldman$elm_css$Css_Transitions$borderRadius3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$BorderRadius);
+var _rtfeldman$elm_css$Css_Transitions$borderRadius2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$BorderRadius);
+var _rtfeldman$elm_css$Css_Transitions$borderRadius = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$BorderRadius);
+var _rtfeldman$elm_css$Css_Transitions$BorderLeftWidth = {ctor: 'BorderLeftWidth'};
+var _rtfeldman$elm_css$Css_Transitions$borderLeftWidth3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$BorderLeftWidth);
+var _rtfeldman$elm_css$Css_Transitions$borderLeftWidth2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$BorderLeftWidth);
+var _rtfeldman$elm_css$Css_Transitions$borderLeftWidth = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$BorderLeftWidth);
+var _rtfeldman$elm_css$Css_Transitions$BorderLeftColor = {ctor: 'BorderLeftColor'};
+var _rtfeldman$elm_css$Css_Transitions$borderLeftColor3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$BorderLeftColor);
+var _rtfeldman$elm_css$Css_Transitions$borderLeftColor2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$BorderLeftColor);
+var _rtfeldman$elm_css$Css_Transitions$borderLeftColor = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$BorderLeftColor);
+var _rtfeldman$elm_css$Css_Transitions$BorderLeft = {ctor: 'BorderLeft'};
+var _rtfeldman$elm_css$Css_Transitions$borderLeft3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$BorderLeft);
+var _rtfeldman$elm_css$Css_Transitions$borderLeft2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$BorderLeft);
+var _rtfeldman$elm_css$Css_Transitions$borderLeft = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$BorderLeft);
+var _rtfeldman$elm_css$Css_Transitions$BorderColor = {ctor: 'BorderColor'};
+var _rtfeldman$elm_css$Css_Transitions$borderColor3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$BorderColor);
+var _rtfeldman$elm_css$Css_Transitions$borderColor2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$BorderColor);
+var _rtfeldman$elm_css$Css_Transitions$borderColor = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$BorderColor);
+var _rtfeldman$elm_css$Css_Transitions$BorderBottomWidth = {ctor: 'BorderBottomWidth'};
+var _rtfeldman$elm_css$Css_Transitions$borderBottomWidth3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$BorderBottomWidth);
+var _rtfeldman$elm_css$Css_Transitions$borderBottomWidth2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$BorderBottomWidth);
+var _rtfeldman$elm_css$Css_Transitions$borderBottomWidth = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$BorderBottomWidth);
+var _rtfeldman$elm_css$Css_Transitions$BorderBottomRightRadius = {ctor: 'BorderBottomRightRadius'};
+var _rtfeldman$elm_css$Css_Transitions$borderBottomRightRadius3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$BorderBottomRightRadius);
+var _rtfeldman$elm_css$Css_Transitions$borderBottomRightRadius2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$BorderBottomRightRadius);
+var _rtfeldman$elm_css$Css_Transitions$borderBottomRightRadius = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$BorderBottomRightRadius);
+var _rtfeldman$elm_css$Css_Transitions$BorderBottomLeftRadius = {ctor: 'BorderBottomLeftRadius'};
+var _rtfeldman$elm_css$Css_Transitions$borderBottomLeftRadius3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$BorderBottomLeftRadius);
+var _rtfeldman$elm_css$Css_Transitions$borderBottomLeftRadius2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$BorderBottomLeftRadius);
+var _rtfeldman$elm_css$Css_Transitions$borderBottomLeftRadius = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$BorderBottomLeftRadius);
+var _rtfeldman$elm_css$Css_Transitions$BorderBottomColor = {ctor: 'BorderBottomColor'};
+var _rtfeldman$elm_css$Css_Transitions$borderBottomColor3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$BorderBottomColor);
+var _rtfeldman$elm_css$Css_Transitions$borderBottomColor2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$BorderBottomColor);
+var _rtfeldman$elm_css$Css_Transitions$borderBottomColor = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$BorderBottomColor);
+var _rtfeldman$elm_css$Css_Transitions$BorderBottom = {ctor: 'BorderBottom'};
+var _rtfeldman$elm_css$Css_Transitions$borderBottom3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$BorderBottom);
+var _rtfeldman$elm_css$Css_Transitions$borderBottom2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$BorderBottom);
+var _rtfeldman$elm_css$Css_Transitions$borderBottom = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$BorderBottom);
+var _rtfeldman$elm_css$Css_Transitions$Border = {ctor: 'Border'};
+var _rtfeldman$elm_css$Css_Transitions$border3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$Border);
+var _rtfeldman$elm_css$Css_Transitions$border2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$Border);
+var _rtfeldman$elm_css$Css_Transitions$border = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$Border);
+var _rtfeldman$elm_css$Css_Transitions$BackgroundSize = {ctor: 'BackgroundSize'};
+var _rtfeldman$elm_css$Css_Transitions$backgroundSize3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$BackgroundSize);
+var _rtfeldman$elm_css$Css_Transitions$backgroundSize2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$BackgroundSize);
+var _rtfeldman$elm_css$Css_Transitions$backgroundSize = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$BackgroundSize);
+var _rtfeldman$elm_css$Css_Transitions$BackgroundPosition = {ctor: 'BackgroundPosition'};
+var _rtfeldman$elm_css$Css_Transitions$backgroundPosition3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$BackgroundPosition);
+var _rtfeldman$elm_css$Css_Transitions$backgroundPosition2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$BackgroundPosition);
+var _rtfeldman$elm_css$Css_Transitions$backgroundPosition = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$BackgroundPosition);
+var _rtfeldman$elm_css$Css_Transitions$BackgroundColor = {ctor: 'BackgroundColor'};
+var _rtfeldman$elm_css$Css_Transitions$backgroundColor3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$BackgroundColor);
+var _rtfeldman$elm_css$Css_Transitions$backgroundColor2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$BackgroundColor);
+var _rtfeldman$elm_css$Css_Transitions$backgroundColor = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$BackgroundColor);
+var _rtfeldman$elm_css$Css_Transitions$Background = {ctor: 'Background'};
+var _rtfeldman$elm_css$Css_Transitions$background3 = _rtfeldman$elm_css$Css_Transitions$fullTransition(_rtfeldman$elm_css$Css_Transitions$Background);
+var _rtfeldman$elm_css$Css_Transitions$background2 = _rtfeldman$elm_css$Css_Transitions$durationDelayTransition(_rtfeldman$elm_css$Css_Transitions$Background);
+var _rtfeldman$elm_css$Css_Transitions$background = _rtfeldman$elm_css$Css_Transitions$durationTransition(_rtfeldman$elm_css$Css_Transitions$Background);
+
 var _fizwidget$game_of_life$Matrix$offsetBy = F2(
 	function (_p1, _p0) {
 		var _p2 = _p1;
@@ -15293,28 +16023,39 @@ var _fizwidget$game_of_life$Matrix$getRows = function (_p4) {
 			},
 			A2(_elm_lang$core$List$range, 0, _p6.height - 1)));
 };
-var _fizwidget$game_of_life$Matrix$any = F2(
-	function (predicate, _p7) {
-		var _p8 = _p7;
-		return !_elm_lang$core$Array$isEmpty(
-			A2(_elm_lang$core$Array$filter, predicate, _p8._1));
+var _fizwidget$game_of_life$Matrix$equals = F2(
+	function (_p8, _p7) {
+		var _p9 = _p8;
+		var _p10 = _p7;
+		return _elm_lang$core$Native_Utils.eq(_p9._1, _p10._1);
+	});
+var _fizwidget$game_of_life$Matrix$all = F2(
+	function (predicate, _p11) {
+		var _p12 = _p11;
+		return _elm_lang$core$Array$isEmpty(
+			A2(
+				_elm_lang$core$Array$filter,
+				function (_p13) {
+					return !predicate(_p13);
+				},
+				_p12._1));
 	});
 var _fizwidget$game_of_life$Matrix$foldl = F3(
-	function (f, initial, _p9) {
-		var _p10 = _p9;
-		return A3(_elm_lang$core$Array$foldl, f, initial, _p10._1);
+	function (f, initial, _p14) {
+		var _p15 = _p14;
+		return A3(_elm_lang$core$Array$foldl, f, initial, _p15._1);
 	});
 var _fizwidget$game_of_life$Matrix$toCoordinate = F2(
-	function (_p11, index) {
-		var _p12 = _p11;
-		var _p13 = _p12.width;
+	function (_p16, index) {
+		var _p17 = _p16;
+		var _p18 = _p17.width;
 		return {
-			x: A2(_elm_lang$core$Basics_ops['%'], index, _p13),
-			y: (index / _p13) | 0
+			x: A2(_elm_lang$core$Basics_ops['%'], index, _p18),
+			y: (index / _p18) | 0
 		};
 	});
-var _fizwidget$game_of_life$Matrix$toListWithCoordinates = function (_p14) {
-	var _p15 = _p14;
+var _fizwidget$game_of_life$Matrix$toListWithCoordinates = function (_p19) {
+	var _p20 = _p19;
 	return _elm_lang$core$Array$toList(
 		A2(
 			_elm_lang$core$Array$indexedMap,
@@ -15322,23 +16063,23 @@ var _fizwidget$game_of_life$Matrix$toListWithCoordinates = function (_p14) {
 				function (index, value) {
 					return {
 						ctor: '_Tuple2',
-						_0: A2(_fizwidget$game_of_life$Matrix$toCoordinate, _p15._0, index),
+						_0: A2(_fizwidget$game_of_life$Matrix$toCoordinate, _p20._0, index),
 						_1: value
 					};
 				}),
-			_p15._1));
+			_p20._1));
 };
 var _fizwidget$game_of_life$Matrix$toIndex = F2(
-	function (_p17, _p16) {
-		var _p18 = _p17;
-		var _p19 = _p16;
-		return (_p19.y * _p18.width) + _p19.x;
+	function (_p22, _p21) {
+		var _p23 = _p22;
+		var _p24 = _p21;
+		return (_p24.y * _p23.width) + _p24.x;
 	});
 var _fizwidget$game_of_life$Matrix$get = F2(
-	function (_p20, coordinate) {
-		var _p21 = _p20;
-		var index = A2(_fizwidget$game_of_life$Matrix$toIndex, _p21._0, coordinate);
-		return A2(_elm_lang$core$Array$get, index, _p21._1);
+	function (_p25, coordinate) {
+		var _p26 = _p25;
+		var index = A2(_fizwidget$game_of_life$Matrix$toIndex, _p26._0, coordinate);
+		return A2(_elm_lang$core$Array$get, index, _p26._1);
 	});
 var _fizwidget$game_of_life$Matrix$getNeighbours = F2(
 	function (coordinate, matrix) {
@@ -15382,13 +16123,13 @@ var _fizwidget$game_of_life$Matrix$getNeighbours = F2(
 					}
 				}));
 	});
-var _fizwidget$game_of_life$Matrix$height = function (_p22) {
-	var _p23 = _p22;
-	return _p23._0.height;
+var _fizwidget$game_of_life$Matrix$height = function (_p27) {
+	var _p28 = _p27;
+	return _p28._0.height;
 };
-var _fizwidget$game_of_life$Matrix$width = function (_p24) {
-	var _p25 = _p24;
-	return _p25._0.width;
+var _fizwidget$game_of_life$Matrix$width = function (_p29) {
+	var _p30 = _p29;
+	return _p30._0.width;
 };
 var _fizwidget$game_of_life$Matrix$Dimensions = F2(
 	function (a, b) {
@@ -15403,22 +16144,22 @@ var _fizwidget$game_of_life$Matrix$Matrix = F2(
 		return {ctor: 'Matrix', _0: a, _1: b};
 	});
 var _fizwidget$game_of_life$Matrix$create = F2(
-	function (_p26, value) {
-		var _p27 = _p26;
+	function (_p31, value) {
+		var _p32 = _p31;
 		return A2(
 			_fizwidget$game_of_life$Matrix$Matrix,
-			_p27,
-			A2(_elm_lang$core$Array$repeat, _p27.width * _p27.height, value));
+			_p32,
+			A2(_elm_lang$core$Array$repeat, _p32.width * _p32.height, value));
 	});
 var _fizwidget$game_of_life$Matrix$set = F3(
-	function (coordinate, value, _p28) {
-		var _p29 = _p28;
-		var _p30 = _p29._0;
-		var index = A2(_fizwidget$game_of_life$Matrix$toIndex, _p30, coordinate);
+	function (coordinate, value, _p33) {
+		var _p34 = _p33;
+		var _p35 = _p34._0;
+		var index = A2(_fizwidget$game_of_life$Matrix$toIndex, _p35, coordinate);
 		return A2(
 			_fizwidget$game_of_life$Matrix$Matrix,
-			_p30,
-			A3(_elm_lang$core$Array$set, index, value, _p29._1));
+			_p35,
+			A3(_elm_lang$core$Array$set, index, value, _p34._1));
 	});
 var _fizwidget$game_of_life$Matrix$update = F3(
 	function (coordinate, matrix, f) {
@@ -15436,27 +16177,27 @@ var _fizwidget$game_of_life$Matrix$update = F3(
 					A2(_fizwidget$game_of_life$Matrix$get, matrix, coordinate))));
 	});
 var _fizwidget$game_of_life$Matrix$map = F2(
-	function (f, _p31) {
-		var _p32 = _p31;
+	function (f, _p36) {
+		var _p37 = _p36;
 		return A2(
 			_fizwidget$game_of_life$Matrix$Matrix,
-			_p32._0,
-			A2(_elm_lang$core$Array$map, f, _p32._1));
+			_p37._0,
+			A2(_elm_lang$core$Array$map, f, _p37._1));
 	});
 var _fizwidget$game_of_life$Matrix$indexedMap = F2(
-	function (f, _p33) {
-		var _p34 = _p33;
-		var _p36 = _p34._0;
+	function (f, _p38) {
+		var _p39 = _p38;
+		var _p41 = _p39._0;
 		return A2(
 			_fizwidget$game_of_life$Matrix$Matrix,
-			_p36,
+			_p41,
 			A2(
 				_elm_lang$core$Array$indexedMap,
-				function (_p35) {
+				function (_p40) {
 					return f(
-						A2(_fizwidget$game_of_life$Matrix$toCoordinate, _p36, _p35));
+						A2(_fizwidget$game_of_life$Matrix$toCoordinate, _p41, _p40));
 				},
-				_p34._1));
+				_p39._1));
 	});
 
 var _fizwidget$game_of_life$Main$cellColor = function (cell) {
@@ -15500,18 +16241,54 @@ var _fizwidget$game_of_life$Main$countNeighbours = F2(
 			0,
 			A2(_fizwidget$game_of_life$Matrix$getNeighbours, coordinate, cells));
 	});
+var _fizwidget$game_of_life$Main$isFrozen = F2(
+	function (cells, previousCells) {
+		return A2(
+			_elm_lang$core$Maybe$withDefault,
+			false,
+			A2(
+				_elm_lang$core$Maybe$map,
+				_fizwidget$game_of_life$Matrix$equals(cells),
+				previousCells));
+	});
 var _fizwidget$game_of_life$Main$noCmd = function (model) {
 	return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 };
-var _fizwidget$game_of_life$Main$Model = F2(
-	function (a, b) {
-		return {cells: a, status: b};
+var _fizwidget$game_of_life$Main$Model = F3(
+	function (a, b, c) {
+		return {status: a, cells: b, previousCells: c};
 	});
+var _fizwidget$game_of_life$Main$Playing = {ctor: 'Playing'};
+var _fizwidget$game_of_life$Main$Paused = {ctor: 'Paused'};
 var _fizwidget$game_of_life$Main$Dead = {ctor: 'Dead'};
-var _fizwidget$game_of_life$Main$blank = A2(
+var _fizwidget$game_of_life$Main$empty = A2(
 	_fizwidget$game_of_life$Matrix$create,
-	{width: 15, height: 15},
+	{width: 18, height: 18},
 	_fizwidget$game_of_life$Main$Dead);
+var _fizwidget$game_of_life$Main$init = {
+	ctor: '_Tuple2',
+	_0: {status: _fizwidget$game_of_life$Main$Paused, cells: _fizwidget$game_of_life$Main$empty, previousCells: _elm_lang$core$Maybe$Nothing},
+	_1: _elm_lang$core$Platform_Cmd$none
+};
+var _fizwidget$game_of_life$Main$isDead = F2(
+	function (x, y) {
+		return _elm_lang$core$Native_Utils.eq(x, y);
+	})(_fizwidget$game_of_life$Main$Dead);
+var _fizwidget$game_of_life$Main$pauseWhenFinished = function (_p2) {
+	var _p3 = _p2;
+	var _p6 = _p3;
+	var _p5 = _p3.cells;
+	var _p4 = _p3.status;
+	if (_p4.ctor === 'Playing') {
+		return A2(_fizwidget$game_of_life$Matrix$all, _fizwidget$game_of_life$Main$isDead, _p5) ? _elm_lang$core$Native_Utils.update(
+			_p6,
+			{status: _fizwidget$game_of_life$Main$Paused}) : (A2(_fizwidget$game_of_life$Main$isFrozen, _p5, _p3.previousCells) ? _elm_lang$core$Native_Utils.update(
+			_p6,
+			{status: _fizwidget$game_of_life$Main$Paused}) : _p6);
+	} else {
+		return _p6;
+	}
+};
 var _fizwidget$game_of_life$Main$Alive = {ctor: 'Alive'};
 var _fizwidget$game_of_life$Main$line = A3(
 	_fizwidget$game_of_life$Matrix$set,
@@ -15549,13 +16326,9 @@ var _fizwidget$game_of_life$Main$line = A3(
 									_fizwidget$game_of_life$Matrix$create,
 									{width: 20, height: 20},
 									_fizwidget$game_of_life$Main$Dead)))))))));
-var _fizwidget$game_of_life$Main$isAlive = F2(
-	function (x, y) {
-		return _elm_lang$core$Native_Utils.eq(x, y);
-	})(_fizwidget$game_of_life$Main$Alive);
 var _fizwidget$game_of_life$Main$toggleCell = function (cell) {
-	var _p2 = cell;
-	if (_p2.ctor === 'Alive') {
+	var _p7 = cell;
+	if (_p7.ctor === 'Alive') {
 		return _fizwidget$game_of_life$Main$Dead;
 	} else {
 		return _fizwidget$game_of_life$Main$Alive;
@@ -15567,149 +16340,127 @@ var _fizwidget$game_of_life$Main$toggle = F2(
 	});
 var _fizwidget$game_of_life$Main$updateCell = F3(
 	function (cells, coordinate, cell) {
-		var _p3 = {
+		var _p8 = {
 			ctor: '_Tuple2',
 			_0: cell,
 			_1: A2(_fizwidget$game_of_life$Main$countNeighbours, cells, coordinate)
 		};
-		_v3_3:
+		_v5_3:
 		do {
-			if (_p3.ctor === '_Tuple2') {
-				if (_p3._0.ctor === 'Alive') {
-					switch (_p3._1) {
+			if (_p8.ctor === '_Tuple2') {
+				if (_p8._0.ctor === 'Alive') {
+					switch (_p8._1) {
 						case 2:
 							return _fizwidget$game_of_life$Main$Alive;
 						case 3:
 							return _fizwidget$game_of_life$Main$Alive;
 						default:
-							break _v3_3;
+							break _v5_3;
 					}
 				} else {
-					if (_p3._1 === 3) {
+					if (_p8._1 === 3) {
 						return _fizwidget$game_of_life$Main$Alive;
 					} else {
-						break _v3_3;
+						break _v5_3;
 					}
 				}
 			} else {
-				break _v3_3;
+				break _v5_3;
 			}
 		} while(false);
 		return _fizwidget$game_of_life$Main$Dead;
 	});
-var _fizwidget$game_of_life$Main$step = function (cells) {
+var _fizwidget$game_of_life$Main$tick = function (cells) {
 	return A2(
 		_fizwidget$game_of_life$Matrix$indexedMap,
 		_fizwidget$game_of_life$Main$updateCell(cells),
 		cells);
 };
-var _fizwidget$game_of_life$Main$Playing = {ctor: 'Playing'};
-var _fizwidget$game_of_life$Main$Paused = {ctor: 'Paused'};
-var _fizwidget$game_of_life$Main$init = {
-	ctor: '_Tuple2',
-	_0: {cells: _fizwidget$game_of_life$Main$blank, status: _fizwidget$game_of_life$Main$Paused},
-	_1: _elm_lang$core$Platform_Cmd$none
-};
-var _fizwidget$game_of_life$Main$pauseIfFinished = function (_p4) {
-	var _p5 = _p4;
-	var _p7 = _p5;
-	var _p6 = _p5.status;
-	if (_p6.ctor === 'Playing') {
-		return A2(_fizwidget$game_of_life$Matrix$any, _fizwidget$game_of_life$Main$isAlive, _p5.cells) ? _p7 : _elm_lang$core$Native_Utils.update(
-			_p7,
-			{status: _fizwidget$game_of_life$Main$Paused});
-	} else {
-		return _p7;
-	}
-};
 var _fizwidget$game_of_life$Main$update = F2(
-	function (msg, model) {
-		var _p8 = msg;
-		switch (_p8.ctor) {
+	function (msg, _p9) {
+		var _p10 = _p9;
+		var _p13 = _p10;
+		var _p12 = _p10.cells;
+		var _p11 = msg;
+		switch (_p11.ctor) {
 			case 'Play':
 				return _fizwidget$game_of_life$Main$noCmd(
 					_elm_lang$core$Native_Utils.update(
-						model,
+						_p13,
 						{status: _fizwidget$game_of_life$Main$Playing}));
 			case 'Pause':
 				return _fizwidget$game_of_life$Main$noCmd(
 					_elm_lang$core$Native_Utils.update(
-						model,
+						_p13,
 						{status: _fizwidget$game_of_life$Main$Paused}));
 			case 'Tick':
 				return _fizwidget$game_of_life$Main$noCmd(
-					_fizwidget$game_of_life$Main$pauseIfFinished(
+					_fizwidget$game_of_life$Main$pauseWhenFinished(
 						_elm_lang$core$Native_Utils.update(
-							model,
+							_p13,
 							{
-								cells: _fizwidget$game_of_life$Main$step(model.cells)
+								cells: _fizwidget$game_of_life$Main$tick(_p12),
+								previousCells: _elm_lang$core$Maybe$Just(_p12)
 							})));
 			default:
 				return _fizwidget$game_of_life$Main$noCmd(
 					_elm_lang$core$Native_Utils.update(
-						model,
+						_p13,
 						{
-							cells: A2(_fizwidget$game_of_life$Main$toggle, model.cells, _p8._0)
+							cells: A2(_fizwidget$game_of_life$Main$toggle, _p12, _p11._0)
 						}));
 		}
 	});
 var _fizwidget$game_of_life$Main$Pause = {ctor: 'Pause'};
 var _fizwidget$game_of_life$Main$Play = {ctor: 'Play'};
 var _fizwidget$game_of_life$Main$viewPlayPauseButton = function (status) {
-	var styles = _rtfeldman$elm_css$Html_Styled_Attributes$css(
-		{
+	var styles = {
+		ctor: '::',
+		_0: _rtfeldman$elm_css$Css$position(_rtfeldman$elm_css$Css$fixed),
+		_1: {
 			ctor: '::',
-			_0: _rtfeldman$elm_css$Css$position(_rtfeldman$elm_css$Css$fixed),
+			_0: _rtfeldman$elm_css$Css$width(
+				_rtfeldman$elm_css$Css$px(100)),
 			_1: {
 				ctor: '::',
-				_0: _rtfeldman$elm_css$Css$width(
-					_rtfeldman$elm_css$Css$px(100)),
+				_0: _rtfeldman$elm_css$Css$height(
+					_rtfeldman$elm_css$Css$px(40)),
 				_1: {
 					ctor: '::',
-					_0: _rtfeldman$elm_css$Css$height(
-						_rtfeldman$elm_css$Css$px(40)),
+					_0: _rtfeldman$elm_css$Css$marginLeft(_rtfeldman$elm_css$Css$auto),
 					_1: {
 						ctor: '::',
-						_0: _rtfeldman$elm_css$Css$marginLeft(_rtfeldman$elm_css$Css$auto),
+						_0: _rtfeldman$elm_css$Css$marginRight(_rtfeldman$elm_css$Css$auto),
 						_1: {
 							ctor: '::',
-							_0: _rtfeldman$elm_css$Css$marginRight(_rtfeldman$elm_css$Css$auto),
+							_0: _rtfeldman$elm_css$Css$left(
+								_rtfeldman$elm_css$Css$px(0)),
 							_1: {
 								ctor: '::',
-								_0: _rtfeldman$elm_css$Css$left(
+								_0: _rtfeldman$elm_css$Css$right(
 									_rtfeldman$elm_css$Css$px(0)),
 								_1: {
 									ctor: '::',
-									_0: _rtfeldman$elm_css$Css$right(
-										_rtfeldman$elm_css$Css$px(0)),
+									_0: _rtfeldman$elm_css$Css$bottom(
+										_rtfeldman$elm_css$Css$pct(6)),
 									_1: {
 										ctor: '::',
-										_0: _rtfeldman$elm_css$Css$bottom(
-											_rtfeldman$elm_css$Css$pct(6)),
+										_0: A2(
+											_rtfeldman$elm_css$Css$border2,
+											_rtfeldman$elm_css$Css$px(0),
+											_rtfeldman$elm_css$Css$none),
 										_1: {
 											ctor: '::',
-											_0: _rtfeldman$elm_css$Css$backgroundColor(
-												A4(_rtfeldman$elm_css$Css$rgba, 76, 154, 255, 0.9)),
+											_0: _rtfeldman$elm_css$Css$borderRadius(
+												_rtfeldman$elm_css$Css$px(10)),
 											_1: {
 												ctor: '::',
-												_0: A2(
-													_rtfeldman$elm_css$Css$border2,
-													_rtfeldman$elm_css$Css$px(0),
-													_rtfeldman$elm_css$Css$none),
+												_0: _rtfeldman$elm_css$Css$color(_rtfeldman$elm_css$Css_Colors$white),
 												_1: {
 													ctor: '::',
-													_0: _rtfeldman$elm_css$Css$borderRadius(
-														_rtfeldman$elm_css$Css$px(10)),
-													_1: {
-														ctor: '::',
-														_0: _rtfeldman$elm_css$Css$color(_rtfeldman$elm_css$Css_Colors$white),
-														_1: {
-															ctor: '::',
-															_0: _rtfeldman$elm_css$Css$fontSize(
-																_rtfeldman$elm_css$Css$px(20)),
-															_1: {ctor: '[]'}
-														}
-													}
+													_0: _rtfeldman$elm_css$Css$fontSize(
+														_rtfeldman$elm_css$Css$px(20)),
+													_1: {ctor: '[]'}
 												}
 											}
 										}
@@ -15720,9 +16471,10 @@ var _fizwidget$game_of_life$Main$viewPlayPauseButton = function (status) {
 					}
 				}
 			}
-		});
-	var _p9 = status;
-	if (_p9.ctor === 'Playing') {
+		}
+	};
+	var _p14 = status;
+	if (_p14.ctor === 'Playing') {
 		return A2(
 			_rtfeldman$elm_css$Html_Styled$button,
 			{
@@ -15730,7 +16482,13 @@ var _fizwidget$game_of_life$Main$viewPlayPauseButton = function (status) {
 				_0: _rtfeldman$elm_css$Html_Styled_Events$onClick(_fizwidget$game_of_life$Main$Pause),
 				_1: {
 					ctor: '::',
-					_0: styles,
+					_0: _rtfeldman$elm_css$Html_Styled_Attributes$css(
+						{
+							ctor: '::',
+							_0: _rtfeldman$elm_css$Css$backgroundColor(
+								A4(_rtfeldman$elm_css$Css$rgba, 76, 154, 255, 0.7)),
+							_1: styles
+						}),
 					_1: {ctor: '[]'}
 				}
 			},
@@ -15747,7 +16505,13 @@ var _fizwidget$game_of_life$Main$viewPlayPauseButton = function (status) {
 				_0: _rtfeldman$elm_css$Html_Styled_Events$onClick(_fizwidget$game_of_life$Main$Play),
 				_1: {
 					ctor: '::',
-					_0: styles,
+					_0: _rtfeldman$elm_css$Html_Styled_Attributes$css(
+						{
+							ctor: '::',
+							_0: _rtfeldman$elm_css$Css$backgroundColor(
+								A4(_rtfeldman$elm_css$Css$rgba, 76, 154, 255, 0.9)),
+							_1: styles
+						}),
 					_1: {ctor: '[]'}
 				}
 			},
@@ -15762,48 +16526,53 @@ var _fizwidget$game_of_life$Main$Toggle = function (a) {
 	return {ctor: 'Toggle', _0: a};
 };
 var _fizwidget$game_of_life$Main$viewCell = F2(
-	function (size, _p10) {
-		var _p11 = _p10;
+	function (size, _p15) {
+		var _p16 = _p15;
 		return A2(
 			_rtfeldman$elm_css$Html_Styled$div,
 			{
 				ctor: '::',
-				_0: _rtfeldman$elm_css$Html_Styled_Attributes$class('cell'),
-				_1: {
-					ctor: '::',
-					_0: _rtfeldman$elm_css$Html_Styled_Attributes$css(
-						{
+				_0: _rtfeldman$elm_css$Html_Styled_Attributes$css(
+					{
+						ctor: '::',
+						_0: _rtfeldman$elm_css$Css$height(
+							_rtfeldman$elm_css$Css$pct(size)),
+						_1: {
 							ctor: '::',
-							_0: _rtfeldman$elm_css$Css$height(
-								_rtfeldman$elm_css$Css$pct(size)),
+							_0: _rtfeldman$elm_css$Css$backgroundColor(
+								_fizwidget$game_of_life$Main$cellColor(_p16._1)),
 							_1: {
 								ctor: '::',
-								_0: _rtfeldman$elm_css$Css$backgroundColor(
-									_fizwidget$game_of_life$Main$cellColor(_p11._1)),
+								_0: _rtfeldman$elm_css$Css$displayFlex,
 								_1: {
 									ctor: '::',
-									_0: _rtfeldman$elm_css$Css$displayFlex,
+									_0: A3(
+										_rtfeldman$elm_css$Css$flex3,
+										_rtfeldman$elm_css$Css$int(0),
+										_rtfeldman$elm_css$Css$int(0),
+										_rtfeldman$elm_css$Css$pct(size)),
 									_1: {
 										ctor: '::',
-										_0: A3(
-											_rtfeldman$elm_css$Css$flex3,
-											_rtfeldman$elm_css$Css$int(0),
-											_rtfeldman$elm_css$Css$int(0),
-											_rtfeldman$elm_css$Css$pct(size)),
+										_0: _rtfeldman$elm_css$Css$borderRadius(
+											_rtfeldman$elm_css$Css$pct(50)),
 										_1: {
 											ctor: '::',
-											_0: _rtfeldman$elm_css$Css$borderRadius(
-												_rtfeldman$elm_css$Css$pct(50)),
+											_0: A3(
+												_rtfeldman$elm_css$Css$border3,
+												_rtfeldman$elm_css$Css$px(4),
+												_rtfeldman$elm_css$Css$solid,
+												_rtfeldman$elm_css$Css_Colors$white),
 											_1: {
 												ctor: '::',
-												_0: A3(
-													_rtfeldman$elm_css$Css$border3,
-													_rtfeldman$elm_css$Css$px(4),
-													_rtfeldman$elm_css$Css$solid,
-													_rtfeldman$elm_css$Css_Colors$white),
+												_0: _rtfeldman$elm_css$Css$boxSizing(_rtfeldman$elm_css$Css$borderBox),
 												_1: {
 													ctor: '::',
-													_0: _rtfeldman$elm_css$Css$boxSizing(_rtfeldman$elm_css$Css$borderBox),
+													_0: _rtfeldman$elm_css$Css_Transitions$transition(
+														{
+															ctor: '::',
+															_0: A3(_rtfeldman$elm_css$Css_Transitions$backgroundColor3, 200, 0, _rtfeldman$elm_css$Css_Transitions$easeInOut),
+															_1: {ctor: '[]'}
+														}),
 													_1: {ctor: '[]'}
 												}
 											}
@@ -15811,13 +16580,13 @@ var _fizwidget$game_of_life$Main$viewCell = F2(
 									}
 								}
 							}
-						}),
-					_1: {
-						ctor: '::',
-						_0: _rtfeldman$elm_css$Html_Styled_Events$onClick(
-							_fizwidget$game_of_life$Main$Toggle(_p11._0)),
-						_1: {ctor: '[]'}
-					}
+						}
+					}),
+				_1: {
+					ctor: '::',
+					_0: _rtfeldman$elm_css$Html_Styled_Events$onClick(
+						_fizwidget$game_of_life$Main$Toggle(_p16._0)),
+					_1: {ctor: '[]'}
 				}
 			},
 			{ctor: '[]'});
@@ -15906,8 +16675,8 @@ var _fizwidget$game_of_life$Main$viewCells = function (cells) {
 			_1: {ctor: '[]'}
 		});
 };
-var _fizwidget$game_of_life$Main$viewModel = function (_p12) {
-	var _p13 = _p12;
+var _fizwidget$game_of_life$Main$viewModel = function (_p17) {
+	var _p18 = _p17;
 	return A2(
 		_rtfeldman$elm_css$Html_Styled$div,
 		{
@@ -15935,10 +16704,10 @@ var _fizwidget$game_of_life$Main$viewModel = function (_p12) {
 		},
 		{
 			ctor: '::',
-			_0: _fizwidget$game_of_life$Main$viewCells(_p13.cells),
+			_0: _fizwidget$game_of_life$Main$viewCells(_p18.cells),
 			_1: {
 				ctor: '::',
-				_0: _fizwidget$game_of_life$Main$viewPlayPauseButton(_p13.status),
+				_0: _fizwidget$game_of_life$Main$viewPlayPauseButton(_p18.status),
 				_1: {ctor: '[]'}
 			}
 		});
@@ -15958,10 +16727,10 @@ var _fizwidget$game_of_life$Main$view = function (model) {
 		});
 };
 var _fizwidget$game_of_life$Main$Tick = {ctor: 'Tick'};
-var _fizwidget$game_of_life$Main$subscriptions = function (_p14) {
-	var _p15 = _p14;
-	var _p16 = _p15.status;
-	if (_p16.ctor === 'Playing') {
+var _fizwidget$game_of_life$Main$subscriptions = function (_p19) {
+	var _p20 = _p19;
+	var _p21 = _p20.status;
+	if (_p21.ctor === 'Playing') {
 		return A2(
 			_elm_lang$core$Time$every,
 			_elm_lang$core$Time$millisecond * 200,
@@ -15973,9 +16742,9 @@ var _fizwidget$game_of_life$Main$subscriptions = function (_p14) {
 var _fizwidget$game_of_life$Main$main = _elm_lang$html$Html$program(
 	{
 		init: _fizwidget$game_of_life$Main$init,
-		view: function (_p17) {
+		view: function (_p22) {
 			return _rtfeldman$elm_css$Html_Styled$toUnstyled(
-				_fizwidget$game_of_life$Main$view(_p17));
+				_fizwidget$game_of_life$Main$view(_p22));
 		},
 		update: _fizwidget$game_of_life$Main$update,
 		subscriptions: _fizwidget$game_of_life$Main$subscriptions
