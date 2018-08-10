@@ -15510,7 +15510,7 @@ var _fizwidget$game_of_life$Main$Model = F2(
 var _fizwidget$game_of_life$Main$Dead = {ctor: 'Dead'};
 var _fizwidget$game_of_life$Main$blank = A2(
 	_fizwidget$game_of_life$Matrix$create,
-	{width: 30, height: 30},
+	{width: 15, height: 15},
 	_fizwidget$game_of_life$Main$Dead);
 var _fizwidget$game_of_life$Main$Alive = {ctor: 'Alive'};
 var _fizwidget$game_of_life$Main$line = A3(
@@ -15607,7 +15607,7 @@ var _fizwidget$game_of_life$Main$Playing = {ctor: 'Playing'};
 var _fizwidget$game_of_life$Main$Paused = {ctor: 'Paused'};
 var _fizwidget$game_of_life$Main$init = {
 	ctor: '_Tuple2',
-	_0: {cells: _fizwidget$game_of_life$Main$line, status: _fizwidget$game_of_life$Main$Paused},
+	_0: {cells: _fizwidget$game_of_life$Main$blank, status: _fizwidget$game_of_life$Main$Paused},
 	_1: _elm_lang$core$Platform_Cmd$none
 };
 var _fizwidget$game_of_life$Main$pauseIfFinished = function (_p4) {
