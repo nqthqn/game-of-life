@@ -15293,17 +15293,28 @@ var _fizwidget$game_of_life$Matrix$getRows = function (_p4) {
 			},
 			A2(_elm_lang$core$List$range, 0, _p6.height - 1)));
 };
-var _fizwidget$game_of_life$Matrix$toCoordinate = F2(
-	function (_p7, index) {
+var _fizwidget$game_of_life$Matrix$any = F2(
+	function (predicate, _p7) {
 		var _p8 = _p7;
-		var _p9 = _p8.width;
+		return !_elm_lang$core$Array$isEmpty(
+			A2(_elm_lang$core$Array$filter, predicate, _p8._1));
+	});
+var _fizwidget$game_of_life$Matrix$foldl = F3(
+	function (f, initial, _p9) {
+		var _p10 = _p9;
+		return A3(_elm_lang$core$Array$foldl, f, initial, _p10._1);
+	});
+var _fizwidget$game_of_life$Matrix$toCoordinate = F2(
+	function (_p11, index) {
+		var _p12 = _p11;
+		var _p13 = _p12.width;
 		return {
-			x: A2(_elm_lang$core$Basics_ops['%'], index, _p9),
-			y: (index / _p9) | 0
+			x: A2(_elm_lang$core$Basics_ops['%'], index, _p13),
+			y: (index / _p13) | 0
 		};
 	});
-var _fizwidget$game_of_life$Matrix$toListWithCoordinates = function (_p10) {
-	var _p11 = _p10;
+var _fizwidget$game_of_life$Matrix$toListWithCoordinates = function (_p14) {
+	var _p15 = _p14;
 	return _elm_lang$core$Array$toList(
 		A2(
 			_elm_lang$core$Array$indexedMap,
@@ -15311,23 +15322,23 @@ var _fizwidget$game_of_life$Matrix$toListWithCoordinates = function (_p10) {
 				function (index, value) {
 					return {
 						ctor: '_Tuple2',
-						_0: A2(_fizwidget$game_of_life$Matrix$toCoordinate, _p11._0, index),
+						_0: A2(_fizwidget$game_of_life$Matrix$toCoordinate, _p15._0, index),
 						_1: value
 					};
 				}),
-			_p11._1));
+			_p15._1));
 };
 var _fizwidget$game_of_life$Matrix$toIndex = F2(
-	function (_p13, _p12) {
-		var _p14 = _p13;
-		var _p15 = _p12;
-		return (_p15.y * _p14.width) + _p15.x;
+	function (_p17, _p16) {
+		var _p18 = _p17;
+		var _p19 = _p16;
+		return (_p19.y * _p18.width) + _p19.x;
 	});
 var _fizwidget$game_of_life$Matrix$get = F2(
-	function (_p16, coordinate) {
-		var _p17 = _p16;
-		var index = A2(_fizwidget$game_of_life$Matrix$toIndex, _p17._0, coordinate);
-		return A2(_elm_lang$core$Array$get, index, _p17._1);
+	function (_p20, coordinate) {
+		var _p21 = _p20;
+		var index = A2(_fizwidget$game_of_life$Matrix$toIndex, _p21._0, coordinate);
+		return A2(_elm_lang$core$Array$get, index, _p21._1);
 	});
 var _fizwidget$game_of_life$Matrix$getNeighbours = F2(
 	function (coordinate, matrix) {
@@ -15371,13 +15382,13 @@ var _fizwidget$game_of_life$Matrix$getNeighbours = F2(
 					}
 				}));
 	});
-var _fizwidget$game_of_life$Matrix$height = function (_p18) {
-	var _p19 = _p18;
-	return _p19._0.height;
+var _fizwidget$game_of_life$Matrix$height = function (_p22) {
+	var _p23 = _p22;
+	return _p23._0.height;
 };
-var _fizwidget$game_of_life$Matrix$width = function (_p20) {
-	var _p21 = _p20;
-	return _p21._0.width;
+var _fizwidget$game_of_life$Matrix$width = function (_p24) {
+	var _p25 = _p24;
+	return _p25._0.width;
 };
 var _fizwidget$game_of_life$Matrix$Dimensions = F2(
 	function (a, b) {
@@ -15392,22 +15403,22 @@ var _fizwidget$game_of_life$Matrix$Matrix = F2(
 		return {ctor: 'Matrix', _0: a, _1: b};
 	});
 var _fizwidget$game_of_life$Matrix$create = F2(
-	function (_p22, value) {
-		var _p23 = _p22;
+	function (_p26, value) {
+		var _p27 = _p26;
 		return A2(
 			_fizwidget$game_of_life$Matrix$Matrix,
-			_p23,
-			A2(_elm_lang$core$Array$repeat, _p23.width * _p23.height, value));
+			_p27,
+			A2(_elm_lang$core$Array$repeat, _p27.width * _p27.height, value));
 	});
 var _fizwidget$game_of_life$Matrix$set = F3(
-	function (coordinate, value, _p24) {
-		var _p25 = _p24;
-		var _p26 = _p25._0;
-		var index = A2(_fizwidget$game_of_life$Matrix$toIndex, _p26, coordinate);
+	function (coordinate, value, _p28) {
+		var _p29 = _p28;
+		var _p30 = _p29._0;
+		var index = A2(_fizwidget$game_of_life$Matrix$toIndex, _p30, coordinate);
 		return A2(
 			_fizwidget$game_of_life$Matrix$Matrix,
-			_p26,
-			A3(_elm_lang$core$Array$set, index, value, _p25._1));
+			_p30,
+			A3(_elm_lang$core$Array$set, index, value, _p29._1));
 	});
 var _fizwidget$game_of_life$Matrix$update = F3(
 	function (coordinate, matrix, f) {
@@ -15416,8 +15427,8 @@ var _fizwidget$game_of_life$Matrix$update = F3(
 			matrix,
 			A2(
 				_elm_lang$core$Maybe$map,
-				function (cell) {
-					return A3(_fizwidget$game_of_life$Matrix$set, coordinate, cell, matrix);
+				function (updatedValue) {
+					return A3(_fizwidget$game_of_life$Matrix$set, coordinate, updatedValue, matrix);
 				},
 				A2(
 					_elm_lang$core$Maybe$map,
@@ -15425,27 +15436,27 @@ var _fizwidget$game_of_life$Matrix$update = F3(
 					A2(_fizwidget$game_of_life$Matrix$get, matrix, coordinate))));
 	});
 var _fizwidget$game_of_life$Matrix$map = F2(
-	function (f, _p27) {
-		var _p28 = _p27;
+	function (f, _p31) {
+		var _p32 = _p31;
 		return A2(
 			_fizwidget$game_of_life$Matrix$Matrix,
-			_p28._0,
-			A2(_elm_lang$core$Array$map, f, _p28._1));
+			_p32._0,
+			A2(_elm_lang$core$Array$map, f, _p32._1));
 	});
 var _fizwidget$game_of_life$Matrix$indexedMap = F2(
-	function (f, _p29) {
-		var _p30 = _p29;
-		var _p32 = _p30._0;
+	function (f, _p33) {
+		var _p34 = _p33;
+		var _p36 = _p34._0;
 		return A2(
 			_fizwidget$game_of_life$Matrix$Matrix,
-			_p32,
+			_p36,
 			A2(
 				_elm_lang$core$Array$indexedMap,
-				function (_p31) {
+				function (_p35) {
 					return f(
-						A2(_fizwidget$game_of_life$Matrix$toCoordinate, _p32, _p31));
+						A2(_fizwidget$game_of_life$Matrix$toCoordinate, _p36, _p35));
 				},
-				_p30._1));
+				_p34._1));
 	});
 
 var _fizwidget$game_of_life$Main$cellColor = function (cell) {
@@ -15458,7 +15469,7 @@ var _fizwidget$game_of_life$Main$cellColor = function (cell) {
 };
 var _fizwidget$game_of_life$Main$cellSize = function (cells) {
 	return 100.0 / _elm_lang$core$Basics$toFloat(
-		_fizwidget$game_of_life$Matrix$width(cells));
+		_fizwidget$game_of_life$Matrix$height(cells));
 };
 var _fizwidget$game_of_life$Main$globalStyles = _rtfeldman$elm_css$Css_Foreign$global(
 	{
@@ -15468,11 +15479,7 @@ var _fizwidget$game_of_life$Main$globalStyles = _rtfeldman$elm_css$Css_Foreign$g
 				ctor: '::',
 				_0: _rtfeldman$elm_css$Css$margin(
 					_rtfeldman$elm_css$Css$px(0)),
-				_1: {
-					ctor: '::',
-					_0: _rtfeldman$elm_css$Css$backgroundColor(_rtfeldman$elm_css$Css_Colors$white),
-					_1: {ctor: '[]'}
-				}
+				_1: {ctor: '[]'}
 			}),
 		_1: {ctor: '[]'}
 	});
@@ -15501,95 +15508,51 @@ var _fizwidget$game_of_life$Main$Model = F2(
 		return {cells: a, status: b};
 	});
 var _fizwidget$game_of_life$Main$Dead = {ctor: 'Dead'};
-var _fizwidget$game_of_life$Main$emptyMatrix = A2(
+var _fizwidget$game_of_life$Main$blank = A2(
 	_fizwidget$game_of_life$Matrix$create,
 	{width: 30, height: 30},
 	_fizwidget$game_of_life$Main$Dead);
 var _fizwidget$game_of_life$Main$Alive = {ctor: 'Alive'};
 var _fizwidget$game_of_life$Main$line = A3(
 	_fizwidget$game_of_life$Matrix$set,
-	{x: 15, y: 6},
+	{x: 14 - 1, y: 6},
 	_fizwidget$game_of_life$Main$Alive,
 	A3(
 		_fizwidget$game_of_life$Matrix$set,
-		{x: 14, y: 6},
+		{x: 13 - 1, y: 6},
 		_fizwidget$game_of_life$Main$Alive,
 		A3(
 			_fizwidget$game_of_life$Matrix$set,
-			{x: 13, y: 6},
+			{x: 12 - 1, y: 6},
 			_fizwidget$game_of_life$Main$Alive,
 			A3(
 				_fizwidget$game_of_life$Matrix$set,
-				{x: 12, y: 6},
+				{x: 11 - 1, y: 6},
 				_fizwidget$game_of_life$Main$Alive,
 				A3(
 					_fizwidget$game_of_life$Matrix$set,
-					{x: 11, y: 6},
+					{x: 10 - 1, y: 6},
 					_fizwidget$game_of_life$Main$Alive,
 					A3(
 						_fizwidget$game_of_life$Matrix$set,
-						{x: 10, y: 6},
+						{x: 9 - 1, y: 6},
 						_fizwidget$game_of_life$Main$Alive,
 						A3(
 							_fizwidget$game_of_life$Matrix$set,
-							{x: 9, y: 6},
+							{x: 8 - 1, y: 6},
 							_fizwidget$game_of_life$Main$Alive,
 							A3(
 								_fizwidget$game_of_life$Matrix$set,
-								{x: 8, y: 6},
+								{x: 7 - 1, y: 6},
 								_fizwidget$game_of_life$Main$Alive,
-								A3(
-									_fizwidget$game_of_life$Matrix$set,
-									{x: 7, y: 6},
-									_fizwidget$game_of_life$Main$Alive,
-									A2(
-										_fizwidget$game_of_life$Matrix$create,
-										{width: 20, height: 20},
-										_fizwidget$game_of_life$Main$Dead))))))))));
-var _fizwidget$game_of_life$Main$oddPattern = A3(
-	_fizwidget$game_of_life$Matrix$set,
-	{x: 8, y: 8},
-	_fizwidget$game_of_life$Main$Alive,
-	A3(
-		_fizwidget$game_of_life$Matrix$set,
-		{x: 7, y: 9},
-		_fizwidget$game_of_life$Main$Alive,
-		A3(
-			_fizwidget$game_of_life$Matrix$set,
-			{x: 4, y: 10},
-			_fizwidget$game_of_life$Main$Alive,
-			A3(
-				_fizwidget$game_of_life$Matrix$set,
-				{x: 4, y: 7},
-				_fizwidget$game_of_life$Main$Alive,
-				A3(
-					_fizwidget$game_of_life$Matrix$set,
-					{x: 8, y: 3},
-					_fizwidget$game_of_life$Main$Alive,
-					A3(
-						_fizwidget$game_of_life$Matrix$set,
-						{x: 6, y: 4},
-						_fizwidget$game_of_life$Main$Alive,
-						A3(
-							_fizwidget$game_of_life$Matrix$set,
-							{x: 2, y: 5},
-							_fizwidget$game_of_life$Main$Alive,
-							A3(
-								_fizwidget$game_of_life$Matrix$set,
-								{x: 3, y: 5},
-								_fizwidget$game_of_life$Main$Alive,
-								A3(
-									_fizwidget$game_of_life$Matrix$set,
-									{x: 3, y: 4},
-									_fizwidget$game_of_life$Main$Alive,
-									A3(
-										_fizwidget$game_of_life$Matrix$set,
-										{x: 3, y: 3},
-										_fizwidget$game_of_life$Main$Alive,
-										A2(
-											_fizwidget$game_of_life$Matrix$create,
-											{width: 20, height: 20},
-											_fizwidget$game_of_life$Main$Dead)))))))))));
+								A2(
+									_fizwidget$game_of_life$Matrix$create,
+									{width: 20, height: 20},
+									_fizwidget$game_of_life$Main$Dead)))))))));
+var _fizwidget$game_of_life$Main$isAlive = F2(
+	function (x, y) {
+		return _elm_lang$core$Native_Utils.eq(x, y);
+	})(_fizwidget$game_of_life$Main$Alive);
 var _fizwidget$game_of_life$Main$toggleCell = function (cell) {
 	var _p2 = cell;
 	if (_p2.ctor === 'Alive') {
@@ -15647,10 +15610,22 @@ var _fizwidget$game_of_life$Main$init = {
 	_0: {cells: _fizwidget$game_of_life$Main$line, status: _fizwidget$game_of_life$Main$Paused},
 	_1: _elm_lang$core$Platform_Cmd$none
 };
+var _fizwidget$game_of_life$Main$pauseIfFinished = function (_p4) {
+	var _p5 = _p4;
+	var _p7 = _p5;
+	var _p6 = _p5.status;
+	if (_p6.ctor === 'Playing') {
+		return A2(_fizwidget$game_of_life$Matrix$any, _fizwidget$game_of_life$Main$isAlive, _p5.cells) ? _p7 : _elm_lang$core$Native_Utils.update(
+			_p7,
+			{status: _fizwidget$game_of_life$Main$Paused});
+	} else {
+		return _p7;
+	}
+};
 var _fizwidget$game_of_life$Main$update = F2(
 	function (msg, model) {
-		var _p4 = msg;
-		switch (_p4.ctor) {
+		var _p8 = msg;
+		switch (_p8.ctor) {
 			case 'Play':
 				return _fizwidget$game_of_life$Main$noCmd(
 					_elm_lang$core$Native_Utils.update(
@@ -15663,17 +15638,18 @@ var _fizwidget$game_of_life$Main$update = F2(
 						{status: _fizwidget$game_of_life$Main$Paused}));
 			case 'Tick':
 				return _fizwidget$game_of_life$Main$noCmd(
-					_elm_lang$core$Native_Utils.update(
-						model,
-						{
-							cells: _fizwidget$game_of_life$Main$step(model.cells)
-						}));
+					_fizwidget$game_of_life$Main$pauseIfFinished(
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{
+								cells: _fizwidget$game_of_life$Main$step(model.cells)
+							})));
 			default:
 				return _fizwidget$game_of_life$Main$noCmd(
 					_elm_lang$core$Native_Utils.update(
 						model,
 						{
-							cells: A2(_fizwidget$game_of_life$Main$toggle, model.cells, _p4._0)
+							cells: A2(_fizwidget$game_of_life$Main$toggle, model.cells, _p8._0)
 						}));
 		}
 	});
@@ -15745,8 +15721,8 @@ var _fizwidget$game_of_life$Main$viewPlayPauseButton = function (status) {
 				}
 			}
 		});
-	var _p5 = status;
-	if (_p5.ctor === 'Playing') {
+	var _p9 = status;
+	if (_p9.ctor === 'Playing') {
 		return A2(
 			_rtfeldman$elm_css$Html_Styled$button,
 			{
@@ -15786,8 +15762,8 @@ var _fizwidget$game_of_life$Main$Toggle = function (a) {
 	return {ctor: 'Toggle', _0: a};
 };
 var _fizwidget$game_of_life$Main$viewCell = F2(
-	function (size, _p6) {
-		var _p7 = _p6;
+	function (size, _p10) {
+		var _p11 = _p10;
 		return A2(
 			_rtfeldman$elm_css$Html_Styled$div,
 			{
@@ -15798,42 +15774,37 @@ var _fizwidget$game_of_life$Main$viewCell = F2(
 					_0: _rtfeldman$elm_css$Html_Styled_Attributes$css(
 						{
 							ctor: '::',
-							_0: _rtfeldman$elm_css$Css$width(
-								_rtfeldman$elm_css$Css$vw(size)),
+							_0: _rtfeldman$elm_css$Css$height(
+								_rtfeldman$elm_css$Css$pct(size)),
 							_1: {
 								ctor: '::',
-								_0: _rtfeldman$elm_css$Css$height(
-									_rtfeldman$elm_css$Css$vh(size)),
+								_0: _rtfeldman$elm_css$Css$backgroundColor(
+									_fizwidget$game_of_life$Main$cellColor(_p11._1)),
 								_1: {
 									ctor: '::',
-									_0: _rtfeldman$elm_css$Css$backgroundColor(
-										_fizwidget$game_of_life$Main$cellColor(_p7._1)),
+									_0: _rtfeldman$elm_css$Css$displayFlex,
 									_1: {
 										ctor: '::',
-										_0: _rtfeldman$elm_css$Css$displayFlex,
+										_0: A3(
+											_rtfeldman$elm_css$Css$flex3,
+											_rtfeldman$elm_css$Css$int(0),
+											_rtfeldman$elm_css$Css$int(0),
+											_rtfeldman$elm_css$Css$pct(size)),
 										_1: {
 											ctor: '::',
-											_0: A3(
-												_rtfeldman$elm_css$Css$flex3,
-												_rtfeldman$elm_css$Css$int(0),
-												_rtfeldman$elm_css$Css$int(0),
-												_rtfeldman$elm_css$Css$pct(size)),
+											_0: _rtfeldman$elm_css$Css$borderRadius(
+												_rtfeldman$elm_css$Css$pct(50)),
 											_1: {
 												ctor: '::',
-												_0: _rtfeldman$elm_css$Css$borderRadius(
-													_rtfeldman$elm_css$Css$pct(50)),
+												_0: A3(
+													_rtfeldman$elm_css$Css$border3,
+													_rtfeldman$elm_css$Css$px(4),
+													_rtfeldman$elm_css$Css$solid,
+													_rtfeldman$elm_css$Css_Colors$white),
 												_1: {
 													ctor: '::',
-													_0: A3(
-														_rtfeldman$elm_css$Css$border3,
-														_rtfeldman$elm_css$Css$px(4),
-														_rtfeldman$elm_css$Css$solid,
-														_rtfeldman$elm_css$Css_Colors$white),
-													_1: {
-														ctor: '::',
-														_0: _rtfeldman$elm_css$Css$boxSizing(_rtfeldman$elm_css$Css$borderBox),
-														_1: {ctor: '[]'}
-													}
+													_0: _rtfeldman$elm_css$Css$boxSizing(_rtfeldman$elm_css$Css$borderBox),
+													_1: {ctor: '[]'}
 												}
 											}
 										}
@@ -15844,7 +15815,7 @@ var _fizwidget$game_of_life$Main$viewCell = F2(
 					_1: {
 						ctor: '::',
 						_0: _rtfeldman$elm_css$Html_Styled_Events$onClick(
-							_fizwidget$game_of_life$Main$Toggle(_p7._0)),
+							_fizwidget$game_of_life$Main$Toggle(_p11._0)),
 						_1: {ctor: '[]'}
 					}
 				}
@@ -15859,16 +15830,102 @@ var _fizwidget$game_of_life$Main$viewCells = function (cells) {
 			_0: _rtfeldman$elm_css$Html_Styled_Attributes$css(
 				{
 					ctor: '::',
+					_0: _rtfeldman$elm_css$Css$position(_rtfeldman$elm_css$Css$relative),
+					_1: {
+						ctor: '::',
+						_0: _rtfeldman$elm_css$Css$width(
+							_rtfeldman$elm_css$Css$pct(100)),
+						_1: {
+							ctor: '::',
+							_0: _rtfeldman$elm_css$Css$after(
+								{
+									ctor: '::',
+									_0: A2(_rtfeldman$elm_css$Css$property, 'content', '\'\''),
+									_1: {
+										ctor: '::',
+										_0: _rtfeldman$elm_css$Css$display(_rtfeldman$elm_css$Css$block),
+										_1: {
+											ctor: '::',
+											_0: _rtfeldman$elm_css$Css$paddingBottom(
+												_rtfeldman$elm_css$Css$pct(100)),
+											_1: {ctor: '[]'}
+										}
+									}
+								}),
+							_1: {ctor: '[]'}
+						}
+					}
+				}),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_rtfeldman$elm_css$Html_Styled$div,
+				{
+					ctor: '::',
+					_0: _rtfeldman$elm_css$Html_Styled_Attributes$css(
+						{
+							ctor: '::',
+							_0: _rtfeldman$elm_css$Css$displayFlex,
+							_1: {
+								ctor: '::',
+								_0: _rtfeldman$elm_css$Css$alignItems(_rtfeldman$elm_css$Css$center),
+								_1: {
+									ctor: '::',
+									_0: _rtfeldman$elm_css$Css$justifyContent(_rtfeldman$elm_css$Css$center),
+									_1: {
+										ctor: '::',
+										_0: _rtfeldman$elm_css$Css$flexWrap(_rtfeldman$elm_css$Css$wrap),
+										_1: {
+											ctor: '::',
+											_0: _rtfeldman$elm_css$Css$position(_rtfeldman$elm_css$Css$absolute),
+											_1: {
+												ctor: '::',
+												_0: _rtfeldman$elm_css$Css$width(
+													_rtfeldman$elm_css$Css$pct(100)),
+												_1: {
+													ctor: '::',
+													_0: _rtfeldman$elm_css$Css$height(
+														_rtfeldman$elm_css$Css$pct(100)),
+													_1: {ctor: '[]'}
+												}
+											}
+										}
+									}
+								}
+							}
+						}),
+					_1: {ctor: '[]'}
+				},
+				A2(
+					_elm_lang$core$List$map,
+					_fizwidget$game_of_life$Main$viewCell(
+						_fizwidget$game_of_life$Main$cellSize(cells)),
+					_fizwidget$game_of_life$Matrix$toListWithCoordinates(cells))),
+			_1: {ctor: '[]'}
+		});
+};
+var _fizwidget$game_of_life$Main$viewModel = function (_p12) {
+	var _p13 = _p12;
+	return A2(
+		_rtfeldman$elm_css$Html_Styled$div,
+		{
+			ctor: '::',
+			_0: _rtfeldman$elm_css$Html_Styled_Attributes$css(
+				{
+					ctor: '::',
 					_0: _rtfeldman$elm_css$Css$displayFlex,
 					_1: {
 						ctor: '::',
-						_0: _rtfeldman$elm_css$Css$alignItems(_rtfeldman$elm_css$Css$center),
+						_0: _rtfeldman$elm_css$Css$justifyContent(_rtfeldman$elm_css$Css$center),
 						_1: {
 							ctor: '::',
-							_0: _rtfeldman$elm_css$Css$justifyContent(_rtfeldman$elm_css$Css$center),
+							_0: _rtfeldman$elm_css$Css$alignItems(_rtfeldman$elm_css$Css$center),
 							_1: {
 								ctor: '::',
-								_0: _rtfeldman$elm_css$Css$flexWrap(_rtfeldman$elm_css$Css$wrap),
+								_0: _rtfeldman$elm_css$Css$height(
+									_rtfeldman$elm_css$Css$vh(100)),
 								_1: {ctor: '[]'}
 							}
 						}
@@ -15876,23 +15933,12 @@ var _fizwidget$game_of_life$Main$viewCells = function (cells) {
 				}),
 			_1: {ctor: '[]'}
 		},
-		A2(
-			_elm_lang$core$List$map,
-			_fizwidget$game_of_life$Main$viewCell(
-				_fizwidget$game_of_life$Main$cellSize(cells)),
-			_fizwidget$game_of_life$Matrix$toListWithCoordinates(cells)));
-};
-var _fizwidget$game_of_life$Main$viewModel = function (_p8) {
-	var _p9 = _p8;
-	return A2(
-		_rtfeldman$elm_css$Html_Styled$div,
-		{ctor: '[]'},
 		{
 			ctor: '::',
-			_0: _fizwidget$game_of_life$Main$viewCells(_p9.cells),
+			_0: _fizwidget$game_of_life$Main$viewCells(_p13.cells),
 			_1: {
 				ctor: '::',
-				_0: _fizwidget$game_of_life$Main$viewPlayPauseButton(_p9.status),
+				_0: _fizwidget$game_of_life$Main$viewPlayPauseButton(_p13.status),
 				_1: {ctor: '[]'}
 			}
 		});
@@ -15912,10 +15958,10 @@ var _fizwidget$game_of_life$Main$view = function (model) {
 		});
 };
 var _fizwidget$game_of_life$Main$Tick = {ctor: 'Tick'};
-var _fizwidget$game_of_life$Main$subscriptions = function (_p10) {
-	var _p11 = _p10;
-	var _p12 = _p11.status;
-	if (_p12.ctor === 'Playing') {
+var _fizwidget$game_of_life$Main$subscriptions = function (_p14) {
+	var _p15 = _p14;
+	var _p16 = _p15.status;
+	if (_p16.ctor === 'Playing') {
 		return A2(
 			_elm_lang$core$Time$every,
 			_elm_lang$core$Time$millisecond * 200,
@@ -15927,9 +15973,9 @@ var _fizwidget$game_of_life$Main$subscriptions = function (_p10) {
 var _fizwidget$game_of_life$Main$main = _elm_lang$html$Html$program(
 	{
 		init: _fizwidget$game_of_life$Main$init,
-		view: function (_p13) {
+		view: function (_p17) {
 			return _rtfeldman$elm_css$Html_Styled$toUnstyled(
-				_fizwidget$game_of_life$Main$view(_p13));
+				_fizwidget$game_of_life$Main$view(_p17));
 		},
 		update: _fizwidget$game_of_life$Main$update,
 		subscriptions: _fizwidget$game_of_life$Main$subscriptions
