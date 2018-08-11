@@ -14650,612 +14650,6 @@ var _rtfeldman$elm_css$Html_Styled_Attributes$style = function (_p0) {
 		_elm_lang$virtual_dom$VirtualDom$style(_p0));
 };
 
-var _rtfeldman$elm_css$Css_Media$unparameterizedFeature = function (key) {
-	return {feature: key, value: _elm_lang$core$Maybe$Nothing};
-};
-var _rtfeldman$elm_css$Css_Media$feature = F2(
-	function (key, _p0) {
-		var _p1 = _p0;
-		return {
-			feature: key,
-			value: _elm_lang$core$Maybe$Just(_p1.value)
-		};
-	});
-var _rtfeldman$elm_css$Css_Media$scripting = function (value) {
-	return A2(_rtfeldman$elm_css$Css_Media$feature, 'scripting', value);
-};
-var _rtfeldman$elm_css$Css_Media$enabled = {value: 'enabled', scriptingSupport: _rtfeldman$elm_css$Css_Structure$Compatible};
-var _rtfeldman$elm_css$Css_Media$initialOnly = {value: 'initial-only', scriptingSupport: _rtfeldman$elm_css$Css_Structure$Compatible};
-var _rtfeldman$elm_css$Css_Media$anyHover = function (value) {
-	return A2(_rtfeldman$elm_css$Css_Media$feature, 'any-hover', value);
-};
-var _rtfeldman$elm_css$Css_Media$hover = function (value) {
-	return A2(_rtfeldman$elm_css$Css_Media$feature, 'hover', value);
-};
-var _rtfeldman$elm_css$Css_Media$canHover = {value: 'hover', hoverCapability: _rtfeldman$elm_css$Css_Structure$Compatible};
-var _rtfeldman$elm_css$Css_Media$anyPointer = function (value) {
-	return A2(_rtfeldman$elm_css$Css_Media$feature, 'any-pointer', value);
-};
-var _rtfeldman$elm_css$Css_Media$pointer = function (value) {
-	return A2(_rtfeldman$elm_css$Css_Media$feature, 'pointer', value);
-};
-var _rtfeldman$elm_css$Css_Media$coarse = {value: 'coarse', pointerDevice: _rtfeldman$elm_css$Css_Structure$Compatible};
-var _rtfeldman$elm_css$Css_Media$fine = {value: 'fine', pointerDevice: _rtfeldman$elm_css$Css_Structure$Compatible};
-var _rtfeldman$elm_css$Css_Media$colorGamut = function (value) {
-	return A2(_rtfeldman$elm_css$Css_Media$feature, 'color-gamut', value);
-};
-var _rtfeldman$elm_css$Css_Media$rec2020 = {value: 'rec2020', colorGamut: _rtfeldman$elm_css$Css_Structure$Compatible};
-var _rtfeldman$elm_css$Css_Media$p3 = {value: 'p3', colorGamut: _rtfeldman$elm_css$Css_Structure$Compatible};
-var _rtfeldman$elm_css$Css_Media$srgb = {value: 'srgb', colorGamut: _rtfeldman$elm_css$Css_Structure$Compatible};
-var _rtfeldman$elm_css$Css_Media$maxColorIndex = function (value) {
-	return A2(_rtfeldman$elm_css$Css_Media$feature, 'max-color-index', value);
-};
-var _rtfeldman$elm_css$Css_Media$minColorIndex = function (value) {
-	return A2(_rtfeldman$elm_css$Css_Media$feature, 'min-color-index', value);
-};
-var _rtfeldman$elm_css$Css_Media$colorIndex = function (value) {
-	return A2(_rtfeldman$elm_css$Css_Media$feature, 'color-index', value);
-};
-var _rtfeldman$elm_css$Css_Media$maxMonochrome = function (value) {
-	return A2(_rtfeldman$elm_css$Css_Media$feature, 'max-monochrome', value);
-};
-var _rtfeldman$elm_css$Css_Media$minMonochrome = function (value) {
-	return A2(_rtfeldman$elm_css$Css_Media$feature, 'min-monochrome', value);
-};
-var _rtfeldman$elm_css$Css_Media$monochrome = _rtfeldman$elm_css$Css_Media$unparameterizedFeature('monochrome');
-var _rtfeldman$elm_css$Css_Media$maxColor = function (value) {
-	return A2(_rtfeldman$elm_css$Css_Media$feature, 'max-color', value);
-};
-var _rtfeldman$elm_css$Css_Media$color = _rtfeldman$elm_css$Css_Media$unparameterizedFeature('color');
-var _rtfeldman$elm_css$Css_Media$minColor = function (value) {
-	return A2(_rtfeldman$elm_css$Css_Media$feature, 'min-color', value);
-};
-var _rtfeldman$elm_css$Css_Media$bits = function (value) {
-	return {
-		value: _elm_lang$core$Basics$toString(value),
-		bits: _rtfeldman$elm_css$Css_Structure$Compatible
-	};
-};
-var _rtfeldman$elm_css$Css_Media$overflowInline = function (value) {
-	return A2(_rtfeldman$elm_css$Css_Media$feature, 'overflow-inline', value);
-};
-var _rtfeldman$elm_css$Css_Media$overflowBlock = function (value) {
-	return A2(_rtfeldman$elm_css$Css_Media$feature, 'overflow-block', value);
-};
-var _rtfeldman$elm_css$Css_Media$optionalPaged = {value: 'optional-paged', blockAxisOverflow: _rtfeldman$elm_css$Css_Structure$Compatible};
-var _rtfeldman$elm_css$Css_Media$paged = {value: 'paged', blockAxisOverflow: _rtfeldman$elm_css$Css_Structure$Compatible};
-var _rtfeldman$elm_css$Css_Media$update = function (value) {
-	return A2(_rtfeldman$elm_css$Css_Media$feature, 'update', value);
-};
-var _rtfeldman$elm_css$Css_Media$fast = {value: 'fast', updateFrequency: _rtfeldman$elm_css$Css_Structure$Compatible};
-var _rtfeldman$elm_css$Css_Media$slow = {value: 'slow', updateFrequency: _rtfeldman$elm_css$Css_Structure$Compatible};
-var _rtfeldman$elm_css$Css_Media$grid = _rtfeldman$elm_css$Css_Media$unparameterizedFeature('grid');
-var _rtfeldman$elm_css$Css_Media$scan = function (value) {
-	return A2(_rtfeldman$elm_css$Css_Media$feature, 'scan', value);
-};
-var _rtfeldman$elm_css$Css_Media$interlace = {value: 'interlace', scanningProcess: _rtfeldman$elm_css$Css_Structure$Compatible};
-var _rtfeldman$elm_css$Css_Media$progressive = {value: 'progressive', scanningProcess: _rtfeldman$elm_css$Css_Structure$Compatible};
-var _rtfeldman$elm_css$Css_Media$maxResolution = function (value) {
-	return A2(_rtfeldman$elm_css$Css_Media$feature, 'max-resolution', value);
-};
-var _rtfeldman$elm_css$Css_Media$resolution = function (value) {
-	return A2(_rtfeldman$elm_css$Css_Media$feature, 'resolution', value);
-};
-var _rtfeldman$elm_css$Css_Media$minResolution = function (value) {
-	return A2(_rtfeldman$elm_css$Css_Media$feature, 'min-resolution', value);
-};
-var _rtfeldman$elm_css$Css_Media$dppx = function (value) {
-	return {
-		value: A2(
-			_elm_lang$core$Basics_ops['++'],
-			_elm_lang$core$Basics$toString(value),
-			'dppx'),
-		resolution: _rtfeldman$elm_css$Css_Structure$Compatible
-	};
-};
-var _rtfeldman$elm_css$Css_Media$dpcm = function (value) {
-	return {
-		value: A2(
-			_elm_lang$core$Basics_ops['++'],
-			_elm_lang$core$Basics$toString(value),
-			'dpcm'),
-		resolution: _rtfeldman$elm_css$Css_Structure$Compatible
-	};
-};
-var _rtfeldman$elm_css$Css_Media$dpi = function (value) {
-	return {
-		value: A2(
-			_elm_lang$core$Basics_ops['++'],
-			_elm_lang$core$Basics$toString(value),
-			'dpi'),
-		resolution: _rtfeldman$elm_css$Css_Structure$Compatible
-	};
-};
-var _rtfeldman$elm_css$Css_Media$orientation = function (value) {
-	return A2(_rtfeldman$elm_css$Css_Media$feature, 'orientation', value);
-};
-var _rtfeldman$elm_css$Css_Media$portrait = {value: 'portrait', orientation: _rtfeldman$elm_css$Css_Structure$Compatible};
-var _rtfeldman$elm_css$Css_Media$landscape = {value: 'landscape', orientation: _rtfeldman$elm_css$Css_Structure$Compatible};
-var _rtfeldman$elm_css$Css_Media$maxAspectRatio = function (value) {
-	return A2(_rtfeldman$elm_css$Css_Media$feature, 'max-aspect-ratio', value);
-};
-var _rtfeldman$elm_css$Css_Media$aspectRatio = function (value) {
-	return A2(_rtfeldman$elm_css$Css_Media$feature, 'aspect-ratio', value);
-};
-var _rtfeldman$elm_css$Css_Media$minAspectRatio = function (value) {
-	return A2(_rtfeldman$elm_css$Css_Media$feature, 'min-aspect-ratio', value);
-};
-var _rtfeldman$elm_css$Css_Media$ratio = F2(
-	function (numerator, denominator) {
-		return {
-			value: A2(
-				_elm_lang$core$Basics_ops['++'],
-				_elm_lang$core$Basics$toString(numerator),
-				A2(
-					_elm_lang$core$Basics_ops['++'],
-					'/',
-					_elm_lang$core$Basics$toString(denominator))),
-			ratio: _rtfeldman$elm_css$Css_Structure$Compatible
-		};
-	});
-var _rtfeldman$elm_css$Css_Media$maxHeight = function (value) {
-	return A2(_rtfeldman$elm_css$Css_Media$feature, 'max-height', value);
-};
-var _rtfeldman$elm_css$Css_Media$height = function (value) {
-	return A2(_rtfeldman$elm_css$Css_Media$feature, 'height', value);
-};
-var _rtfeldman$elm_css$Css_Media$minHeight = function (value) {
-	return A2(_rtfeldman$elm_css$Css_Media$feature, 'min-height', value);
-};
-var _rtfeldman$elm_css$Css_Media$maxWidth = function (value) {
-	return A2(_rtfeldman$elm_css$Css_Media$feature, 'max-width', value);
-};
-var _rtfeldman$elm_css$Css_Media$width = function (value) {
-	return A2(_rtfeldman$elm_css$Css_Media$feature, 'width', value);
-};
-var _rtfeldman$elm_css$Css_Media$minWidth = function (value) {
-	return A2(_rtfeldman$elm_css$Css_Media$feature, 'min-width', value);
-};
-var _rtfeldman$elm_css$Css_Media$speech = _rtfeldman$elm_css$Css_Structure$Speech;
-var _rtfeldman$elm_css$Css_Media$screen = _rtfeldman$elm_css$Css_Structure$Screen;
-var _rtfeldman$elm_css$Css_Media$print = _rtfeldman$elm_css$Css_Structure$Print;
-var _rtfeldman$elm_css$Css_Media$connectWith = F2(
-	function (connect, queries) {
-		var _p2 = queries;
-		if (_p2.ctor === '[]') {
-			return _elm_lang$core$Maybe$Nothing;
-		} else {
-			var _p4 = _p2._0;
-			var _p3 = A2(_rtfeldman$elm_css$Css_Media$connectWith, connect, _p2._1);
-			if (_p3.ctor === 'Nothing') {
-				return _elm_lang$core$Maybe$Just(_p4);
-			} else {
-				return _elm_lang$core$Maybe$Just(
-					A2(connect, _p4, _p3._0));
-			}
-		}
-	});
-var _rtfeldman$elm_css$Css_Media$not = _rtfeldman$elm_css$Css_Structure$NotQuery;
-var _rtfeldman$elm_css$Css_Media$only = _rtfeldman$elm_css$Css_Structure$OnlyQuery;
-var _rtfeldman$elm_css$Css_Media$all = _rtfeldman$elm_css$Css_Structure$AllQuery;
-var _rtfeldman$elm_css$Css_Media$withMediaQuery = function (queries) {
-	return _rtfeldman$elm_css$Css_Preprocess$WithMedia(
-		A2(_elm_lang$core$List$map, _rtfeldman$elm_css$Css_Structure$CustomQuery, queries));
-};
-var _rtfeldman$elm_css$Css_Media$withMedia = function (queries) {
-	return _rtfeldman$elm_css$Css_Preprocess$WithMedia(queries);
-};
-var _rtfeldman$elm_css$Css_Media$Ratio = F2(
-	function (a, b) {
-		return {value: a, ratio: b};
-	});
-var _rtfeldman$elm_css$Css_Media$Landscape = F2(
-	function (a, b) {
-		return {value: a, orientation: b};
-	});
-var _rtfeldman$elm_css$Css_Media$Portrait = F2(
-	function (a, b) {
-		return {value: a, orientation: b};
-	});
-var _rtfeldman$elm_css$Css_Media$Resolution = F2(
-	function (a, b) {
-		return {value: a, resolution: b};
-	});
-var _rtfeldman$elm_css$Css_Media$Progressive = F2(
-	function (a, b) {
-		return {value: a, scanningProcess: b};
-	});
-var _rtfeldman$elm_css$Css_Media$Interlace = F2(
-	function (a, b) {
-		return {value: a, scanningProcess: b};
-	});
-var _rtfeldman$elm_css$Css_Media$Slow = F2(
-	function (a, b) {
-		return {value: a, updateFrequency: b};
-	});
-var _rtfeldman$elm_css$Css_Media$Fast = F2(
-	function (a, b) {
-		return {value: a, updateFrequency: b};
-	});
-var _rtfeldman$elm_css$Css_Media$Paged = F2(
-	function (a, b) {
-		return {value: a, blockAxisOverflow: b};
-	});
-var _rtfeldman$elm_css$Css_Media$OptionalPaged = F2(
-	function (a, b) {
-		return {value: a, blockAxisOverflow: b};
-	});
-var _rtfeldman$elm_css$Css_Media$Bits = F2(
-	function (a, b) {
-		return {value: a, bits: b};
-	});
-var _rtfeldman$elm_css$Css_Media$SRGB = F2(
-	function (a, b) {
-		return {value: a, colorGamut: b};
-	});
-var _rtfeldman$elm_css$Css_Media$P3 = F2(
-	function (a, b) {
-		return {value: a, colorGamut: b};
-	});
-var _rtfeldman$elm_css$Css_Media$Rec2020 = F2(
-	function (a, b) {
-		return {value: a, colorGamut: b};
-	});
-var _rtfeldman$elm_css$Css_Media$Fine = F2(
-	function (a, b) {
-		return {value: a, pointerDevice: b};
-	});
-var _rtfeldman$elm_css$Css_Media$Coarse = F2(
-	function (a, b) {
-		return {value: a, pointerDevice: b};
-	});
-var _rtfeldman$elm_css$Css_Media$CanHover = F2(
-	function (a, b) {
-		return {value: a, hoverCapability: b};
-	});
-var _rtfeldman$elm_css$Css_Media$InitialOnly = F2(
-	function (a, b) {
-		return {value: a, scriptingSupport: b};
-	});
-var _rtfeldman$elm_css$Css_Media$Enabled = F2(
-	function (a, b) {
-		return {value: a, scriptingSupport: b};
-	});
-
-var _rtfeldman$elm_css$Css_Foreign$collectSelectors = function (declarations) {
-	collectSelectors:
-	while (true) {
-		var _p0 = declarations;
-		if (_p0.ctor === '[]') {
-			return {ctor: '[]'};
-		} else {
-			if (_p0._0.ctor === 'StyleBlockDeclaration') {
-				return A2(
-					_elm_lang$core$Basics_ops['++'],
-					{
-						ctor: '::',
-						_0: A2(_rtfeldman$elm_css$Css_Foreign$unwrapSelector, _p0._0._0._0, _p0._0._0._2),
-						_1: _p0._0._0._1
-					},
-					_rtfeldman$elm_css$Css_Foreign$collectSelectors(_p0._1));
-			} else {
-				var _v1 = _p0._1;
-				declarations = _v1;
-				continue collectSelectors;
-			}
-		}
-	}
-};
-var _rtfeldman$elm_css$Css_Foreign$unwrapSelector = F2(
-	function (_p1, styles) {
-		var _p2 = _p1;
-		var unwrapCombinatorSelector = F2(
-			function (style, cs) {
-				var _p3 = style;
-				if (_p3.ctor === 'NestSnippet') {
-					return A2(
-						_elm_lang$core$List$append,
-						cs,
-						A2(
-							_elm_lang$core$List$map,
-							function (_p4) {
-								var _p5 = _p4;
-								return {ctor: '_Tuple2', _0: _p3._0, _1: _p5._0};
-							},
-							A2(
-								_elm_lang$core$List$concatMap,
-								function (_p6) {
-									return _rtfeldman$elm_css$Css_Foreign$collectSelectors(
-										_rtfeldman$elm_css$Css_Preprocess$unwrapSnippet(_p6));
-								},
-								_p3._1)));
-				} else {
-					return cs;
-				}
-			});
-		var unwrapSequenceSelector = F2(
-			function (style, s) {
-				var _p7 = style;
-				if (_p7.ctor === 'ExtendSelector') {
-					return A3(
-						_elm_lang$core$List$foldr,
-						unwrapSequenceSelector,
-						A2(_rtfeldman$elm_css$Css_Structure$appendRepeatable, _p7._0, s),
-						_p7._1);
-				} else {
-					return s;
-				}
-			});
-		return A3(
-			_rtfeldman$elm_css$Css_Structure$Selector,
-			A3(_elm_lang$core$List$foldr, unwrapSequenceSelector, _p2._0, styles),
-			A3(_elm_lang$core$List$foldr, unwrapCombinatorSelector, _p2._1, styles),
-			_p2._2);
-	});
-var _rtfeldman$elm_css$Css_Foreign$typeSelector = F2(
-	function (selectorStr, styles) {
-		var sequence = A2(
-			_rtfeldman$elm_css$Css_Structure$TypeSelectorSequence,
-			_rtfeldman$elm_css$Css_Structure$TypeSelector(selectorStr),
-			{ctor: '[]'});
-		var selector = A3(
-			_rtfeldman$elm_css$Css_Structure$Selector,
-			sequence,
-			{ctor: '[]'},
-			_elm_lang$core$Maybe$Nothing);
-		return _rtfeldman$elm_css$Css_Preprocess$Snippet(
-			{
-				ctor: '::',
-				_0: _rtfeldman$elm_css$Css_Preprocess$StyleBlockDeclaration(
-					A3(
-						_rtfeldman$elm_css$Css_Preprocess$StyleBlock,
-						selector,
-						{ctor: '[]'},
-						styles)),
-				_1: {ctor: '[]'}
-			});
-	});
-var _rtfeldman$elm_css$Css_Foreign$html = _rtfeldman$elm_css$Css_Foreign$typeSelector('html');
-var _rtfeldman$elm_css$Css_Foreign$body = _rtfeldman$elm_css$Css_Foreign$typeSelector('body');
-var _rtfeldman$elm_css$Css_Foreign$article = _rtfeldman$elm_css$Css_Foreign$typeSelector('article');
-var _rtfeldman$elm_css$Css_Foreign$header = _rtfeldman$elm_css$Css_Foreign$typeSelector('header');
-var _rtfeldman$elm_css$Css_Foreign$footer = _rtfeldman$elm_css$Css_Foreign$typeSelector('footer');
-var _rtfeldman$elm_css$Css_Foreign$h1 = _rtfeldman$elm_css$Css_Foreign$typeSelector('h1');
-var _rtfeldman$elm_css$Css_Foreign$h2 = _rtfeldman$elm_css$Css_Foreign$typeSelector('h2');
-var _rtfeldman$elm_css$Css_Foreign$h3 = _rtfeldman$elm_css$Css_Foreign$typeSelector('h3');
-var _rtfeldman$elm_css$Css_Foreign$h4 = _rtfeldman$elm_css$Css_Foreign$typeSelector('h4');
-var _rtfeldman$elm_css$Css_Foreign$h5 = _rtfeldman$elm_css$Css_Foreign$typeSelector('h5');
-var _rtfeldman$elm_css$Css_Foreign$h6 = _rtfeldman$elm_css$Css_Foreign$typeSelector('h6');
-var _rtfeldman$elm_css$Css_Foreign$nav = _rtfeldman$elm_css$Css_Foreign$typeSelector('nav');
-var _rtfeldman$elm_css$Css_Foreign$menu = _rtfeldman$elm_css$Css_Foreign$typeSelector('menu');
-var _rtfeldman$elm_css$Css_Foreign$section = _rtfeldman$elm_css$Css_Foreign$typeSelector('section');
-var _rtfeldman$elm_css$Css_Foreign$aside = _rtfeldman$elm_css$Css_Foreign$typeSelector('aside');
-var _rtfeldman$elm_css$Css_Foreign$time = _rtfeldman$elm_css$Css_Foreign$typeSelector('time');
-var _rtfeldman$elm_css$Css_Foreign$div = _rtfeldman$elm_css$Css_Foreign$typeSelector('div');
-var _rtfeldman$elm_css$Css_Foreign$hr = _rtfeldman$elm_css$Css_Foreign$typeSelector('hr');
-var _rtfeldman$elm_css$Css_Foreign$li = _rtfeldman$elm_css$Css_Foreign$typeSelector('li');
-var _rtfeldman$elm_css$Css_Foreign$main_ = _rtfeldman$elm_css$Css_Foreign$typeSelector('main');
-var _rtfeldman$elm_css$Css_Foreign$ol = _rtfeldman$elm_css$Css_Foreign$typeSelector('ol');
-var _rtfeldman$elm_css$Css_Foreign$p = _rtfeldman$elm_css$Css_Foreign$typeSelector('p');
-var _rtfeldman$elm_css$Css_Foreign$ul = _rtfeldman$elm_css$Css_Foreign$typeSelector('ul');
-var _rtfeldman$elm_css$Css_Foreign$pre = _rtfeldman$elm_css$Css_Foreign$typeSelector('pre');
-var _rtfeldman$elm_css$Css_Foreign$dl = _rtfeldman$elm_css$Css_Foreign$typeSelector('dl');
-var _rtfeldman$elm_css$Css_Foreign$dt = _rtfeldman$elm_css$Css_Foreign$typeSelector('dt');
-var _rtfeldman$elm_css$Css_Foreign$dd = _rtfeldman$elm_css$Css_Foreign$typeSelector('dd');
-var _rtfeldman$elm_css$Css_Foreign$a = _rtfeldman$elm_css$Css_Foreign$typeSelector('a');
-var _rtfeldman$elm_css$Css_Foreign$code = _rtfeldman$elm_css$Css_Foreign$typeSelector('code');
-var _rtfeldman$elm_css$Css_Foreign$small = _rtfeldman$elm_css$Css_Foreign$typeSelector('small');
-var _rtfeldman$elm_css$Css_Foreign$span = _rtfeldman$elm_css$Css_Foreign$typeSelector('span');
-var _rtfeldman$elm_css$Css_Foreign$strong = _rtfeldman$elm_css$Css_Foreign$typeSelector('strong');
-var _rtfeldman$elm_css$Css_Foreign$i = _rtfeldman$elm_css$Css_Foreign$typeSelector('i');
-var _rtfeldman$elm_css$Css_Foreign$em = _rtfeldman$elm_css$Css_Foreign$typeSelector('em');
-var _rtfeldman$elm_css$Css_Foreign$q = _rtfeldman$elm_css$Css_Foreign$typeSelector('q');
-var _rtfeldman$elm_css$Css_Foreign$img = _rtfeldman$elm_css$Css_Foreign$typeSelector('img');
-var _rtfeldman$elm_css$Css_Foreign$audio = _rtfeldman$elm_css$Css_Foreign$typeSelector('audio');
-var _rtfeldman$elm_css$Css_Foreign$video = _rtfeldman$elm_css$Css_Foreign$typeSelector('video');
-var _rtfeldman$elm_css$Css_Foreign$canvas = _rtfeldman$elm_css$Css_Foreign$typeSelector('canvas');
-var _rtfeldman$elm_css$Css_Foreign$caption = _rtfeldman$elm_css$Css_Foreign$typeSelector('caption');
-var _rtfeldman$elm_css$Css_Foreign$col = _rtfeldman$elm_css$Css_Foreign$typeSelector('col');
-var _rtfeldman$elm_css$Css_Foreign$colgroup = _rtfeldman$elm_css$Css_Foreign$typeSelector('colgroup');
-var _rtfeldman$elm_css$Css_Foreign$table = _rtfeldman$elm_css$Css_Foreign$typeSelector('table');
-var _rtfeldman$elm_css$Css_Foreign$tbody = _rtfeldman$elm_css$Css_Foreign$typeSelector('tbody');
-var _rtfeldman$elm_css$Css_Foreign$td = _rtfeldman$elm_css$Css_Foreign$typeSelector('td');
-var _rtfeldman$elm_css$Css_Foreign$tfoot = _rtfeldman$elm_css$Css_Foreign$typeSelector('tfoot');
-var _rtfeldman$elm_css$Css_Foreign$th = _rtfeldman$elm_css$Css_Foreign$typeSelector('th');
-var _rtfeldman$elm_css$Css_Foreign$thead = _rtfeldman$elm_css$Css_Foreign$typeSelector('thead');
-var _rtfeldman$elm_css$Css_Foreign$tr = _rtfeldman$elm_css$Css_Foreign$typeSelector('tr');
-var _rtfeldman$elm_css$Css_Foreign$button = _rtfeldman$elm_css$Css_Foreign$typeSelector('button');
-var _rtfeldman$elm_css$Css_Foreign$fieldset = _rtfeldman$elm_css$Css_Foreign$typeSelector('fieldset');
-var _rtfeldman$elm_css$Css_Foreign$form = _rtfeldman$elm_css$Css_Foreign$typeSelector('form');
-var _rtfeldman$elm_css$Css_Foreign$input = _rtfeldman$elm_css$Css_Foreign$typeSelector('input');
-var _rtfeldman$elm_css$Css_Foreign$label = _rtfeldman$elm_css$Css_Foreign$typeSelector('label');
-var _rtfeldman$elm_css$Css_Foreign$legend = _rtfeldman$elm_css$Css_Foreign$typeSelector('legend');
-var _rtfeldman$elm_css$Css_Foreign$optgroup = _rtfeldman$elm_css$Css_Foreign$typeSelector('optgroup');
-var _rtfeldman$elm_css$Css_Foreign$option = _rtfeldman$elm_css$Css_Foreign$typeSelector('option');
-var _rtfeldman$elm_css$Css_Foreign$progress = _rtfeldman$elm_css$Css_Foreign$typeSelector('progress');
-var _rtfeldman$elm_css$Css_Foreign$select = _rtfeldman$elm_css$Css_Foreign$typeSelector('select');
-var _rtfeldman$elm_css$Css_Foreign$textarea = _rtfeldman$elm_css$Css_Foreign$typeSelector('textarea');
-var _rtfeldman$elm_css$Css_Foreign$blockquote = _rtfeldman$elm_css$Css_Foreign$typeSelector('blockquote');
-var _rtfeldman$elm_css$Css_Foreign$svg = _rtfeldman$elm_css$Css_Foreign$typeSelector('svg');
-var _rtfeldman$elm_css$Css_Foreign$path = _rtfeldman$elm_css$Css_Foreign$typeSelector('path');
-var _rtfeldman$elm_css$Css_Foreign$rect = _rtfeldman$elm_css$Css_Foreign$typeSelector('rect');
-var _rtfeldman$elm_css$Css_Foreign$circle = _rtfeldman$elm_css$Css_Foreign$typeSelector('circle');
-var _rtfeldman$elm_css$Css_Foreign$ellipse = _rtfeldman$elm_css$Css_Foreign$typeSelector('ellipse');
-var _rtfeldman$elm_css$Css_Foreign$line = _rtfeldman$elm_css$Css_Foreign$typeSelector('line');
-var _rtfeldman$elm_css$Css_Foreign$polyline = _rtfeldman$elm_css$Css_Foreign$typeSelector('polyline');
-var _rtfeldman$elm_css$Css_Foreign$polygon = _rtfeldman$elm_css$Css_Foreign$typeSelector('polygon');
-var _rtfeldman$elm_css$Css_Foreign$each = F2(
-	function (snippetCreators, styles) {
-		var selectorsToSnippet = function (selectors) {
-			var _p8 = selectors;
-			if (_p8.ctor === '[]') {
-				return _rtfeldman$elm_css$Css_Preprocess$Snippet(
-					{ctor: '[]'});
-			} else {
-				return _rtfeldman$elm_css$Css_Preprocess$Snippet(
-					{
-						ctor: '::',
-						_0: _rtfeldman$elm_css$Css_Preprocess$StyleBlockDeclaration(
-							A3(_rtfeldman$elm_css$Css_Preprocess$StyleBlock, _p8._0, _p8._1, styles)),
-						_1: {ctor: '[]'}
-					});
-			}
-		};
-		return selectorsToSnippet(
-			_rtfeldman$elm_css$Css_Foreign$collectSelectors(
-				A2(
-					_elm_lang$core$List$concatMap,
-					_rtfeldman$elm_css$Css_Preprocess$unwrapSnippet,
-					A2(
-						_elm_lang$core$List$map,
-						F2(
-							function (x, y) {
-								return y(x);
-							})(
-							{ctor: '[]'}),
-						snippetCreators))));
-	});
-var _rtfeldman$elm_css$Css_Foreign$generalSiblings = _rtfeldman$elm_css$Css_Preprocess$NestSnippet(_rtfeldman$elm_css$Css_Structure$GeneralSibling);
-var _rtfeldman$elm_css$Css_Foreign$adjacentSiblings = _rtfeldman$elm_css$Css_Preprocess$NestSnippet(_rtfeldman$elm_css$Css_Structure$AdjacentSibling);
-var _rtfeldman$elm_css$Css_Foreign$descendants = _rtfeldman$elm_css$Css_Preprocess$NestSnippet(_rtfeldman$elm_css$Css_Structure$Descendant);
-var _rtfeldman$elm_css$Css_Foreign$withClass = function ($class) {
-	return _rtfeldman$elm_css$Css_Preprocess$ExtendSelector(
-		_rtfeldman$elm_css$Css_Structure$ClassSelector(
-			A2(_rtfeldman$elm_css_util$Css_Helpers$identifierToString, '', $class)));
-};
-var _rtfeldman$elm_css$Css_Foreign$children = _rtfeldman$elm_css$Css_Preprocess$NestSnippet(_rtfeldman$elm_css$Css_Structure$Child);
-var _rtfeldman$elm_css$Css_Foreign$media = F2(
-	function (queries, snippets) {
-		var nestedMediaRules = function (declarations) {
-			nestedMediaRules:
-			while (true) {
-				var _p9 = declarations;
-				if (_p9.ctor === '[]') {
-					return {ctor: '[]'};
-				} else {
-					switch (_p9._0.ctor) {
-						case 'StyleBlockDeclaration':
-							var _v8 = _p9._1;
-							declarations = _v8;
-							continue nestedMediaRules;
-						case 'MediaRule':
-							return {
-								ctor: '::',
-								_0: A2(
-									_rtfeldman$elm_css$Css_Preprocess$MediaRule,
-									A2(_elm_lang$core$List$append, queries, _p9._0._0),
-									_p9._0._1),
-								_1: nestedMediaRules(_p9._1)
-							};
-						default:
-							return {
-								ctor: '::',
-								_0: _p9._0,
-								_1: nestedMediaRules(_p9._1)
-							};
-					}
-				}
-			}
-		};
-		var extractStyleBlocks = function (declarations) {
-			extractStyleBlocks:
-			while (true) {
-				var _p10 = declarations;
-				if (_p10.ctor === '[]') {
-					return {ctor: '[]'};
-				} else {
-					if (_p10._0.ctor === 'StyleBlockDeclaration') {
-						return {
-							ctor: '::',
-							_0: _p10._0._0,
-							_1: extractStyleBlocks(_p10._1)
-						};
-					} else {
-						var _v10 = _p10._1;
-						declarations = _v10;
-						continue extractStyleBlocks;
-					}
-				}
-			}
-		};
-		var snippetDeclarations = A2(_elm_lang$core$List$concatMap, _rtfeldman$elm_css$Css_Preprocess$unwrapSnippet, snippets);
-		var mediaRuleFromStyleBlocks = A2(
-			_rtfeldman$elm_css$Css_Preprocess$MediaRule,
-			queries,
-			extractStyleBlocks(snippetDeclarations));
-		return _rtfeldman$elm_css$Css_Preprocess$Snippet(
-			{
-				ctor: '::',
-				_0: mediaRuleFromStyleBlocks,
-				_1: nestedMediaRules(snippetDeclarations)
-			});
-	});
-var _rtfeldman$elm_css$Css_Foreign$mediaQuery = F2(
-	function (stringQueries, snippets) {
-		return A2(
-			_rtfeldman$elm_css$Css_Foreign$media,
-			A2(_elm_lang$core$List$map, _rtfeldman$elm_css$Css_Structure$CustomQuery, stringQueries),
-			snippets);
-	});
-var _rtfeldman$elm_css$Css_Foreign$everything = function (styles) {
-	return A2(
-		_rtfeldman$elm_css$VirtualDom_Styled$makeSnippet,
-		styles,
-		_rtfeldman$elm_css$Css_Structure$UniversalSelectorSequence(
-			{ctor: '[]'}));
-};
-var _rtfeldman$elm_css$Css_Foreign$selector = F2(
-	function (selectorStr, styles) {
-		return A2(
-			_rtfeldman$elm_css$VirtualDom_Styled$makeSnippet,
-			styles,
-			A2(
-				_rtfeldman$elm_css$Css_Structure$CustomSelector,
-				selectorStr,
-				{ctor: '[]'}));
-	});
-var _rtfeldman$elm_css$Css_Foreign$class = F2(
-	function ($class, styles) {
-		return A2(
-			_rtfeldman$elm_css$VirtualDom_Styled$makeSnippet,
-			styles,
-			_rtfeldman$elm_css$Css_Structure$UniversalSelectorSequence(
-				{
-					ctor: '::',
-					_0: _rtfeldman$elm_css$Css_Structure$ClassSelector(
-						A2(_rtfeldman$elm_css_util$Css_Helpers$identifierToString, '', $class)),
-					_1: {ctor: '[]'}
-				}));
-	});
-var _rtfeldman$elm_css$Css_Foreign$id = F2(
-	function (identifier, styles) {
-		return A2(
-			_rtfeldman$elm_css$VirtualDom_Styled$makeSnippet,
-			styles,
-			_rtfeldman$elm_css$Css_Structure$UniversalSelectorSequence(
-				{
-					ctor: '::',
-					_0: _rtfeldman$elm_css$Css_Structure$IdSelector(
-						A2(_rtfeldman$elm_css_util$Css_Helpers$identifierToString, '', identifier)),
-					_1: {ctor: '[]'}
-				}));
-	});
-var _rtfeldman$elm_css$Css_Foreign$global = function (snippets) {
-	return _rtfeldman$elm_css$VirtualDom_Styled$unstyledNode(
-		A3(
-			_elm_lang$virtual_dom$VirtualDom$node,
-			'style',
-			{ctor: '[]'},
-			_elm_lang$core$List$singleton(
-				_elm_lang$virtual_dom$VirtualDom$text(
-					function (_) {
-						return _.css;
-					}(
-						_rtfeldman$elm_css$Css_Preprocess_Resolve$compile(
-							_elm_lang$core$List$singleton(
-								_rtfeldman$elm_css$Css_Preprocess$stylesheet(snippets))))))));
-};
-
 var _rtfeldman$elm_css$Css_Colors$white = _rtfeldman$elm_css$Css$hex('ffffff');
 var _rtfeldman$elm_css$Css_Colors$silver = _rtfeldman$elm_css$Css$hex('dddddd');
 var _rtfeldman$elm_css$Css_Colors$gray = _rtfeldman$elm_css$Css$hex('AAAAAA');
@@ -16010,52 +15404,39 @@ var _fizwidget$game_of_life$Matrix$offsetBy = F2(
 		var _p3 = _p0;
 		return {x: _p2.x + _p3._0, y: _p2.y + _p3._1};
 	});
-var _fizwidget$game_of_life$Matrix$getRows = function (_p4) {
-	var _p5 = _p4;
-	var _p6 = _p5._0;
-	return A2(
-		_elm_lang$core$List$map,
-		_elm_lang$core$Array$toList,
-		A2(
-			_elm_lang$core$List$map,
-			function (y) {
-				return A3(_elm_lang$core$Array$slice, y * _p6.width, (y + 1) * _p6.width, _p5._1);
-			},
-			A2(_elm_lang$core$List$range, 0, _p6.height - 1)));
-};
 var _fizwidget$game_of_life$Matrix$equals = F2(
-	function (_p8, _p7) {
-		var _p9 = _p8;
-		var _p10 = _p7;
-		return _elm_lang$core$Native_Utils.eq(_p9._1, _p10._1);
+	function (_p5, _p4) {
+		var _p6 = _p5;
+		var _p7 = _p4;
+		return _elm_lang$core$Native_Utils.eq(_p6._1, _p7._1);
 	});
 var _fizwidget$game_of_life$Matrix$all = F2(
-	function (predicate, _p11) {
-		var _p12 = _p11;
+	function (predicate, _p8) {
+		var _p9 = _p8;
 		return _elm_lang$core$Array$isEmpty(
 			A2(
 				_elm_lang$core$Array$filter,
-				function (_p13) {
-					return !predicate(_p13);
+				function (_p10) {
+					return !predicate(_p10);
 				},
-				_p12._1));
+				_p9._1));
 	});
 var _fizwidget$game_of_life$Matrix$foldl = F3(
-	function (f, initial, _p14) {
-		var _p15 = _p14;
-		return A3(_elm_lang$core$Array$foldl, f, initial, _p15._1);
+	function (f, initial, _p11) {
+		var _p12 = _p11;
+		return A3(_elm_lang$core$Array$foldl, f, initial, _p12._1);
 	});
 var _fizwidget$game_of_life$Matrix$toCoordinate = F2(
-	function (_p16, index) {
-		var _p17 = _p16;
-		var _p18 = _p17.width;
+	function (_p13, index) {
+		var _p14 = _p13;
+		var _p15 = _p14.width;
 		return {
-			x: A2(_elm_lang$core$Basics_ops['%'], index, _p18),
-			y: (index / _p18) | 0
+			x: A2(_elm_lang$core$Basics_ops['%'], index, _p15),
+			y: (index / _p15) | 0
 		};
 	});
-var _fizwidget$game_of_life$Matrix$toListWithCoordinates = function (_p19) {
-	var _p20 = _p19;
+var _fizwidget$game_of_life$Matrix$toList = function (_p16) {
+	var _p17 = _p16;
 	return _elm_lang$core$Array$toList(
 		A2(
 			_elm_lang$core$Array$indexedMap,
@@ -16063,25 +15444,25 @@ var _fizwidget$game_of_life$Matrix$toListWithCoordinates = function (_p19) {
 				function (index, value) {
 					return {
 						ctor: '_Tuple2',
-						_0: A2(_fizwidget$game_of_life$Matrix$toCoordinate, _p20._0, index),
+						_0: A2(_fizwidget$game_of_life$Matrix$toCoordinate, _p17._0, index),
 						_1: value
 					};
 				}),
-			_p20._1));
+			_p17._1));
 };
 var _fizwidget$game_of_life$Matrix$toIndex = F2(
-	function (_p22, _p21) {
-		var _p23 = _p22;
-		var _p24 = _p21;
-		return (_p24.y * _p23.width) + _p24.x;
+	function (_p19, _p18) {
+		var _p20 = _p19;
+		var _p21 = _p18;
+		return (_p21.y * _p20.width) + _p21.x;
 	});
 var _fizwidget$game_of_life$Matrix$get = F2(
-	function (_p25, coordinate) {
-		var _p26 = _p25;
-		var index = A2(_fizwidget$game_of_life$Matrix$toIndex, _p26._0, coordinate);
-		return A2(_elm_lang$core$Array$get, index, _p26._1);
+	function (_p22, coordinate) {
+		var _p23 = _p22;
+		var index = A2(_fizwidget$game_of_life$Matrix$toIndex, _p23._0, coordinate);
+		return A2(_elm_lang$core$Array$get, index, _p23._1);
 	});
-var _fizwidget$game_of_life$Matrix$getNeighbours = F2(
+var _fizwidget$game_of_life$Matrix$neighbours = F2(
 	function (coordinate, matrix) {
 		return A2(
 			_elm_lang$core$List$filterMap,
@@ -16123,13 +15504,13 @@ var _fizwidget$game_of_life$Matrix$getNeighbours = F2(
 					}
 				}));
 	});
-var _fizwidget$game_of_life$Matrix$height = function (_p27) {
-	var _p28 = _p27;
-	return _p28._0.height;
+var _fizwidget$game_of_life$Matrix$height = function (_p24) {
+	var _p25 = _p24;
+	return _p25._0.height;
 };
-var _fizwidget$game_of_life$Matrix$width = function (_p29) {
-	var _p30 = _p29;
-	return _p30._0.width;
+var _fizwidget$game_of_life$Matrix$width = function (_p26) {
+	var _p27 = _p26;
+	return _p27._0.width;
 };
 var _fizwidget$game_of_life$Matrix$Dimensions = F2(
 	function (a, b) {
@@ -16144,22 +15525,22 @@ var _fizwidget$game_of_life$Matrix$Matrix = F2(
 		return {ctor: 'Matrix', _0: a, _1: b};
 	});
 var _fizwidget$game_of_life$Matrix$create = F2(
-	function (_p31, value) {
-		var _p32 = _p31;
+	function (_p28, value) {
+		var _p29 = _p28;
+		return A2(
+			_fizwidget$game_of_life$Matrix$Matrix,
+			_p29,
+			A2(_elm_lang$core$Array$repeat, _p29.width * _p29.height, value));
+	});
+var _fizwidget$game_of_life$Matrix$set = F3(
+	function (coordinate, value, _p30) {
+		var _p31 = _p30;
+		var _p32 = _p31._0;
+		var index = A2(_fizwidget$game_of_life$Matrix$toIndex, _p32, coordinate);
 		return A2(
 			_fizwidget$game_of_life$Matrix$Matrix,
 			_p32,
-			A2(_elm_lang$core$Array$repeat, _p32.width * _p32.height, value));
-	});
-var _fizwidget$game_of_life$Matrix$set = F3(
-	function (coordinate, value, _p33) {
-		var _p34 = _p33;
-		var _p35 = _p34._0;
-		var index = A2(_fizwidget$game_of_life$Matrix$toIndex, _p35, coordinate);
-		return A2(
-			_fizwidget$game_of_life$Matrix$Matrix,
-			_p35,
-			A3(_elm_lang$core$Array$set, index, value, _p34._1));
+			A3(_elm_lang$core$Array$set, index, value, _p31._1));
 	});
 var _fizwidget$game_of_life$Matrix$update = F3(
 	function (coordinate, matrix, f) {
@@ -16177,71 +15558,76 @@ var _fizwidget$game_of_life$Matrix$update = F3(
 					A2(_fizwidget$game_of_life$Matrix$get, matrix, coordinate))));
 	});
 var _fizwidget$game_of_life$Matrix$map = F2(
-	function (f, _p36) {
-		var _p37 = _p36;
+	function (f, _p33) {
+		var _p34 = _p33;
 		return A2(
 			_fizwidget$game_of_life$Matrix$Matrix,
-			_p37._0,
-			A2(_elm_lang$core$Array$map, f, _p37._1));
+			_p34._0,
+			A2(_elm_lang$core$Array$map, f, _p34._1));
 	});
-var _fizwidget$game_of_life$Matrix$indexedMap = F2(
-	function (f, _p38) {
-		var _p39 = _p38;
-		var _p41 = _p39._0;
+var _fizwidget$game_of_life$Matrix$coordinateMap = F2(
+	function (f, _p35) {
+		var _p36 = _p35;
+		var _p38 = _p36._0;
 		return A2(
 			_fizwidget$game_of_life$Matrix$Matrix,
-			_p41,
+			_p38,
 			A2(
 				_elm_lang$core$Array$indexedMap,
-				function (_p40) {
+				function (_p37) {
 					return f(
-						A2(_fizwidget$game_of_life$Matrix$toCoordinate, _p41, _p40));
+						A2(_fizwidget$game_of_life$Matrix$toCoordinate, _p38, _p37));
 				},
-				_p39._1));
+				_p36._1));
 	});
 
-var _fizwidget$game_of_life$Main$cellColor = function (cell) {
-	var _p0 = cell;
-	if (_p0.ctor === 'Alive') {
-		return A4(_rtfeldman$elm_css$Css$rgba, 38, 132, 255, 0.8);
+var _fizwidget$game_of_life$Main$liveCellColor = function (_p0) {
+	var _p1 = _p0;
+	var _p2 = {
+		ctor: '_Tuple2',
+		_0: _elm_lang$core$Native_Utils.eq(
+			A2(_elm_lang$core$Basics_ops['%'], _p1.x, 2),
+			0),
+		_1: _elm_lang$core$Native_Utils.eq(
+			A2(_elm_lang$core$Basics_ops['%'], _p1.y, 2),
+			0)
+	};
+	if (_p2._0 === true) {
+		if (_p2._1 === true) {
+			return A4(_rtfeldman$elm_css$Css$rgba, 255, 171, 0, 0.8);
+		} else {
+			return A4(_rtfeldman$elm_css$Css$rgba, 54, 179, 126, 0.8);
+		}
 	} else {
-		return _rtfeldman$elm_css$Css_Colors$white;
+		if (_p2._1 === true) {
+			return A4(_rtfeldman$elm_css$Css$rgba, 0, 184, 217, 0.8);
+		} else {
+			return A4(_rtfeldman$elm_css$Css$rgba, 101, 84, 192, 0.8);
+		}
 	}
 };
+var _fizwidget$game_of_life$Main$cellColor = F2(
+	function (cell, coordinate) {
+		var _p3 = cell;
+		if (_p3.ctor === 'Alive') {
+			return _fizwidget$game_of_life$Main$liveCellColor(coordinate);
+		} else {
+			return A3(_rtfeldman$elm_css$Css$rgb, 244, 245, 247);
+		}
+	});
 var _fizwidget$game_of_life$Main$cellSize = function (cells) {
 	return 100.0 / _elm_lang$core$Basics$toFloat(
 		_fizwidget$game_of_life$Matrix$height(cells));
 };
-var _fizwidget$game_of_life$Main$globalStyles = _rtfeldman$elm_css$Css_Foreign$global(
-	{
-		ctor: '::',
-		_0: _rtfeldman$elm_css$Css_Foreign$body(
-			{
-				ctor: '::',
-				_0: _rtfeldman$elm_css$Css$margin(
-					_rtfeldman$elm_css$Css$px(0)),
-				_1: {ctor: '[]'}
-			}),
-		_1: {ctor: '[]'}
-	});
-var _fizwidget$game_of_life$Main$countNeighbours = F2(
-	function (cells, coordinate) {
-		var countLiveCell = F2(
-			function (cell, currentCount) {
-				var _p1 = cell;
-				if (_p1.ctor === 'Alive') {
-					return currentCount + 1;
-				} else {
-					return currentCount;
-				}
-			});
-		return A3(
-			_elm_lang$core$List$foldl,
-			countLiveCell,
-			0,
-			A2(_fizwidget$game_of_life$Matrix$getNeighbours, coordinate, cells));
-	});
-var _fizwidget$game_of_life$Main$isFrozen = F2(
+var _fizwidget$game_of_life$Main$cellBorderSize = function (cell) {
+	var _p4 = cell;
+	if (_p4.ctor === 'Alive') {
+		return 4;
+	} else {
+		return 30;
+	}
+};
+var _fizwidget$game_of_life$Main$hasReachedEquilibrium = F2(
 	function (cells, previousCells) {
 		return A2(
 			_elm_lang$core$Maybe$withDefault,
@@ -16261,206 +15647,198 @@ var _fizwidget$game_of_life$Main$Model = F3(
 var _fizwidget$game_of_life$Main$Playing = {ctor: 'Playing'};
 var _fizwidget$game_of_life$Main$Paused = {ctor: 'Paused'};
 var _fizwidget$game_of_life$Main$Dead = {ctor: 'Dead'};
-var _fizwidget$game_of_life$Main$empty = A2(
-	_fizwidget$game_of_life$Matrix$create,
-	{width: 18, height: 18},
-	_fizwidget$game_of_life$Main$Dead);
 var _fizwidget$game_of_life$Main$init = {
 	ctor: '_Tuple2',
-	_0: {status: _fizwidget$game_of_life$Main$Paused, cells: _fizwidget$game_of_life$Main$empty, previousCells: _elm_lang$core$Maybe$Nothing},
+	_0: {
+		status: _fizwidget$game_of_life$Main$Paused,
+		cells: A2(
+			_fizwidget$game_of_life$Matrix$create,
+			{width: 18, height: 18},
+			_fizwidget$game_of_life$Main$Dead),
+		previousCells: _elm_lang$core$Maybe$Nothing
+	},
 	_1: _elm_lang$core$Platform_Cmd$none
 };
-var _fizwidget$game_of_life$Main$isDead = F2(
-	function (x, y) {
-		return _elm_lang$core$Native_Utils.eq(x, y);
-	})(_fizwidget$game_of_life$Main$Dead);
-var _fizwidget$game_of_life$Main$pauseWhenFinished = function (_p2) {
-	var _p3 = _p2;
-	var _p6 = _p3;
-	var _p5 = _p3.cells;
-	var _p4 = _p3.status;
-	if (_p4.ctor === 'Playing') {
-		return A2(_fizwidget$game_of_life$Matrix$all, _fizwidget$game_of_life$Main$isDead, _p5) ? _elm_lang$core$Native_Utils.update(
-			_p6,
-			{status: _fizwidget$game_of_life$Main$Paused}) : (A2(_fizwidget$game_of_life$Main$isFrozen, _p5, _p3.previousCells) ? _elm_lang$core$Native_Utils.update(
-			_p6,
-			{status: _fizwidget$game_of_life$Main$Paused}) : _p6);
+var _fizwidget$game_of_life$Main$pauseIfFinished = function (_p5) {
+	var _p6 = _p5;
+	var _p9 = _p6;
+	var _p8 = _p6.cells;
+	var _p7 = _p6.status;
+	if (_p7.ctor === 'Playing') {
+		return A2(
+			_fizwidget$game_of_life$Matrix$all,
+			F2(
+				function (x, y) {
+					return _elm_lang$core$Native_Utils.eq(x, y);
+				})(_fizwidget$game_of_life$Main$Dead),
+			_p8) ? _elm_lang$core$Native_Utils.update(
+			_p9,
+			{status: _fizwidget$game_of_life$Main$Paused}) : (A2(_fizwidget$game_of_life$Main$hasReachedEquilibrium, _p8, _p6.previousCells) ? _elm_lang$core$Native_Utils.update(
+			_p9,
+			{status: _fizwidget$game_of_life$Main$Paused}) : _p9);
 	} else {
-		return _p6;
+		return _p9;
 	}
 };
 var _fizwidget$game_of_life$Main$Alive = {ctor: 'Alive'};
-var _fizwidget$game_of_life$Main$line = A3(
-	_fizwidget$game_of_life$Matrix$set,
-	{x: 14 - 1, y: 6},
-	_fizwidget$game_of_life$Main$Alive,
-	A3(
-		_fizwidget$game_of_life$Matrix$set,
-		{x: 13 - 1, y: 6},
-		_fizwidget$game_of_life$Main$Alive,
-		A3(
-			_fizwidget$game_of_life$Matrix$set,
-			{x: 12 - 1, y: 6},
-			_fizwidget$game_of_life$Main$Alive,
-			A3(
-				_fizwidget$game_of_life$Matrix$set,
-				{x: 11 - 1, y: 6},
-				_fizwidget$game_of_life$Main$Alive,
-				A3(
-					_fizwidget$game_of_life$Matrix$set,
-					{x: 10 - 1, y: 6},
-					_fizwidget$game_of_life$Main$Alive,
-					A3(
-						_fizwidget$game_of_life$Matrix$set,
-						{x: 9 - 1, y: 6},
-						_fizwidget$game_of_life$Main$Alive,
-						A3(
-							_fizwidget$game_of_life$Matrix$set,
-							{x: 8 - 1, y: 6},
-							_fizwidget$game_of_life$Main$Alive,
-							A3(
-								_fizwidget$game_of_life$Matrix$set,
-								{x: 7 - 1, y: 6},
-								_fizwidget$game_of_life$Main$Alive,
-								A2(
-									_fizwidget$game_of_life$Matrix$create,
-									{width: 20, height: 20},
-									_fizwidget$game_of_life$Main$Dead)))))))));
-var _fizwidget$game_of_life$Main$toggleCell = function (cell) {
-	var _p7 = cell;
-	if (_p7.ctor === 'Alive') {
-		return _fizwidget$game_of_life$Main$Dead;
-	} else {
-		return _fizwidget$game_of_life$Main$Alive;
-	}
-};
-var _fizwidget$game_of_life$Main$toggle = F2(
+var _fizwidget$game_of_life$Main$countLiveNeighbours = F2(
 	function (cells, coordinate) {
-		return A3(_fizwidget$game_of_life$Matrix$update, coordinate, cells, _fizwidget$game_of_life$Main$toggleCell);
+		return _elm_lang$core$List$length(
+			A2(
+				_elm_lang$core$List$filter,
+				F2(
+					function (x, y) {
+						return _elm_lang$core$Native_Utils.eq(x, y);
+					})(_fizwidget$game_of_life$Main$Alive),
+				A2(_fizwidget$game_of_life$Matrix$neighbours, coordinate, cells)));
 	});
 var _fizwidget$game_of_life$Main$updateCell = F3(
 	function (cells, coordinate, cell) {
-		var _p8 = {
+		var _p10 = {
 			ctor: '_Tuple2',
 			_0: cell,
-			_1: A2(_fizwidget$game_of_life$Main$countNeighbours, cells, coordinate)
+			_1: A2(_fizwidget$game_of_life$Main$countLiveNeighbours, cells, coordinate)
 		};
-		_v5_3:
+		_v6_3:
 		do {
-			if (_p8.ctor === '_Tuple2') {
-				if (_p8._0.ctor === 'Alive') {
-					switch (_p8._1) {
+			if (_p10.ctor === '_Tuple2') {
+				if (_p10._0.ctor === 'Alive') {
+					switch (_p10._1) {
 						case 2:
 							return _fizwidget$game_of_life$Main$Alive;
 						case 3:
 							return _fizwidget$game_of_life$Main$Alive;
 						default:
-							break _v5_3;
+							break _v6_3;
 					}
 				} else {
-					if (_p8._1 === 3) {
+					if (_p10._1 === 3) {
 						return _fizwidget$game_of_life$Main$Alive;
 					} else {
-						break _v5_3;
+						break _v6_3;
 					}
 				}
 			} else {
-				break _v5_3;
+				break _v6_3;
 			}
 		} while(false);
 		return _fizwidget$game_of_life$Main$Dead;
 	});
-var _fizwidget$game_of_life$Main$tick = function (cells) {
+var _fizwidget$game_of_life$Main$updateCells = function (cells) {
 	return A2(
-		_fizwidget$game_of_life$Matrix$indexedMap,
+		_fizwidget$game_of_life$Matrix$coordinateMap,
 		_fizwidget$game_of_life$Main$updateCell(cells),
 		cells);
 };
+var _fizwidget$game_of_life$Main$toggleCell = function (cell) {
+	var _p11 = cell;
+	if (_p11.ctor === 'Alive') {
+		return _fizwidget$game_of_life$Main$Dead;
+	} else {
+		return _fizwidget$game_of_life$Main$Alive;
+	}
+};
+var _fizwidget$game_of_life$Main$toggleCoordinate = F2(
+	function (cells, coordinate) {
+		return A3(_fizwidget$game_of_life$Matrix$update, coordinate, cells, _fizwidget$game_of_life$Main$toggleCell);
+	});
 var _fizwidget$game_of_life$Main$update = F2(
-	function (msg, _p9) {
-		var _p10 = _p9;
-		var _p13 = _p10;
-		var _p12 = _p10.cells;
-		var _p11 = msg;
-		switch (_p11.ctor) {
+	function (msg, model) {
+		var _p12 = msg;
+		switch (_p12.ctor) {
 			case 'Play':
 				return _fizwidget$game_of_life$Main$noCmd(
 					_elm_lang$core$Native_Utils.update(
-						_p13,
+						model,
 						{status: _fizwidget$game_of_life$Main$Playing}));
 			case 'Pause':
 				return _fizwidget$game_of_life$Main$noCmd(
 					_elm_lang$core$Native_Utils.update(
-						_p13,
+						model,
 						{status: _fizwidget$game_of_life$Main$Paused}));
 			case 'Tick':
 				return _fizwidget$game_of_life$Main$noCmd(
-					_fizwidget$game_of_life$Main$pauseWhenFinished(
+					_fizwidget$game_of_life$Main$pauseIfFinished(
 						_elm_lang$core$Native_Utils.update(
-							_p13,
+							model,
 							{
-								cells: _fizwidget$game_of_life$Main$tick(_p12),
-								previousCells: _elm_lang$core$Maybe$Just(_p12)
+								cells: _fizwidget$game_of_life$Main$updateCells(model.cells),
+								previousCells: _elm_lang$core$Maybe$Just(model.cells)
 							})));
 			default:
 				return _fizwidget$game_of_life$Main$noCmd(
 					_elm_lang$core$Native_Utils.update(
-						_p13,
+						model,
 						{
-							cells: A2(_fizwidget$game_of_life$Main$toggle, _p12, _p11._0)
+							cells: A2(_fizwidget$game_of_life$Main$toggleCoordinate, model.cells, _p12._0)
 						}));
 		}
 	});
 var _fizwidget$game_of_life$Main$Pause = {ctor: 'Pause'};
 var _fizwidget$game_of_life$Main$Play = {ctor: 'Play'};
-var _fizwidget$game_of_life$Main$viewPlayPauseButton = function (status) {
-	var styles = {
-		ctor: '::',
-		_0: _rtfeldman$elm_css$Css$position(_rtfeldman$elm_css$Css$fixed),
-		_1: {
+var _fizwidget$game_of_life$Main$viewStatusButton = F2(
+	function (status, cells) {
+		var styles = {
 			ctor: '::',
-			_0: _rtfeldman$elm_css$Css$width(
-				_rtfeldman$elm_css$Css$px(100)),
+			_0: _rtfeldman$elm_css$Css$position(_rtfeldman$elm_css$Css$fixed),
 			_1: {
 				ctor: '::',
-				_0: _rtfeldman$elm_css$Css$height(
-					_rtfeldman$elm_css$Css$px(40)),
+				_0: _rtfeldman$elm_css$Css$width(
+					_rtfeldman$elm_css$Css$px(100)),
 				_1: {
 					ctor: '::',
-					_0: _rtfeldman$elm_css$Css$marginLeft(_rtfeldman$elm_css$Css$auto),
+					_0: _rtfeldman$elm_css$Css$height(
+						_rtfeldman$elm_css$Css$px(40)),
 					_1: {
 						ctor: '::',
-						_0: _rtfeldman$elm_css$Css$marginRight(_rtfeldman$elm_css$Css$auto),
+						_0: _rtfeldman$elm_css$Css$marginLeft(_rtfeldman$elm_css$Css$auto),
 						_1: {
 							ctor: '::',
-							_0: _rtfeldman$elm_css$Css$left(
-								_rtfeldman$elm_css$Css$px(0)),
+							_0: _rtfeldman$elm_css$Css$marginRight(_rtfeldman$elm_css$Css$auto),
 							_1: {
 								ctor: '::',
-								_0: _rtfeldman$elm_css$Css$right(
+								_0: _rtfeldman$elm_css$Css$left(
 									_rtfeldman$elm_css$Css$px(0)),
 								_1: {
 									ctor: '::',
-									_0: _rtfeldman$elm_css$Css$bottom(
-										_rtfeldman$elm_css$Css$pct(6)),
+									_0: _rtfeldman$elm_css$Css$right(
+										_rtfeldman$elm_css$Css$px(0)),
 									_1: {
 										ctor: '::',
-										_0: A2(
-											_rtfeldman$elm_css$Css$border2,
-											_rtfeldman$elm_css$Css$px(0),
-											_rtfeldman$elm_css$Css$none),
+										_0: _rtfeldman$elm_css$Css$bottom(
+											_rtfeldman$elm_css$Css$pct(6)),
 										_1: {
 											ctor: '::',
-											_0: _rtfeldman$elm_css$Css$borderRadius(
-												_rtfeldman$elm_css$Css$px(10)),
+											_0: A2(
+												_rtfeldman$elm_css$Css$border2,
+												_rtfeldman$elm_css$Css$px(0),
+												_rtfeldman$elm_css$Css$none),
 											_1: {
 												ctor: '::',
-												_0: _rtfeldman$elm_css$Css$color(_rtfeldman$elm_css$Css_Colors$white),
+												_0: _rtfeldman$elm_css$Css$borderRadius(
+													_rtfeldman$elm_css$Css$px(20)),
 												_1: {
 													ctor: '::',
-													_0: _rtfeldman$elm_css$Css$fontSize(
-														_rtfeldman$elm_css$Css$px(20)),
-													_1: {ctor: '[]'}
+													_0: _rtfeldman$elm_css$Css$color(_rtfeldman$elm_css$Css_Colors$white),
+													_1: {
+														ctor: '::',
+														_0: _rtfeldman$elm_css$Css$fontSize(
+															_rtfeldman$elm_css$Css$px(20)),
+														_1: {
+															ctor: '::',
+															_0: _rtfeldman$elm_css$Css_Transitions$transition(
+																{
+																	ctor: '::',
+																	_0: A3(_rtfeldman$elm_css$Css_Transitions$backgroundColor3, 200, 0, _rtfeldman$elm_css$Css_Transitions$easeInOut),
+																	_1: {
+																		ctor: '::',
+																		_0: A3(_rtfeldman$elm_css$Css_Transitions$visibility3, 200, 0, _rtfeldman$elm_css$Css_Transitions$easeInOut),
+																		_1: {ctor: '[]'}
+																	}
+																}),
+															_1: {ctor: '[]'}
+														}
+													}
 												}
 											}
 										}
@@ -16471,63 +15849,77 @@ var _fizwidget$game_of_life$Main$viewPlayPauseButton = function (status) {
 					}
 				}
 			}
+		};
+		if (A2(
+			_fizwidget$game_of_life$Matrix$all,
+			F2(
+				function (x, y) {
+					return _elm_lang$core$Native_Utils.eq(x, y);
+				})(_fizwidget$game_of_life$Main$Dead),
+			cells)) {
+			return A2(
+				_rtfeldman$elm_css$Html_Styled$div,
+				{ctor: '[]'},
+				{ctor: '[]'});
+		} else {
+			var _p13 = status;
+			if (_p13.ctor === 'Playing') {
+				return A2(
+					_rtfeldman$elm_css$Html_Styled$button,
+					{
+						ctor: '::',
+						_0: _rtfeldman$elm_css$Html_Styled_Events$onClick(_fizwidget$game_of_life$Main$Pause),
+						_1: {
+							ctor: '::',
+							_0: _rtfeldman$elm_css$Html_Styled_Attributes$css(
+								{
+									ctor: '::',
+									_0: _rtfeldman$elm_css$Css$backgroundColor(
+										A4(_rtfeldman$elm_css$Css$rgba, 179, 186, 197, 0.6)),
+									_1: styles
+								}),
+							_1: {ctor: '[]'}
+						}
+					},
+					{
+						ctor: '::',
+						_0: _rtfeldman$elm_css$Html_Styled$text('Pause'),
+						_1: {ctor: '[]'}
+					});
+			} else {
+				return A2(
+					_rtfeldman$elm_css$Html_Styled$button,
+					{
+						ctor: '::',
+						_0: _rtfeldman$elm_css$Html_Styled_Events$onClick(_fizwidget$game_of_life$Main$Play),
+						_1: {
+							ctor: '::',
+							_0: _rtfeldman$elm_css$Html_Styled_Attributes$css(
+								{
+									ctor: '::',
+									_0: _rtfeldman$elm_css$Css$backgroundColor(
+										A4(_rtfeldman$elm_css$Css$rgba, 54, 179, 126, 0.9)),
+									_1: styles
+								}),
+							_1: {ctor: '[]'}
+						}
+					},
+					{
+						ctor: '::',
+						_0: _rtfeldman$elm_css$Html_Styled$text('Play'),
+						_1: {ctor: '[]'}
+					});
+			}
 		}
-	};
-	var _p14 = status;
-	if (_p14.ctor === 'Playing') {
-		return A2(
-			_rtfeldman$elm_css$Html_Styled$button,
-			{
-				ctor: '::',
-				_0: _rtfeldman$elm_css$Html_Styled_Events$onClick(_fizwidget$game_of_life$Main$Pause),
-				_1: {
-					ctor: '::',
-					_0: _rtfeldman$elm_css$Html_Styled_Attributes$css(
-						{
-							ctor: '::',
-							_0: _rtfeldman$elm_css$Css$backgroundColor(
-								A4(_rtfeldman$elm_css$Css$rgba, 76, 154, 255, 0.7)),
-							_1: styles
-						}),
-					_1: {ctor: '[]'}
-				}
-			},
-			{
-				ctor: '::',
-				_0: _rtfeldman$elm_css$Html_Styled$text('Pause'),
-				_1: {ctor: '[]'}
-			});
-	} else {
-		return A2(
-			_rtfeldman$elm_css$Html_Styled$button,
-			{
-				ctor: '::',
-				_0: _rtfeldman$elm_css$Html_Styled_Events$onClick(_fizwidget$game_of_life$Main$Play),
-				_1: {
-					ctor: '::',
-					_0: _rtfeldman$elm_css$Html_Styled_Attributes$css(
-						{
-							ctor: '::',
-							_0: _rtfeldman$elm_css$Css$backgroundColor(
-								A4(_rtfeldman$elm_css$Css$rgba, 76, 154, 255, 0.9)),
-							_1: styles
-						}),
-					_1: {ctor: '[]'}
-				}
-			},
-			{
-				ctor: '::',
-				_0: _rtfeldman$elm_css$Html_Styled$text('Play'),
-				_1: {ctor: '[]'}
-			});
-	}
-};
+	});
 var _fizwidget$game_of_life$Main$Toggle = function (a) {
 	return {ctor: 'Toggle', _0: a};
 };
 var _fizwidget$game_of_life$Main$viewCell = F2(
-	function (size, _p15) {
-		var _p16 = _p15;
+	function (size, _p14) {
+		var _p15 = _p14;
+		var _p17 = _p15._0;
+		var _p16 = _p15._1;
 		return A2(
 			_rtfeldman$elm_css$Html_Styled$div,
 			{
@@ -16540,7 +15932,7 @@ var _fizwidget$game_of_life$Main$viewCell = F2(
 						_1: {
 							ctor: '::',
 							_0: _rtfeldman$elm_css$Css$backgroundColor(
-								_fizwidget$game_of_life$Main$cellColor(_p16._1)),
+								A2(_fizwidget$game_of_life$Main$cellColor, _p16, _p17)),
 							_1: {
 								ctor: '::',
 								_0: _rtfeldman$elm_css$Css$displayFlex,
@@ -16559,7 +15951,8 @@ var _fizwidget$game_of_life$Main$viewCell = F2(
 											ctor: '::',
 											_0: A3(
 												_rtfeldman$elm_css$Css$border3,
-												_rtfeldman$elm_css$Css$px(4),
+												_rtfeldman$elm_css$Css$px(
+													_fizwidget$game_of_life$Main$cellBorderSize(_p16)),
 												_rtfeldman$elm_css$Css$solid,
 												_rtfeldman$elm_css$Css_Colors$white),
 											_1: {
@@ -16571,7 +15964,11 @@ var _fizwidget$game_of_life$Main$viewCell = F2(
 														{
 															ctor: '::',
 															_0: A3(_rtfeldman$elm_css$Css_Transitions$backgroundColor3, 200, 0, _rtfeldman$elm_css$Css_Transitions$easeInOut),
-															_1: {ctor: '[]'}
+															_1: {
+																ctor: '::',
+																_0: _rtfeldman$elm_css$Css_Transitions$borderWidth(200),
+																_1: {ctor: '[]'}
+															}
 														}),
 													_1: {ctor: '[]'}
 												}
@@ -16585,7 +15982,7 @@ var _fizwidget$game_of_life$Main$viewCell = F2(
 				_1: {
 					ctor: '::',
 					_0: _rtfeldman$elm_css$Html_Styled_Events$onClick(
-						_fizwidget$game_of_life$Main$Toggle(_p16._0)),
+						_fizwidget$game_of_life$Main$Toggle(_p17)),
 					_1: {ctor: '[]'}
 				}
 			},
@@ -16671,12 +16068,13 @@ var _fizwidget$game_of_life$Main$viewCells = function (cells) {
 					_elm_lang$core$List$map,
 					_fizwidget$game_of_life$Main$viewCell(
 						_fizwidget$game_of_life$Main$cellSize(cells)),
-					_fizwidget$game_of_life$Matrix$toListWithCoordinates(cells))),
+					_fizwidget$game_of_life$Matrix$toList(cells))),
 			_1: {ctor: '[]'}
 		});
 };
-var _fizwidget$game_of_life$Main$viewModel = function (_p17) {
-	var _p18 = _p17;
+var _fizwidget$game_of_life$Main$view = function (_p18) {
+	var _p19 = _p18;
+	var _p20 = _p19.cells;
 	return A2(
 		_rtfeldman$elm_css$Html_Styled$div,
 		{
@@ -16691,12 +16089,7 @@ var _fizwidget$game_of_life$Main$viewModel = function (_p17) {
 						_1: {
 							ctor: '::',
 							_0: _rtfeldman$elm_css$Css$alignItems(_rtfeldman$elm_css$Css$center),
-							_1: {
-								ctor: '::',
-								_0: _rtfeldman$elm_css$Css$height(
-									_rtfeldman$elm_css$Css$vh(100)),
-								_1: {ctor: '[]'}
-							}
+							_1: {ctor: '[]'}
 						}
 					}
 				}),
@@ -16704,33 +16097,19 @@ var _fizwidget$game_of_life$Main$viewModel = function (_p17) {
 		},
 		{
 			ctor: '::',
-			_0: _fizwidget$game_of_life$Main$viewCells(_p18.cells),
+			_0: _fizwidget$game_of_life$Main$viewCells(_p20),
 			_1: {
 				ctor: '::',
-				_0: _fizwidget$game_of_life$Main$viewPlayPauseButton(_p18.status),
-				_1: {ctor: '[]'}
-			}
-		});
-};
-var _fizwidget$game_of_life$Main$view = function (model) {
-	return A2(
-		_rtfeldman$elm_css$Html_Styled$div,
-		{ctor: '[]'},
-		{
-			ctor: '::',
-			_0: _fizwidget$game_of_life$Main$globalStyles,
-			_1: {
-				ctor: '::',
-				_0: _fizwidget$game_of_life$Main$viewModel(model),
+				_0: A2(_fizwidget$game_of_life$Main$viewStatusButton, _p19.status, _p20),
 				_1: {ctor: '[]'}
 			}
 		});
 };
 var _fizwidget$game_of_life$Main$Tick = {ctor: 'Tick'};
-var _fizwidget$game_of_life$Main$subscriptions = function (_p19) {
-	var _p20 = _p19;
-	var _p21 = _p20.status;
-	if (_p21.ctor === 'Playing') {
+var _fizwidget$game_of_life$Main$subscriptions = function (_p21) {
+	var _p22 = _p21;
+	var _p23 = _p22.status;
+	if (_p23.ctor === 'Playing') {
 		return A2(
 			_elm_lang$core$Time$every,
 			_elm_lang$core$Time$millisecond * 200,
@@ -16742,9 +16121,9 @@ var _fizwidget$game_of_life$Main$subscriptions = function (_p19) {
 var _fizwidget$game_of_life$Main$main = _elm_lang$html$Html$program(
 	{
 		init: _fizwidget$game_of_life$Main$init,
-		view: function (_p22) {
+		view: function (_p24) {
 			return _rtfeldman$elm_css$Html_Styled$toUnstyled(
-				_fizwidget$game_of_life$Main$view(_p22));
+				_fizwidget$game_of_life$Main$view(_p24));
 		},
 		update: _fizwidget$game_of_life$Main$update,
 		subscriptions: _fizwidget$game_of_life$Main$subscriptions
