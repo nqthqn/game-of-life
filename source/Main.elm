@@ -5,7 +5,6 @@ import Html.Styled.Events exposing (onClick)
 import Html.Styled exposing (Html, toUnstyled, div, span, button, text)
 import Html.Styled.Attributes exposing (css, class)
 import Css exposing (..)
-import Css.Foreign exposing (global, body)
 import Css.Colors as Colors
 import Css.Transitions exposing (easeInOut, transition)
 import Time as Time exposing (millisecond)
@@ -43,29 +42,11 @@ type alias Model =
 init : ( Model, Cmd Msg )
 init =
     ( { status = Paused
-      , cells = empty
+      , cells = Matrix.create { width = 18, height = 18 } Dead
       , previousCells = Nothing
       }
     , Cmd.none
     )
-
-
-empty : Cells
-empty =
-    Matrix.create { width = 18, height = 18 } Dead
-
-
-line : Cells
-line =
-    Matrix.create { width = 20, height = 20 } Dead
-        |> Matrix.set { x = 7 - 1, y = 6 } Alive
-        |> Matrix.set { x = 8 - 1, y = 6 } Alive
-        |> Matrix.set { x = 9 - 1, y = 6 } Alive
-        |> Matrix.set { x = 10 - 1, y = 6 } Alive
-        |> Matrix.set { x = 11 - 1, y = 6 } Alive
-        |> Matrix.set { x = 12 - 1, y = 6 } Alive
-        |> Matrix.set { x = 13 - 1, y = 6 } Alive
-        |> Matrix.set { x = 14 - 1, y = 6 } Alive
 
 
 
@@ -80,7 +61,7 @@ type Msg
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update msg ({ cells } as model) =
+update msg model =
     case msg of
         Play ->
             { model | status = Playing }
@@ -91,12 +72,12 @@ update msg ({ cells } as model) =
                 |> noCmd
 
         Tick ->
-            { model | cells = tick cells, previousCells = Just cells }
-                |> pauseWhenFinished
+            { model | cells = updateCells model.cells, previousCells = Just model.cells }
+                |> pauseIfFinished
                 |> noCmd
 
         Toggle coordinate ->
-            { model | cells = toggle cells coordinate }
+            { model | cells = toggleCoordinate model.cells coordinate }
                 |> noCmd
 
 
@@ -105,56 +86,14 @@ noCmd model =
     ( model, Cmd.none )
 
 
-pauseWhenFinished : Model -> Model
-pauseWhenFinished ({ status, cells, previousCells } as model) =
-    case status of
-        Playing ->
-            if Matrix.all isDead cells then
-                { model | status = Paused }
-            else if isFrozen cells previousCells then
-                { model | status = Paused }
-            else
-                model
-
-        Paused ->
-            model
-
-
-isFrozen : Cells -> Maybe Cells -> Bool
-isFrozen cells previousCells =
-    previousCells
-        |> Maybe.map (Matrix.equals cells)
-        |> Maybe.withDefault False
-
-
-isDead : Cell -> Bool
-isDead =
-    (==) Dead
-
-
-toggle : Cells -> Coordinate -> Cells
-toggle cells coordinate =
-    Matrix.update coordinate cells toggleCell
-
-
-toggleCell : Cell -> Cell
-toggleCell cell =
-    case cell of
-        Alive ->
-            Dead
-
-        Dead ->
-            Alive
-
-
-tick : Cells -> Cells
-tick cells =
-    Matrix.indexedMap (updateCell cells) cells
+updateCells : Cells -> Cells
+updateCells cells =
+    Matrix.coordinateMap (updateCell cells) cells
 
 
 updateCell : Cells -> Coordinate -> Cell -> Cell
 updateCell cells coordinate cell =
-    case ( cell, countNeighbours cells coordinate ) of
+    case ( cell, countLiveNeighbours cells coordinate ) of
         ( Alive, 2 ) ->
             Alive
 
@@ -168,19 +107,48 @@ updateCell cells coordinate cell =
             Dead
 
 
-countNeighbours : Cells -> Coordinate -> Int
-countNeighbours cells coordinate =
-    let
-        countLiveCell cell currentCount =
-            case cell of
-                Alive ->
-                    currentCount + 1
+countLiveNeighbours : Cells -> Coordinate -> Int
+countLiveNeighbours cells coordinate =
+    Matrix.neighbours coordinate cells
+        |> List.filter ((==) Alive)
+        |> List.length
 
-                Dead ->
-                    currentCount
-    in
-        Matrix.getNeighbours coordinate cells
-            |> List.foldl countLiveCell 0
+
+pauseIfFinished : Model -> Model
+pauseIfFinished ({ status, cells, previousCells } as model) =
+    case status of
+        Playing ->
+            if Matrix.all ((==) Dead) cells then
+                { model | status = Paused }
+            else if hasReachedEquilibrium cells previousCells then
+                { model | status = Paused }
+            else
+                model
+
+        Paused ->
+            model
+
+
+hasReachedEquilibrium : Cells -> Maybe Cells -> Bool
+hasReachedEquilibrium cells previousCells =
+    previousCells
+        |> Maybe.map (Matrix.equals cells)
+        |> Maybe.withDefault False
+
+
+toggleCoordinate : Cells -> Coordinate -> Cells
+toggleCoordinate cells coordinate =
+    Matrix.update coordinate cells toggleCell
+
+
+toggleCell : Cell -> Cell
+toggleCell cell =
+    case cell of
+        Alive ->
+            Dead
+
+        Dead ->
+            Alive
 
 
 
@@ -188,26 +156,9 @@ countNeighbours cells coordinate =
 
 
 view : Model -> Html Msg
-view model =
-    div [] [ globalStyles, viewModel model ]
-
-
-globalStyles : Html msg
-globalStyles =
-    global [ body [ margin (px 0) ] ]
-
-
-viewModel : Model -> Html Msg
-viewModel { cells, status } =
-    div
-        [ css
-            [ displayFlex
-            , justifyContent center
-            , alignItems center
-            , height (vh 100)
-            ]
-        ]
-        [ viewCells cells, viewPlayPauseButton status ]
+view { cells, status } =
+    div [ css [ displayFlex, justifyContent center, alignItems center ] ]
+        [ viewCells cells, viewStatusButton status cells ]
 
 
 viewCells : Cells -> Html Msg
@@ -234,9 +185,7 @@ viewCells cells =
                 , height (pct 100)
                 ]
             ]
-            (Matrix.toListWithCoordinates cells
-                |> List.map (viewCell (cellSize cells))
-            )
+            (Matrix.toList cells |> List.map (viewCell (cellSize cells)))
         ]
 
 
@@ -245,17 +194,30 @@ viewCell size ( coordinate, cell ) =
     div
         [ css
             [ height (pct size)
-            , backgroundColor (cellColor cell)
+            , backgroundColor (cellColor cell coordinate)
             , displayFlex
             , flex3 (int 0) (int 0) (pct size)
             , borderRadius (pct 50)
-            , border3 (px 4) solid Colors.white
+            , border3 (px (cellBorderSize cell)) solid Colors.white
             , boxSizing borderBox
-            , transition [ Css.Transitions.backgroundColor3 200 0 easeInOut ]
+            , transition
+                [ Css.Transitions.backgroundColor3 200 0 easeInOut
+                , Css.Transitions.borderWidth 200
+                ]
             ]
         , (onClick (Toggle coordinate))
         ]
         []
+
+
+cellBorderSize : Cell -> Float
+cellBorderSize cell =
+    case cell of
+        Alive ->
+            4
+
+        Dead ->
+            30
 
 
 cellSize : Cells -> Float
@@ -263,18 +225,34 @@ cellSize cells =
     100.0 / toFloat (Matrix.height cells)
 
 
-cellColor : Cell -> Css.Color
-cellColor cell =
+cellColor : Cell -> Coordinate -> Css.Color
+cellColor cell coordinate =
     case cell of
         Alive ->
-            rgba 38 132 255 0.8
+            liveCellColor coordinate
 
         Dead ->
-            Colors.white
+            rgb 244 245 247
 
 
-viewPlayPauseButton : Status -> Html Msg
-viewPlayPauseButton status =
+liveCellColor : Coordinate -> Color
+liveCellColor { x, y } =
+    case ( x % 2 == 0, y % 2 == 0 ) of
+        ( True, True ) ->
+            rgba 255 171 0 0.8
+
+        ( True, False ) ->
+            rgba 54 179 126 0.8
+
+        ( False, True ) ->
+            rgba 0 184 217 0.8
+
+        ( False, False ) ->
+            rgba 101 84 192 0.8
+
+
+viewStatusButton : Status -> Cells -> Html Msg
+viewStatusButton status cells =
     let
         styles =
             [ position fixed
@@ -286,21 +264,28 @@ viewPlayPauseButton status =
             , right (px 0)
             , bottom (pct 6)
             , border2 (px 0) none
-            , borderRadius (px 10)
+            , borderRadius (px 20)
             , color Colors.white
             , fontSize (px 20)
+            , transition
+                [ Css.Transitions.backgroundColor3 200 0 easeInOut
+                , Css.Transitions.visibility3 200 0 easeInOut
+                ]
             ]
     in
-        case status of
-            Playing ->
-                button
-                    [ onClick Pause, css (backgroundColor (rgba 76 154 255 0.7) :: styles) ]
-                    [ text "Pause" ]
+        if Matrix.all ((==) Dead) cells then
+            div [] []
+        else
+            case status of
+                Playing ->
+                    button
+                        [ onClick Pause, css (backgroundColor (rgba 179 186 197 0.6) :: styles) ]
+                        [ text "Pause" ]
 
-            Paused ->
-                button
-                    [ onClick Play, css (backgroundColor (rgba 76 154 255 0.9) :: styles) ]
-                    [ text "Play" ]
+                Paused ->
+                    button
+                        [ onClick Play, css (backgroundColor (rgba 54 179 126 0.9) :: styles) ]
+                        [ text "Play" ]
 
 
 

@@ -9,13 +9,12 @@ module Matrix
         , set
         , update
         , map
-        , indexedMap
+        , coordinateMap
         , foldl
         , all
         , equals
-        , toListWithCoordinates
-        , getRows
-        , getNeighbours
+        , toList
+        , neighbours
         )
 
 import Array exposing (Array)
@@ -103,8 +102,8 @@ map f (Matrix dimensions array) =
         |> Matrix dimensions
 
 
-indexedMap : (Coordinate -> a -> b) -> Matrix a -> Matrix b
-indexedMap f (Matrix dimensions array) =
+coordinateMap : (Coordinate -> a -> b) -> Matrix a -> Matrix b
+coordinateMap f (Matrix dimensions array) =
     Array.indexedMap (toCoordinate dimensions >> f) array
         |> Matrix dimensions
 
@@ -126,18 +125,11 @@ equals (Matrix _ a) (Matrix _ b) =
     a == b
 
 
-toListWithCoordinates : Matrix a -> List ( Coordinate, a )
-toListWithCoordinates (Matrix dimensions array) =
+toList : Matrix a -> List ( Coordinate, a )
+toList (Matrix dimensions array) =
     array
         |> Array.indexedMap (\index -> \value -> ( toCoordinate dimensions index, value ))
         |> Array.toList
-
-
-getRows : Matrix a -> List (List a)
-getRows (Matrix dimensions array) =
-    List.range 0 (dimensions.height - 1)
-        |> List.map (\y -> Array.slice (y * dimensions.width) ((y + 1) * dimensions.width) array)
-        |> List.map Array.toList
 
 
 offsetBy : Coordinate -> ( Int, Int ) -> Coordinate
@@ -147,8 +139,8 @@ offsetBy { x, y } ( dx, dy ) =
     }
 
 
-getNeighbours : Coordinate -> Matrix a -> List a
-getNeighbours coordinate matrix =
+neighbours : Coordinate -> Matrix a -> List a
+neighbours coordinate matrix =
     [ ( 1, 1 ), ( 1, 0 ), ( 1, -1 ), ( 0, -1 ), ( -1, -1 ), ( -1, 0 ), ( -1, 1 ), ( 0, 1 ) ]
         |> List.map (offsetBy coordinate)
         |> List.filterMap (get matrix)
