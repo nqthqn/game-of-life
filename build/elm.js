@@ -15570,6 +15570,25 @@ var _fizwidget$game_of_life$Matrix$coordinateMap = F2(
 	});
 
 var _fizwidget$game_of_life$Main$tickInterval = 600 * _elm_lang$core$Time$millisecond;
+var _fizwidget$game_of_life$Main$viewButton = F3(
+	function (description, clickMsg, styles) {
+		return A2(
+			_rtfeldman$elm_css$Html_Styled$button,
+			{
+				ctor: '::',
+				_0: _rtfeldman$elm_css$Html_Styled_Events$onClick(clickMsg),
+				_1: {
+					ctor: '::',
+					_0: _rtfeldman$elm_css$Html_Styled_Attributes$css(styles),
+					_1: {ctor: '[]'}
+				}
+			},
+			{
+				ctor: '::',
+				_0: _rtfeldman$elm_css$Html_Styled$text(description),
+				_1: {ctor: '[]'}
+			});
+	});
 var _fizwidget$game_of_life$Main$statusButtonStyles = {
 	ctor: '::',
 	_0: _rtfeldman$elm_css$Css$position(_rtfeldman$elm_css$Css$fixed),
@@ -15660,10 +15679,6 @@ var _fizwidget$game_of_life$Main$cellColor = F2(
 			return A3(_rtfeldman$elm_css$Css$rgb, 244, 245, 247);
 		}
 	});
-var _fizwidget$game_of_life$Main$cellSize = function (cells) {
-	return 100.0 / _elm_lang$core$Basics$toFloat(
-		_fizwidget$game_of_life$Matrix$height(cells));
-};
 var _fizwidget$game_of_life$Main$cellContentSize = function (cell) {
 	var _p4 = cell;
 	if (_p4.ctor === 'Alive') {
@@ -15671,6 +15686,10 @@ var _fizwidget$game_of_life$Main$cellContentSize = function (cell) {
 	} else {
 		return 40;
 	}
+};
+var _fizwidget$game_of_life$Main$cellSize = function (cells) {
+	return 100.0 / _elm_lang$core$Basics$toFloat(
+		_fizwidget$game_of_life$Matrix$height(cells));
 };
 var _fizwidget$game_of_life$Main$transitionDuration = _fizwidget$game_of_life$Main$tickInterval + (200 * _elm_lang$core$Time$millisecond);
 var _fizwidget$game_of_life$Main$viewCellContent = F2(
@@ -15806,35 +15825,35 @@ var _fizwidget$game_of_life$Main$pauseIfFinished = function (_p5) {
 var _fizwidget$game_of_life$Main$Alive = {ctor: 'Alive'};
 var _fizwidget$game_of_life$Main$lineConfiguration = A3(
 	_fizwidget$game_of_life$Matrix$set,
-	{x: 12, y: 4},
+	{x: 12, y: 5},
 	_fizwidget$game_of_life$Main$Alive,
 	A3(
 		_fizwidget$game_of_life$Matrix$set,
-		{x: 11, y: 4},
+		{x: 11, y: 5},
 		_fizwidget$game_of_life$Main$Alive,
 		A3(
 			_fizwidget$game_of_life$Matrix$set,
-			{x: 10, y: 4},
+			{x: 10, y: 5},
 			_fizwidget$game_of_life$Main$Alive,
 			A3(
 				_fizwidget$game_of_life$Matrix$set,
-				{x: 9, y: 4},
+				{x: 9, y: 5},
 				_fizwidget$game_of_life$Main$Alive,
 				A3(
 					_fizwidget$game_of_life$Matrix$set,
-					{x: 8, y: 4},
+					{x: 8, y: 5},
 					_fizwidget$game_of_life$Main$Alive,
 					A3(
 						_fizwidget$game_of_life$Matrix$set,
-						{x: 7, y: 4},
+						{x: 7, y: 5},
 						_fizwidget$game_of_life$Main$Alive,
 						A3(
 							_fizwidget$game_of_life$Matrix$set,
-							{x: 6, y: 4},
+							{x: 6, y: 5},
 							_fizwidget$game_of_life$Main$Alive,
 							A3(
 								_fizwidget$game_of_life$Matrix$set,
-								{x: 5, y: 4},
+								{x: 5, y: 5},
 								_fizwidget$game_of_life$Main$Alive,
 								A2(
 									_fizwidget$game_of_life$Matrix$create,
@@ -15956,50 +15975,26 @@ var _fizwidget$game_of_life$Main$viewStatusButton = F2(
 		} else {
 			var _p13 = status;
 			if (_p13.ctor === 'Playing') {
-				return A2(
-					_rtfeldman$elm_css$Html_Styled$button,
+				return A3(
+					_fizwidget$game_of_life$Main$viewButton,
+					'Pause',
+					_fizwidget$game_of_life$Main$Pause,
 					{
 						ctor: '::',
-						_0: _rtfeldman$elm_css$Html_Styled_Events$onClick(_fizwidget$game_of_life$Main$Pause),
-						_1: {
-							ctor: '::',
-							_0: _rtfeldman$elm_css$Html_Styled_Attributes$css(
-								{
-									ctor: '::',
-									_0: _rtfeldman$elm_css$Css$backgroundColor(
-										A4(_rtfeldman$elm_css$Css$rgba, 179, 186, 197, 0.6)),
-									_1: _fizwidget$game_of_life$Main$statusButtonStyles
-								}),
-							_1: {ctor: '[]'}
-						}
-					},
-					{
-						ctor: '::',
-						_0: _rtfeldman$elm_css$Html_Styled$text('Pause'),
-						_1: {ctor: '[]'}
+						_0: _rtfeldman$elm_css$Css$backgroundColor(
+							A4(_rtfeldman$elm_css$Css$rgba, 179, 186, 197, 0.6)),
+						_1: _fizwidget$game_of_life$Main$statusButtonStyles
 					});
 			} else {
-				return A2(
-					_rtfeldman$elm_css$Html_Styled$button,
+				return A3(
+					_fizwidget$game_of_life$Main$viewButton,
+					'Play',
+					_fizwidget$game_of_life$Main$Play,
 					{
 						ctor: '::',
-						_0: _rtfeldman$elm_css$Html_Styled_Events$onClick(_fizwidget$game_of_life$Main$Play),
-						_1: {
-							ctor: '::',
-							_0: _rtfeldman$elm_css$Html_Styled_Attributes$css(
-								{
-									ctor: '::',
-									_0: _rtfeldman$elm_css$Css$backgroundColor(
-										A4(_rtfeldman$elm_css$Css$rgba, 54, 179, 126, 0.9)),
-									_1: _fizwidget$game_of_life$Main$statusButtonStyles
-								}),
-							_1: {ctor: '[]'}
-						}
-					},
-					{
-						ctor: '::',
-						_0: _rtfeldman$elm_css$Html_Styled$text('Play'),
-						_1: {ctor: '[]'}
+						_0: _rtfeldman$elm_css$Css$backgroundColor(
+							A4(_rtfeldman$elm_css$Css$rgba, 54, 179, 126, 0.9)),
+						_1: _fizwidget$game_of_life$Main$statusButtonStyles
 					});
 			}
 		}
