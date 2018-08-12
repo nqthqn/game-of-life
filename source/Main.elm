@@ -7,7 +7,7 @@ import Html.Styled.Attributes exposing (css, class)
 import Css exposing (..)
 import Css.Colors as Colors
 import Css.Transitions exposing (easeInOut, transition)
-import Time as Time exposing (millisecond)
+import Time as Time exposing (Time, millisecond)
 import Matrix as Matrix exposing (Matrix, Coordinate)
 
 
@@ -77,7 +77,7 @@ update msg model =
                 |> noCmd
 
         Toggle coordinate ->
-            { model | cells = toggleCoordinate model.cells coordinate }
+            { model | cells = toggleCoordinate coordinate model.cells }
                 |> noCmd
 
 
@@ -109,7 +109,7 @@ updateCell cells coordinate cell =
 
 countLiveNeighbours : Cells -> Coordinate -> Int
 countLiveNeighbours cells coordinate =
-    Matrix.neighbours coordinate cells
+    Matrix.neighbours cells coordinate
         |> List.filter ((==) Alive)
         |> List.length
 
@@ -120,7 +120,7 @@ pauseIfFinished ({ status, cells, previousCells } as model) =
         Playing ->
             if Matrix.all ((==) Dead) cells then
                 { model | status = Paused }
-            else if hasReachedEquilibrium cells previousCells then
+            else if isEquilibrium cells previousCells then
                 { model | status = Paused }
             else
                 model
@@ -129,16 +129,16 @@ pauseIfFinished ({ status, cells, previousCells } as model) =
             model
 
 
-hasReachedEquilibrium : Cells -> Maybe Cells -> Bool
-hasReachedEquilibrium cells previousCells =
+isEquilibrium : Cells -> Maybe Cells -> Bool
+isEquilibrium cells previousCells =
     previousCells
         |> Maybe.map (Matrix.equals cells)
         |> Maybe.withDefault False
 
 
-toggleCoordinate : Cells -> Coordinate -> Cells
-toggleCoordinate cells coordinate =
-    Matrix.update coordinate cells toggleCell
+toggleCoordinate : Coordinate -> Cells -> Cells
+toggleCoordinate coordinate cells =
+    Matrix.update toggleCell coordinate cells
 
 
 toggleCell : Cell -> Cell
@@ -157,12 +157,20 @@ toggleCell cell =
 
 view : Model -> Html Msg
 view { cells, status } =
-    div [ css [ displayFlex, justifyContent center, alignItems center ] ]
-        [ viewCells cells, viewStatusButton status cells ]
+    div
+        [ css
+            [ displayFlex
+            , justifyContent center
+            , alignItems center
+            ]
+        ]
+        [ squareContainer (viewCells cells)
+        , viewStatusButton status cells
+        ]
 
 
-viewCells : Cells -> Html Msg
-viewCells cells =
+squareContainer : Html msg -> Html msg
+squareContainer content =
     div
         [ css
             [ position relative
@@ -174,118 +182,142 @@ viewCells cells =
                 ]
             ]
         ]
-        [ div
-            [ css
-                [ displayFlex
-                , alignItems center
-                , justifyContent center
-                , flexWrap wrap
-                , position absolute
-                , width (pct 100)
-                , height (pct 100)
-                ]
-            ]
-            (Matrix.toList cells |> List.map (viewCell (cellSize cells)))
-        ]
+        [ content ]
 
 
-viewCell : Float -> ( Coordinate, Cell ) -> Html Msg
-viewCell size ( coordinate, cell ) =
+viewCells : Cells -> Html Msg
+viewCells cells =
     div
         [ css
-            [ height (pct size)
-            , backgroundColor (cellColor cell coordinate)
+            [ displayFlex
+            , alignItems center
+            , justifyContent center
+            , flexWrap wrap
+            , position absolute
+            , width (pct 100)
+            , height (pct 100)
+            ]
+        ]
+        (cells
+            |> Matrix.coordinateMap (viewCell (cellSize cells))
+            |> Matrix.toList
+        )
+
+
+viewCell : Percentage -> Coordinate -> Cell -> Html Msg
+viewCell size coordinate cell =
+    div
+        [ css
+            [ width (pct size)
+            , height (pct size)
             , displayFlex
-            , flex3 (int 0) (int 0) (pct size)
-            , borderRadius (pct 50)
-            , border3 (px (cellBorderSize cell)) solid Colors.white
-            , boxSizing borderBox
+            , justifyContent center
+            , alignItems center
+            ]
+        , onClick (Toggle coordinate)
+        ]
+        [ viewCellContent cell coordinate ]
+
+
+viewCellContent : Cell -> Coordinate -> Html msg
+viewCellContent cell coordinate =
+    div
+        [ css
+            [ width (pct (cellContentSize cell))
+            , height (pct (cellContentSize cell))
+            , backgroundColor (cellColor cell coordinate)
+            , borderRadius (pct 30)
             , transition
-                [ Css.Transitions.backgroundColor3 200 0 easeInOut
-                , Css.Transitions.borderWidth 200
+                [ Css.Transitions.backgroundColor3 transitionDuration 0 easeInOut
+                , Css.Transitions.width transitionDuration
+                , Css.Transitions.height transitionDuration
                 ]
             ]
-        , (onClick (Toggle coordinate))
         ]
         []
 
 
-cellBorderSize : Cell -> Float
-cellBorderSize cell =
+transitionDuration : Time
+transitionDuration =
+    550 * millisecond
+
+
+cellContentSize : Cell -> Percentage
+cellContentSize cell =
     case cell of
         Alive ->
-            4
+            70
 
         Dead ->
-            30
+            40
 
 
-cellSize : Cells -> Float
+cellSize : Cells -> Percentage
 cellSize cells =
     100.0 / toFloat (Matrix.height cells)
 
 
+type alias Percentage =
+    Float
+
+
 cellColor : Cell -> Coordinate -> Css.Color
-cellColor cell coordinate =
+cellColor cell { x, y } =
     case cell of
         Alive ->
-            liveCellColor coordinate
+            case ( x % 2 == 0, y % 2 == 0 ) of
+                ( True, True ) ->
+                    rgba 255 171 0 0.8
+
+                ( True, False ) ->
+                    rgba 54 179 126 0.8
+
+                ( False, True ) ->
+                    rgba 0 184 217 0.8
+
+                ( False, False ) ->
+                    rgba 101 84 192 0.8
 
         Dead ->
             rgb 244 245 247
 
 
-liveCellColor : Coordinate -> Color
-liveCellColor { x, y } =
-    case ( x % 2 == 0, y % 2 == 0 ) of
-        ( True, True ) ->
-            rgba 255 171 0 0.8
-
-        ( True, False ) ->
-            rgba 54 179 126 0.8
-
-        ( False, True ) ->
-            rgba 0 184 217 0.8
-
-        ( False, False ) ->
-            rgba 101 84 192 0.8
-
-
 viewStatusButton : Status -> Cells -> Html Msg
 viewStatusButton status cells =
-    let
-        styles =
-            [ position fixed
-            , width (px 100)
-            , height (px 40)
-            , marginLeft auto
-            , marginRight auto
-            , left (px 0)
-            , right (px 0)
-            , bottom (pct 6)
-            , border2 (px 0) none
-            , borderRadius (px 20)
-            , color Colors.white
-            , fontSize (px 20)
-            , transition
-                [ Css.Transitions.backgroundColor3 200 0 easeInOut
-                , Css.Transitions.visibility3 200 0 easeInOut
-                ]
-            ]
-    in
-        if Matrix.all ((==) Dead) cells then
-            div [] []
-        else
-            case status of
-                Playing ->
-                    button
-                        [ onClick Pause, css (backgroundColor (rgba 179 186 197 0.6) :: styles) ]
-                        [ text "Pause" ]
+    if Matrix.all ((==) Dead) cells then
+        div [] []
+    else
+        case status of
+            Playing ->
+                button
+                    [ onClick Pause, css (backgroundColor (rgba 179 186 197 0.6) :: statusButtonStyles) ]
+                    [ text "Pause" ]
 
-                Paused ->
-                    button
-                        [ onClick Play, css (backgroundColor (rgba 54 179 126 0.9) :: styles) ]
-                        [ text "Play" ]
+            Paused ->
+                button
+                    [ onClick Play, css (backgroundColor (rgba 54 179 126 0.9) :: statusButtonStyles) ]
+                    [ text "Play" ]
+
+
+statusButtonStyles : List Css.Style
+statusButtonStyles =
+    [ position fixed
+    , width (px 100)
+    , height (px 40)
+    , marginLeft auto
+    , marginRight auto
+    , left (px 0)
+    , right (px 0)
+    , bottom (pct 6)
+    , border2 (px 0) none
+    , borderRadius (px 20)
+    , color Colors.white
+    , fontSize (px 20)
+    , transition
+        [ Css.Transitions.backgroundColor3 200 0 easeInOut
+        , Css.Transitions.visibility3 200 0 easeInOut
+        ]
+    ]
 
 
 
@@ -296,7 +328,7 @@ subscriptions : Model -> Sub Msg
 subscriptions { status } =
     case status of
         Playing ->
-            Time.every (millisecond * 200) (always Tick)
+            Time.every (600 * millisecond) (always Tick)
 
         Paused ->
             Sub.none

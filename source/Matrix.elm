@@ -68,31 +68,23 @@ toCoordinate { width } index =
     }
 
 
-get : Matrix a -> Coordinate -> Maybe a
-get (Matrix dimensions array) coordinate =
-    let
-        index =
-            toIndex dimensions coordinate
-    in
-        Array.get index array
+get : Coordinate -> Matrix a -> Maybe a
+get coordinate (Matrix dimensions array) =
+    Array.get (toIndex dimensions coordinate) array
 
 
 set : Coordinate -> a -> Matrix a -> Matrix a
 set coordinate value (Matrix dimensions array) =
-    let
-        index =
-            toIndex dimensions coordinate
-    in
-        Array.set index value array
-            |> Matrix dimensions
+    Array.set (toIndex dimensions coordinate) value array
+        |> Matrix dimensions
 
 
-update : Coordinate -> Matrix a -> (a -> a) -> Matrix a
-update coordinate matrix f =
-    coordinate
-        |> get matrix
+update : (a -> a) -> Coordinate -> Matrix a -> Matrix a
+update f coordinate matrix =
+    matrix
+        |> get coordinate
         |> Maybe.map f
-        |> Maybe.map (\updatedValue -> set coordinate updatedValue matrix)
+        |> Maybe.map (\value -> set coordinate value matrix)
         |> Maybe.withDefault matrix
 
 
@@ -125,11 +117,16 @@ equals (Matrix _ a) (Matrix _ b) =
     a == b
 
 
-toList : Matrix a -> List ( Coordinate, a )
-toList (Matrix dimensions array) =
-    array
-        |> Array.indexedMap (\index -> \value -> ( toCoordinate dimensions index, value ))
-        |> Array.toList
+toList : Matrix a -> List a
+toList (Matrix _ array) =
+    Array.toList array
+
+
+neighbours : Matrix a -> Coordinate -> List a
+neighbours matrix coordinate =
+    [ ( 1, 1 ), ( 1, 0 ), ( 1, -1 ), ( 0, -1 ), ( -1, -1 ), ( -1, 0 ), ( -1, 1 ), ( 0, 1 ) ]
+        |> List.map (offsetBy coordinate)
+        |> List.filterMap ((flip get) matrix)
 
 
 offsetBy : Coordinate -> ( Int, Int ) -> Coordinate
@@ -137,10 +134,3 @@ offsetBy { x, y } ( dx, dy ) =
     { x = x + dx
     , y = y + dy
     }
-
-
-neighbours : Coordinate -> Matrix a -> List a
-neighbours coordinate matrix =
-    [ ( 1, 1 ), ( 1, 0 ), ( 1, -1 ), ( 0, -1 ), ( -1, -1 ), ( -1, 0 ), ( -1, 1 ), ( 0, 1 ) ]
-        |> List.map (offsetBy coordinate)
-        |> List.filterMap (get matrix)
