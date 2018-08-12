@@ -1,12 +1,14 @@
 module Main exposing (main)
 
 import Html
-import Html.Styled.Events exposing (onClick)
+import Html.Styled.Events exposing (onClick, onMouseDown, onMouseUp, onMouseEnter)
 import Html.Styled exposing (Html, toUnstyled, div, button, text)
 import Html.Styled.Attributes exposing (css)
 import Css exposing (..)
 import Css.Colors as Colors
 import Css.Transitions as Transitions exposing (easeInOut, transition)
+import Keyboard as Keyboard exposing (KeyCode)
+import Char
 import Time as Time exposing (Time, millisecond)
 import Matrix as Matrix exposing (Matrix, Coordinate)
 
@@ -17,6 +19,16 @@ import Matrix as Matrix exposing (Matrix, Coordinate)
 type Status
     = Paused
     | Playing
+
+
+type Mouse
+    = Up
+    | Down
+
+
+type Speed
+    = Slow
+    | Fast
 
 
 type Cell
@@ -31,7 +43,8 @@ type alias Cells =
 type alias Model =
     { status : Status
     , cells : Cells
-    , previousCells : Maybe Cells
+    , mouse : Mouse
+    , speed : Speed
     }
 
 
@@ -42,8 +55,9 @@ type alias Model =
 init : ( Model, Cmd Msg )
 init =
     ( { status = Paused
-      , cells = lineConfiguration
-      , previousCells = Nothing
+      , cells = emptyConfiguration
+      , mouse = Up
+      , speed = Slow
       }
     , Cmd.none
     )
@@ -76,6 +90,11 @@ type Msg
     | Toggle Coordinate
     | Play
     | Pause
+    | MouseDown
+    | MouseUp
+    | MouseOver Coordinate
+    | KeyDown KeyCode
+    | SetSpeed Speed
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -90,7 +109,7 @@ update msg model =
                 |> noCmd
 
         Tick ->
-            { model | cells = updateCells model.cells, previousCells = Just model.cells }
+            { model | cells = updateCells model.cells }
                 |> pauseIfFinished
                 |> noCmd
 
@@ -98,10 +117,48 @@ update msg model =
             { model | cells = toggleCoordinate coordinate model.cells }
                 |> noCmd
 
+        MouseDown ->
+            { model | mouse = Down }
+                |> noCmd
+
+        MouseUp ->
+            { model | mouse = Up }
+                |> noCmd
+
+        MouseOver coordinate ->
+            case model.mouse of
+                Up ->
+                    noCmd model
+
+                Down ->
+                    { model | cells = toggleCoordinate coordinate model.cells }
+                        |> noCmd
+
+        KeyDown keyCode ->
+            if Char.fromCode keyCode == 'P' then
+                { model | status = toggleStatus model.status }
+                    |> noCmd
+            else
+                noCmd model
+
+        SetSpeed speed ->
+            { model | speed = speed }
+                |> noCmd
+
 
 noCmd : Model -> ( Model, Cmd Msg )
 noCmd model =
     ( model, Cmd.none )
+
+
+toggleStatus : Status -> Status
+toggleStatus status =
+    case status of
+        Playing ->
+            Paused
+
+        Paused ->
+            Playing
 
 
 updateCells : Cells -> Cells
@@ -111,7 +168,7 @@ updateCells cells =
 
 updateCell : Cells -> Coordinate -> Cell -> Cell
 updateCell cells coordinate cell =
-    case ( cell, countLiveNeighbours cells coordinate ) of
+    case ( cell, liveNeighbours cells coordinate ) of
         ( Alive, 2 ) ->
             Alive
 
@@ -125,20 +182,18 @@ updateCell cells coordinate cell =
             Dead
 
 
-countLiveNeighbours : Cells -> Coordinate -> Int
-countLiveNeighbours cells coordinate =
+liveNeighbours : Cells -> Coordinate -> Int
+liveNeighbours cells coordinate =
     Matrix.neighbours cells coordinate
         |> List.filter ((==) Alive)
         |> List.length
 
 
 pauseIfFinished : Model -> Model
-pauseIfFinished ({ status, cells, previousCells } as model) =
+pauseIfFinished ({ status, cells } as model) =
     case status of
         Playing ->
             if Matrix.all ((==) Dead) cells then
-                { model | status = Paused }
-            else if previousCells == Just cells then
                 { model | status = Paused }
             else
                 model
@@ -167,17 +222,23 @@ toggleCell cell =
 
 
 view : Model -> Html Msg
-view { cells, status } =
-    div
-        [ css
-            [ displayFlex
-            , justifyContent center
-            , alignItems center
+view { cells, status, speed } =
+    let
+        transitionDuration =
+            getTransitionDuration speed
+    in
+        div
+            [ css
+                [ displayFlex
+                , justifyContent center
+                , alignItems center
+                ]
+            , onMouseDown MouseDown
+            , onMouseUp MouseUp
             ]
-        ]
-        [ squareContainer (viewCells cells)
-        , viewStatusButton status cells
-        ]
+            [ squareContainer (viewCells transitionDuration cells)
+            , viewControls status speed cells
+            ]
 
 
 squareContainer : Html msg -> Html msg
@@ -196,8 +257,8 @@ squareContainer content =
         [ content ]
 
 
-viewCells : Cells -> Html Msg
-viewCells cells =
+viewCells : Time -> Cells -> Html Msg
+viewCells transitionDuration cells =
     div
         [ css
             [ displayFlex
@@ -210,13 +271,13 @@ viewCells cells =
             ]
         ]
         (cells
-            |> Matrix.coordinateMap (viewCell (cellSize cells))
+            |> Matrix.coordinateMap (viewCell transitionDuration (cellSize cells))
             |> Matrix.toList
         )
 
 
-viewCell : Percentage -> Coordinate -> Cell -> Html Msg
-viewCell size coordinate cell =
+viewCell : Time -> Percentage -> Coordinate -> Cell -> Html Msg
+viewCell transitionDuration size coordinate cell =
     div
         [ css
             [ width (pct size)
@@ -225,13 +286,14 @@ viewCell size coordinate cell =
             , justifyContent center
             , alignItems center
             ]
-        , onClick (Toggle coordinate)
+        , onMouseDown (Toggle coordinate)
+        , onMouseEnter (MouseOver coordinate)
         ]
-        [ viewCellContent cell coordinate ]
+        [ viewCellContent transitionDuration cell coordinate ]
 
 
-viewCellContent : Cell -> Coordinate -> Html msg
-viewCellContent cell coordinate =
+viewCellContent : Time -> Cell -> Coordinate -> Html msg
+viewCellContent transitionDuration cell coordinate =
     div
         [ css
             [ width (pct (cellContentSize cell))
@@ -248,9 +310,9 @@ viewCellContent cell coordinate =
         []
 
 
-transitionDuration : Time
-transitionDuration =
-    tickInterval + 200 * millisecond
+getTransitionDuration : Speed -> Time
+getTransitionDuration speed =
+    (tickInterval speed) + 200 * millisecond
 
 
 cellSize : Cells -> Percentage
@@ -293,29 +355,62 @@ cellColor cell { x, y } =
             rgb 244 245 247
 
 
+viewControls : Status -> Speed -> Cells -> Html Msg
+viewControls status speed cells =
+    div
+        [ css
+            [ position fixed
+            , left (px 20)
+            , bottom (px 20)
+            ]
+        ]
+        [ viewStatusButton status cells
+        , viewSpeedButton status speed
+        ]
+
+
 viewStatusButton : Status -> Cells -> Html Msg
 viewStatusButton status cells =
     if Matrix.all ((==) Dead) cells then
-        div [] []
+        blank
     else
         case status of
             Playing ->
-                viewButton "Pause" Pause (backgroundColor (rgba 179 186 197 0.6) :: statusButtonStyles)
+                viewButton "Pause" Pause []
 
             Paused ->
-                viewButton "Play" Play (backgroundColor (rgba 54 179 126 0.9) :: statusButtonStyles)
+                viewButton "Play" Play [ backgroundColor (rgba 54 179 126 0.9) ]
 
 
-statusButtonStyles : List Style
-statusButtonStyles =
-    [ position fixed
-    , width (px 100)
+viewSpeedButton : Status -> Speed -> Html Msg
+viewSpeedButton status speed =
+    case ( status, speed ) of
+        ( Playing, Slow ) ->
+            viewButton "Faster" (SetSpeed Fast) []
+
+        ( Playing, Fast ) ->
+            viewButton "Slower" (SetSpeed Slow) []
+
+        _ ->
+            blank
+
+
+viewButton : String -> Msg -> List Style -> Html Msg
+viewButton description clickMsg styles =
+    button
+        [ onClick clickMsg, css (buttonStyles ++ styles) ]
+        [ text description ]
+
+
+buttonStyles : List Style
+buttonStyles =
+    [ width (px 100)
     , height (px 40)
-    , left (px 20)
-    , bottom (px 20)
+    , margin (px 5)
     , border2 (px 0) none
     , borderRadius (px 15)
     , color Colors.white
+    , backgroundColor (rgba 179 186 197 0.6)
     , fontSize (px 20)
     , transition
         [ Transitions.backgroundColor3 200 0 easeInOut
@@ -324,30 +419,37 @@ statusButtonStyles =
     ]
 
 
-viewButton : String -> Msg -> List Style -> Html Msg
-viewButton description clickMsg styles =
-    button
-        [ onClick clickMsg, css styles ]
-        [ text description ]
+blank : Html msg
+blank =
+    div [] []
 
 
 
 -- SUBSCRIPTIONS
 
 
-tickInterval : Time
-tickInterval =
-    600 * millisecond
+tickInterval : Speed -> Time
+tickInterval speed =
+    case speed of
+        Slow ->
+            600 * millisecond
+
+        Fast ->
+            300 * millisecond
 
 
 subscriptions : Model -> Sub Msg
-subscriptions { status } =
-    case status of
-        Playing ->
-            Time.every tickInterval (always Tick)
+subscriptions { status, speed } =
+    let
+        ticks =
+            case status of
+                Playing ->
+                    Time.every (tickInterval speed) (always Tick)
 
-        Paused ->
-            Sub.none
+                Paused ->
+                    Sub.none
+    in
+        Sub.batch [ Keyboard.downs KeyDown, ticks ]
 
 
 
