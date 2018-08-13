@@ -74,18 +74,18 @@ initialCells =
 
 
 type Msg
-    = Tick
-    | Play
+    = Play
     | Pause
+    | Tick
+    | SetSpeed Speed
     | MouseDown Coordinate
     | MouseUp
     | MouseOver Coordinate
     | KeyDown KeyCode
-    | SetSpeed Speed
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
+update msg ({ status, mouse, cells } as model) =
     case msg of
         Play ->
             { model | status = Playing }
@@ -96,15 +96,16 @@ update msg model =
                 |> noCmd
 
         Tick ->
-            { model | cells = History.advance model.cells updateCells }
-                |> pauseIfFinished
+            { model | cells = History.record updateCells cells }
+                |> pauseWhenSettled
+                |> noCmd
+
+        SetSpeed speed ->
+            { model | speed = speed }
                 |> noCmd
 
         MouseDown coordinate ->
-            { model
-                | mouse = Down
-                , cells = History.advance model.cells (toggleCoordinate coordinate)
-            }
+            { model | mouse = Down, cells = History.record (toggleCoordinate coordinate) cells }
                 |> noCmd
 
         MouseUp ->
@@ -112,46 +113,41 @@ update msg model =
                 |> noCmd
 
         MouseOver coordinate ->
-            case model.mouse of
+            case mouse of
                 Up ->
                     noCmd model
 
                 Down ->
-                    { model | cells = History.advance model.cells (toggleCoordinate coordinate) }
+                    { model | cells = History.record (toggleCoordinate coordinate) cells }
                         |> noCmd
 
-        KeyDown key ->
-            onKeyDown key model
-                |> noCmd
+        KeyDown keyCode ->
+            if keyCode == Char.toCode 'P' then
+                { model | status = toggleStatus status }
+                    |> noCmd
+            else if keyCode == rightKey then
+                { model | status = Paused, cells = History.record updateCells cells }
+                    |> noCmd
+            else if keyCode == leftKey then
+                { model | status = Paused, cells = History.undo cells }
+                    |> noCmd
+            else
+                noCmd model
 
-        SetSpeed speed ->
-            { model | speed = speed }
-                |> noCmd
+
+leftKey : KeyCode
+leftKey =
+    37
+
+
+rightKey : KeyCode
+rightKey =
+    39
 
 
 noCmd : Model -> ( Model, Cmd Msg )
 noCmd model =
     ( model, Cmd.none )
-
-
-onKeyDown : KeyCode -> Model -> Model
-onKeyDown keyCode model =
-    let
-        leftKey =
-            37
-
-        rightKey =
-            39
-    in
-        if keyCode == Char.toCode 'P' then
-            { model | status = toggleStatus model.status }
-        else if keyCode == rightKey then
-            { model | cells = History.advance model.cells updateCells }
-                |> pauseIfFinished
-        else if keyCode == leftKey then
-            { model | status = Paused, cells = History.undo model.cells }
-        else
-            model
 
 
 toggleStatus : Status -> Status
@@ -192,14 +188,14 @@ liveNeighbours cells coordinate =
         |> List.length
 
 
-pauseIfFinished : Model -> Model
-pauseIfFinished ({ status, cells } as model) =
+pauseWhenSettled : Model -> Model
+pauseWhenSettled ({ status, cells } as model) =
     case status of
         Playing ->
-            if Matrix.all ((==) Dead) (History.current cells) then
-                { model | status = Paused }
-            else
+            if History.didChange cells then
                 model
+            else
+                { model | status = Paused }
 
         Paused ->
             model
@@ -228,7 +224,7 @@ view : Model -> Html Msg
 view { cells, status, speed } =
     let
         currentCells =
-            History.current cells
+            History.now cells
 
         transitionDuration =
             getTransitionDuration speed
