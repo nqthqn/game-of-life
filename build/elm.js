@@ -9005,6 +9005,49 @@ var _elm_lang$keyboard$Keyboard$subMap = F2(
 	});
 _elm_lang$core$Native_Platform.effectManagers['Keyboard'] = {pkg: 'elm-lang/keyboard', init: _elm_lang$keyboard$Keyboard$init, onEffects: _elm_lang$keyboard$Keyboard$onEffects, onSelfMsg: _elm_lang$keyboard$Keyboard$onSelfMsg, tag: 'sub', subMap: _elm_lang$keyboard$Keyboard$subMap};
 
+var _fizwidget$game_of_life$History$current = function (_p0) {
+	var _p1 = _p0;
+	return _p1._0;
+};
+var _fizwidget$game_of_life$History$History = F2(
+	function (a, b) {
+		return {ctor: 'History', _0: a, _1: b};
+	});
+var _fizwidget$game_of_life$History$begin = function (current) {
+	return A2(
+		_fizwidget$game_of_life$History$History,
+		current,
+		{ctor: '[]'});
+};
+var _fizwidget$game_of_life$History$record = F2(
+	function (value, _p2) {
+		var _p3 = _p2;
+		return A2(
+			_fizwidget$game_of_life$History$History,
+			value,
+			{ctor: '::', _0: _p3._0, _1: _p3._1});
+	});
+var _fizwidget$game_of_life$History$advance = F2(
+	function (history, f) {
+		return A2(
+			_fizwidget$game_of_life$History$record,
+			function (_p4) {
+				return f(
+					_fizwidget$game_of_life$History$current(_p4));
+			}(history),
+			history);
+	});
+var _fizwidget$game_of_life$History$undo = function (_p5) {
+	var _p6 = _p5;
+	var _p8 = _p6._1;
+	var _p7 = _p8;
+	if (_p7.ctor === '::') {
+		return A2(_fizwidget$game_of_life$History$History, _p7._0, _p7._1);
+	} else {
+		return A2(_fizwidget$game_of_life$History$History, _p6._0, _p8);
+	}
+};
+
 var _rtfeldman$elm_css_util$Css_Helpers$toCssIdentifier = function (identifier) {
 	return A4(
 		_elm_lang$core$Regex$replace,
@@ -16184,13 +16227,18 @@ var _fizwidget$game_of_life$Main$Up = {ctor: 'Up'};
 var _fizwidget$game_of_life$Main$Fast = {ctor: 'Fast'};
 var _fizwidget$game_of_life$Main$Slow = {ctor: 'Slow'};
 var _fizwidget$game_of_life$Main$Dead = {ctor: 'Dead'};
-var _fizwidget$game_of_life$Main$emptyConfiguration = A2(
+var _fizwidget$game_of_life$Main$initialCells = A2(
 	_fizwidget$game_of_life$Matrix$create,
 	{width: 18, height: 18},
 	_fizwidget$game_of_life$Main$Dead);
 var _fizwidget$game_of_life$Main$init = {
 	ctor: '_Tuple2',
-	_0: {status: _fizwidget$game_of_life$Main$Paused, cells: _fizwidget$game_of_life$Main$emptyConfiguration, mouse: _fizwidget$game_of_life$Main$Up, speed: _fizwidget$game_of_life$Main$Slow},
+	_0: {
+		status: _fizwidget$game_of_life$Main$Paused,
+		cells: _fizwidget$game_of_life$History$begin(_fizwidget$game_of_life$Main$initialCells),
+		mouse: _fizwidget$game_of_life$Main$Up,
+		speed: _fizwidget$game_of_life$Main$Slow
+	},
 	_1: _elm_lang$core$Platform_Cmd$none
 };
 var _fizwidget$game_of_life$Main$pauseIfFinished = function (_p7) {
@@ -16204,7 +16252,7 @@ var _fizwidget$game_of_life$Main$pauseIfFinished = function (_p7) {
 				function (x, y) {
 					return _elm_lang$core$Native_Utils.eq(x, y);
 				})(_fizwidget$game_of_life$Main$Dead),
-			_p8.cells) ? _elm_lang$core$Native_Utils.update(
+			_fizwidget$game_of_life$History$current(_p8.cells)) ? _elm_lang$core$Native_Utils.update(
 			_p10,
 			{status: _fizwidget$game_of_life$Main$Paused}) : _p10;
 	} else {
@@ -16212,42 +16260,6 @@ var _fizwidget$game_of_life$Main$pauseIfFinished = function (_p7) {
 	}
 };
 var _fizwidget$game_of_life$Main$Alive = {ctor: 'Alive'};
-var _fizwidget$game_of_life$Main$lineConfiguration = A3(
-	_fizwidget$game_of_life$Matrix$set,
-	{x: 12, y: 5},
-	_fizwidget$game_of_life$Main$Alive,
-	A3(
-		_fizwidget$game_of_life$Matrix$set,
-		{x: 11, y: 5},
-		_fizwidget$game_of_life$Main$Alive,
-		A3(
-			_fizwidget$game_of_life$Matrix$set,
-			{x: 10, y: 5},
-			_fizwidget$game_of_life$Main$Alive,
-			A3(
-				_fizwidget$game_of_life$Matrix$set,
-				{x: 9, y: 5},
-				_fizwidget$game_of_life$Main$Alive,
-				A3(
-					_fizwidget$game_of_life$Matrix$set,
-					{x: 8, y: 5},
-					_fizwidget$game_of_life$Main$Alive,
-					A3(
-						_fizwidget$game_of_life$Matrix$set,
-						{x: 7, y: 5},
-						_fizwidget$game_of_life$Main$Alive,
-						A3(
-							_fizwidget$game_of_life$Matrix$set,
-							{x: 6, y: 5},
-							_fizwidget$game_of_life$Main$Alive,
-							A3(
-								_fizwidget$game_of_life$Matrix$set,
-								{x: 5, y: 5},
-								_fizwidget$game_of_life$Main$Alive,
-								A2(
-									_fizwidget$game_of_life$Matrix$create,
-									{width: 18, height: 18},
-									_fizwidget$game_of_life$Main$Dead)))))))));
 var _fizwidget$game_of_life$Main$liveNeighbours = F2(
 	function (cells, coordinate) {
 		return _elm_lang$core$List$length(
@@ -16297,6 +16309,29 @@ var _fizwidget$game_of_life$Main$updateCells = function (cells) {
 		_fizwidget$game_of_life$Main$updateCell(cells),
 		cells);
 };
+var _fizwidget$game_of_life$Main$onKeyDown = F2(
+	function (keyCode, model) {
+		var rightKey = 39;
+		var leftKey = 37;
+		return _elm_lang$core$Native_Utils.eq(
+			keyCode,
+			_elm_lang$core$Char$toCode(
+				_elm_lang$core$Native_Utils.chr('P'))) ? _elm_lang$core$Native_Utils.update(
+			model,
+			{
+				status: _fizwidget$game_of_life$Main$toggleStatus(model.status)
+			}) : (_elm_lang$core$Native_Utils.eq(keyCode, rightKey) ? _fizwidget$game_of_life$Main$pauseIfFinished(
+			_elm_lang$core$Native_Utils.update(
+				model,
+				{
+					cells: A2(_fizwidget$game_of_life$History$advance, model.cells, _fizwidget$game_of_life$Main$updateCells)
+				})) : (_elm_lang$core$Native_Utils.eq(keyCode, leftKey) ? _elm_lang$core$Native_Utils.update(
+			model,
+			{
+				status: _fizwidget$game_of_life$Main$Paused,
+				cells: _fizwidget$game_of_life$History$undo(model.cells)
+			}) : model));
+	});
 var _fizwidget$game_of_life$Main$toggleCell = function (cell) {
 	var _p12 = cell;
 	if (_p12.ctor === 'Alive') {
@@ -16329,20 +16364,19 @@ var _fizwidget$game_of_life$Main$update = F2(
 						_elm_lang$core$Native_Utils.update(
 							model,
 							{
-								cells: _fizwidget$game_of_life$Main$updateCells(model.cells)
+								cells: A2(_fizwidget$game_of_life$History$advance, model.cells, _fizwidget$game_of_life$Main$updateCells)
 							})));
-			case 'Toggle':
-				return _fizwidget$game_of_life$Main$noCmd(
-					_elm_lang$core$Native_Utils.update(
-						model,
-						{
-							cells: A2(_fizwidget$game_of_life$Main$toggleCoordinate, _p13._0, model.cells)
-						}));
 			case 'MouseDown':
 				return _fizwidget$game_of_life$Main$noCmd(
 					_elm_lang$core$Native_Utils.update(
 						model,
-						{mouse: _fizwidget$game_of_life$Main$Down}));
+						{
+							mouse: _fizwidget$game_of_life$Main$Down,
+							cells: A2(
+								_fizwidget$game_of_life$History$advance,
+								model.cells,
+								_fizwidget$game_of_life$Main$toggleCoordinate(_p13._0))
+						}));
 			case 'MouseUp':
 				return _fizwidget$game_of_life$Main$noCmd(
 					_elm_lang$core$Native_Utils.update(
@@ -16357,18 +16391,15 @@ var _fizwidget$game_of_life$Main$update = F2(
 						_elm_lang$core$Native_Utils.update(
 							model,
 							{
-								cells: A2(_fizwidget$game_of_life$Main$toggleCoordinate, _p13._0, model.cells)
+								cells: A2(
+									_fizwidget$game_of_life$History$advance,
+									model.cells,
+									_fizwidget$game_of_life$Main$toggleCoordinate(_p13._0))
 							}));
 				}
 			case 'KeyDown':
-				return _elm_lang$core$Native_Utils.eq(
-					_elm_lang$core$Char$fromCode(_p13._0),
-					_elm_lang$core$Native_Utils.chr('P')) ? _fizwidget$game_of_life$Main$noCmd(
-					_elm_lang$core$Native_Utils.update(
-						model,
-						{
-							status: _fizwidget$game_of_life$Main$toggleStatus(model.status)
-						})) : _fizwidget$game_of_life$Main$noCmd(model);
+				return _fizwidget$game_of_life$Main$noCmd(
+					A2(_fizwidget$game_of_life$Main$onKeyDown, _p13._0, model));
 			default:
 				return _fizwidget$game_of_life$Main$noCmd(
 					_elm_lang$core$Native_Utils.update(
@@ -16407,7 +16438,110 @@ var _fizwidget$game_of_life$Main$MouseOver = function (a) {
 	return {ctor: 'MouseOver', _0: a};
 };
 var _fizwidget$game_of_life$Main$MouseUp = {ctor: 'MouseUp'};
-var _fizwidget$game_of_life$Main$MouseDown = {ctor: 'MouseDown'};
+var _fizwidget$game_of_life$Main$MouseDown = function (a) {
+	return {ctor: 'MouseDown', _0: a};
+};
+var _fizwidget$game_of_life$Main$viewCell = F4(
+	function (transitionDuration, size, coordinate, cell) {
+		return A2(
+			_rtfeldman$elm_css$Html_Styled$div,
+			{
+				ctor: '::',
+				_0: _rtfeldman$elm_css$Html_Styled_Attributes$css(
+					{
+						ctor: '::',
+						_0: _rtfeldman$elm_css$Css$width(
+							_rtfeldman$elm_css$Css$pct(size)),
+						_1: {
+							ctor: '::',
+							_0: _rtfeldman$elm_css$Css$height(
+								_rtfeldman$elm_css$Css$pct(size)),
+							_1: {
+								ctor: '::',
+								_0: _rtfeldman$elm_css$Css$displayFlex,
+								_1: {
+									ctor: '::',
+									_0: _rtfeldman$elm_css$Css$justifyContent(_rtfeldman$elm_css$Css$center),
+									_1: {
+										ctor: '::',
+										_0: _rtfeldman$elm_css$Css$alignItems(_rtfeldman$elm_css$Css$center),
+										_1: {ctor: '[]'}
+									}
+								}
+							}
+						}
+					}),
+				_1: {
+					ctor: '::',
+					_0: _rtfeldman$elm_css$Html_Styled_Events$onMouseDown(
+						_fizwidget$game_of_life$Main$MouseDown(coordinate)),
+					_1: {
+						ctor: '::',
+						_0: _rtfeldman$elm_css$Html_Styled_Events$onMouseUp(_fizwidget$game_of_life$Main$MouseUp),
+						_1: {
+							ctor: '::',
+							_0: _rtfeldman$elm_css$Html_Styled_Events$onMouseEnter(
+								_fizwidget$game_of_life$Main$MouseOver(coordinate)),
+							_1: {ctor: '[]'}
+						}
+					}
+				}
+			},
+			{
+				ctor: '::',
+				_0: A3(_fizwidget$game_of_life$Main$viewCellContent, transitionDuration, cell, coordinate),
+				_1: {ctor: '[]'}
+			});
+	});
+var _fizwidget$game_of_life$Main$viewCells = F2(
+	function (transitionDuration, cells) {
+		return A2(
+			_rtfeldman$elm_css$Html_Styled$div,
+			{
+				ctor: '::',
+				_0: _rtfeldman$elm_css$Html_Styled_Attributes$css(
+					{
+						ctor: '::',
+						_0: _rtfeldman$elm_css$Css$displayFlex,
+						_1: {
+							ctor: '::',
+							_0: _rtfeldman$elm_css$Css$alignItems(_rtfeldman$elm_css$Css$center),
+							_1: {
+								ctor: '::',
+								_0: _rtfeldman$elm_css$Css$justifyContent(_rtfeldman$elm_css$Css$center),
+								_1: {
+									ctor: '::',
+									_0: _rtfeldman$elm_css$Css$flexWrap(_rtfeldman$elm_css$Css$wrap),
+									_1: {
+										ctor: '::',
+										_0: _rtfeldman$elm_css$Css$position(_rtfeldman$elm_css$Css$absolute),
+										_1: {
+											ctor: '::',
+											_0: _rtfeldman$elm_css$Css$width(
+												_rtfeldman$elm_css$Css$pct(100)),
+											_1: {
+												ctor: '::',
+												_0: _rtfeldman$elm_css$Css$height(
+													_rtfeldman$elm_css$Css$pct(100)),
+												_1: {ctor: '[]'}
+											}
+										}
+									}
+								}
+							}
+						}
+					}),
+				_1: {ctor: '[]'}
+			},
+			_fizwidget$game_of_life$Matrix$toList(
+				A2(
+					_fizwidget$game_of_life$Matrix$coordinateMap,
+					A2(
+						_fizwidget$game_of_life$Main$viewCell,
+						transitionDuration,
+						_fizwidget$game_of_life$Main$cellSize(cells)),
+					cells)));
+	});
 var _fizwidget$game_of_life$Main$Pause = {ctor: 'Pause'};
 var _fizwidget$game_of_life$Main$Play = {ctor: 'Play'};
 var _fizwidget$game_of_life$Main$viewStatusButton = F2(
@@ -16476,111 +16610,11 @@ var _fizwidget$game_of_life$Main$viewControls = F3(
 				}
 			});
 	});
-var _fizwidget$game_of_life$Main$Toggle = function (a) {
-	return {ctor: 'Toggle', _0: a};
-};
-var _fizwidget$game_of_life$Main$viewCell = F4(
-	function (transitionDuration, size, coordinate, cell) {
-		return A2(
-			_rtfeldman$elm_css$Html_Styled$div,
-			{
-				ctor: '::',
-				_0: _rtfeldman$elm_css$Html_Styled_Attributes$css(
-					{
-						ctor: '::',
-						_0: _rtfeldman$elm_css$Css$width(
-							_rtfeldman$elm_css$Css$pct(size)),
-						_1: {
-							ctor: '::',
-							_0: _rtfeldman$elm_css$Css$height(
-								_rtfeldman$elm_css$Css$pct(size)),
-							_1: {
-								ctor: '::',
-								_0: _rtfeldman$elm_css$Css$displayFlex,
-								_1: {
-									ctor: '::',
-									_0: _rtfeldman$elm_css$Css$justifyContent(_rtfeldman$elm_css$Css$center),
-									_1: {
-										ctor: '::',
-										_0: _rtfeldman$elm_css$Css$alignItems(_rtfeldman$elm_css$Css$center),
-										_1: {ctor: '[]'}
-									}
-								}
-							}
-						}
-					}),
-				_1: {
-					ctor: '::',
-					_0: _rtfeldman$elm_css$Html_Styled_Events$onMouseDown(
-						_fizwidget$game_of_life$Main$Toggle(coordinate)),
-					_1: {
-						ctor: '::',
-						_0: _rtfeldman$elm_css$Html_Styled_Events$onMouseEnter(
-							_fizwidget$game_of_life$Main$MouseOver(coordinate)),
-						_1: {ctor: '[]'}
-					}
-				}
-			},
-			{
-				ctor: '::',
-				_0: A3(_fizwidget$game_of_life$Main$viewCellContent, transitionDuration, cell, coordinate),
-				_1: {ctor: '[]'}
-			});
-	});
-var _fizwidget$game_of_life$Main$viewCells = F2(
-	function (transitionDuration, cells) {
-		return A2(
-			_rtfeldman$elm_css$Html_Styled$div,
-			{
-				ctor: '::',
-				_0: _rtfeldman$elm_css$Html_Styled_Attributes$css(
-					{
-						ctor: '::',
-						_0: _rtfeldman$elm_css$Css$displayFlex,
-						_1: {
-							ctor: '::',
-							_0: _rtfeldman$elm_css$Css$alignItems(_rtfeldman$elm_css$Css$center),
-							_1: {
-								ctor: '::',
-								_0: _rtfeldman$elm_css$Css$justifyContent(_rtfeldman$elm_css$Css$center),
-								_1: {
-									ctor: '::',
-									_0: _rtfeldman$elm_css$Css$flexWrap(_rtfeldman$elm_css$Css$wrap),
-									_1: {
-										ctor: '::',
-										_0: _rtfeldman$elm_css$Css$position(_rtfeldman$elm_css$Css$absolute),
-										_1: {
-											ctor: '::',
-											_0: _rtfeldman$elm_css$Css$width(
-												_rtfeldman$elm_css$Css$pct(100)),
-											_1: {
-												ctor: '::',
-												_0: _rtfeldman$elm_css$Css$height(
-													_rtfeldman$elm_css$Css$pct(100)),
-												_1: {ctor: '[]'}
-											}
-										}
-									}
-								}
-							}
-						}
-					}),
-				_1: {ctor: '[]'}
-			},
-			_fizwidget$game_of_life$Matrix$toList(
-				A2(
-					_fizwidget$game_of_life$Matrix$coordinateMap,
-					A2(
-						_fizwidget$game_of_life$Main$viewCell,
-						transitionDuration,
-						_fizwidget$game_of_life$Main$cellSize(cells)),
-					cells)));
-	});
 var _fizwidget$game_of_life$Main$view = function (_p17) {
 	var _p18 = _p17;
-	var _p20 = _p18.speed;
-	var _p19 = _p18.cells;
-	var transitionDuration = _fizwidget$game_of_life$Main$getTransitionDuration(_p20);
+	var _p19 = _p18.speed;
+	var transitionDuration = _fizwidget$game_of_life$Main$getTransitionDuration(_p19);
+	var currentCells = _fizwidget$game_of_life$History$current(_p18.cells);
 	return A2(
 		_rtfeldman$elm_css$Html_Styled$div,
 		{
@@ -16599,36 +16633,29 @@ var _fizwidget$game_of_life$Main$view = function (_p17) {
 						}
 					}
 				}),
-			_1: {
-				ctor: '::',
-				_0: _rtfeldman$elm_css$Html_Styled_Events$onMouseDown(_fizwidget$game_of_life$Main$MouseDown),
-				_1: {
-					ctor: '::',
-					_0: _rtfeldman$elm_css$Html_Styled_Events$onMouseUp(_fizwidget$game_of_life$Main$MouseUp),
-					_1: {ctor: '[]'}
-				}
-			}
+			_1: {ctor: '[]'}
 		},
 		{
 			ctor: '::',
 			_0: _fizwidget$game_of_life$Main$squareContainer(
-				A2(_fizwidget$game_of_life$Main$viewCells, transitionDuration, _p19)),
+				A2(_fizwidget$game_of_life$Main$viewCells, transitionDuration, currentCells)),
 			_1: {
 				ctor: '::',
-				_0: A3(_fizwidget$game_of_life$Main$viewControls, _p18.status, _p20, _p19),
+				_0: A3(_fizwidget$game_of_life$Main$viewControls, _p18.status, _p19, currentCells),
 				_1: {ctor: '[]'}
 			}
 		});
 };
 var _fizwidget$game_of_life$Main$Tick = {ctor: 'Tick'};
-var _fizwidget$game_of_life$Main$subscriptions = function (_p21) {
-	var _p22 = _p21;
+var _fizwidget$game_of_life$Main$subscriptions = function (_p20) {
+	var _p21 = _p20;
+	var keyDowns = _elm_lang$keyboard$Keyboard$downs(_fizwidget$game_of_life$Main$KeyDown);
 	var ticks = function () {
-		var _p23 = _p22.status;
-		if (_p23.ctor === 'Playing') {
+		var _p22 = _p21.status;
+		if (_p22.ctor === 'Playing') {
 			return A2(
 				_elm_lang$core$Time$every,
-				_fizwidget$game_of_life$Main$tickInterval(_p22.speed),
+				_fizwidget$game_of_life$Main$tickInterval(_p21.speed),
 				_elm_lang$core$Basics$always(_fizwidget$game_of_life$Main$Tick));
 		} else {
 			return _elm_lang$core$Platform_Sub$none;
@@ -16637,10 +16664,10 @@ var _fizwidget$game_of_life$Main$subscriptions = function (_p21) {
 	return _elm_lang$core$Platform_Sub$batch(
 		{
 			ctor: '::',
-			_0: _elm_lang$keyboard$Keyboard$downs(_fizwidget$game_of_life$Main$KeyDown),
+			_0: ticks,
 			_1: {
 				ctor: '::',
-				_0: ticks,
+				_0: keyDowns,
 				_1: {ctor: '[]'}
 			}
 		});
@@ -16648,9 +16675,9 @@ var _fizwidget$game_of_life$Main$subscriptions = function (_p21) {
 var _fizwidget$game_of_life$Main$main = _elm_lang$html$Html$program(
 	{
 		init: _fizwidget$game_of_life$Main$init,
-		view: function (_p24) {
+		view: function (_p23) {
 			return _rtfeldman$elm_css$Html_Styled$toUnstyled(
-				_fizwidget$game_of_life$Main$view(_p24));
+				_fizwidget$game_of_life$Main$view(_p23));
 		},
 		update: _fizwidget$game_of_life$Main$update,
 		subscriptions: _fizwidget$game_of_life$Main$subscriptions
