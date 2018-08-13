@@ -9005,9 +9005,22 @@ var _elm_lang$keyboard$Keyboard$subMap = F2(
 	});
 _elm_lang$core$Native_Platform.effectManagers['Keyboard'] = {pkg: 'elm-lang/keyboard', init: _elm_lang$keyboard$Keyboard$init, onEffects: _elm_lang$keyboard$Keyboard$onEffects, onSelfMsg: _elm_lang$keyboard$Keyboard$onSelfMsg, tag: 'sub', subMap: _elm_lang$keyboard$Keyboard$subMap};
 
-var _fizwidget$game_of_life$History$current = function (_p0) {
+var _fizwidget$game_of_life$History$didChange = function (_p0) {
 	var _p1 = _p0;
-	return _p1._0;
+	return A2(
+		_elm_lang$core$Maybe$withDefault,
+		true,
+		A2(
+			_elm_lang$core$Maybe$map,
+			F2(
+				function (x, y) {
+					return !_elm_lang$core$Native_Utils.eq(x, y);
+				})(_p1._0),
+			_elm_lang$core$List$head(_p1._1)));
+};
+var _fizwidget$game_of_life$History$now = function (_p2) {
+	var _p3 = _p2;
+	return _p3._0;
 };
 var _fizwidget$game_of_life$History$History = F2(
 	function (a, b) {
@@ -9020,31 +9033,22 @@ var _fizwidget$game_of_life$History$begin = function (current) {
 		{ctor: '[]'});
 };
 var _fizwidget$game_of_life$History$record = F2(
-	function (value, _p2) {
-		var _p3 = _p2;
+	function (f, _p4) {
+		var _p5 = _p4;
+		var _p6 = _p5._0;
 		return A2(
 			_fizwidget$game_of_life$History$History,
-			value,
-			{ctor: '::', _0: _p3._0, _1: _p3._1});
+			f(_p6),
+			{ctor: '::', _0: _p6, _1: _p5._1});
 	});
-var _fizwidget$game_of_life$History$advance = F2(
-	function (history, f) {
-		return A2(
-			_fizwidget$game_of_life$History$record,
-			function (_p4) {
-				return f(
-					_fizwidget$game_of_life$History$current(_p4));
-			}(history),
-			history);
-	});
-var _fizwidget$game_of_life$History$undo = function (_p5) {
-	var _p6 = _p5;
-	var _p8 = _p6._1;
-	var _p7 = _p8;
-	if (_p7.ctor === '::') {
-		return A2(_fizwidget$game_of_life$History$History, _p7._0, _p7._1);
+var _fizwidget$game_of_life$History$undo = function (_p7) {
+	var _p8 = _p7;
+	var _p10 = _p8._1;
+	var _p9 = _p10;
+	if (_p9.ctor === '::') {
+		return A2(_fizwidget$game_of_life$History$History, _p9._0, _p9._1);
 	} else {
-		return A2(_fizwidget$game_of_life$History$History, _p6._0, _p8);
+		return A2(_fizwidget$game_of_life$History$History, _p8._0, _p10);
 	}
 };
 
@@ -16208,6 +16212,8 @@ var _fizwidget$game_of_life$Main$squareContainer = function (content) {
 var _fizwidget$game_of_life$Main$noCmd = function (model) {
 	return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 };
+var _fizwidget$game_of_life$Main$rightKey = 39;
+var _fizwidget$game_of_life$Main$leftKey = 37;
 var _fizwidget$game_of_life$Main$Model = F4(
 	function (a, b, c, d) {
 		return {status: a, cells: b, mouse: c, speed: d};
@@ -16220,6 +16226,18 @@ var _fizwidget$game_of_life$Main$toggleStatus = function (status) {
 		return _fizwidget$game_of_life$Main$Paused;
 	} else {
 		return _fizwidget$game_of_life$Main$Playing;
+	}
+};
+var _fizwidget$game_of_life$Main$pauseWhenSettled = function (_p7) {
+	var _p8 = _p7;
+	var _p10 = _p8;
+	var _p9 = _p8.status;
+	if (_p9.ctor === 'Playing') {
+		return _fizwidget$game_of_life$History$didChange(_p8.cells) ? _p10 : _elm_lang$core$Native_Utils.update(
+			_p10,
+			{status: _fizwidget$game_of_life$Main$Paused});
+	} else {
+		return _p10;
 	}
 };
 var _fizwidget$game_of_life$Main$Down = {ctor: 'Down'};
@@ -16240,24 +16258,6 @@ var _fizwidget$game_of_life$Main$init = {
 		speed: _fizwidget$game_of_life$Main$Slow
 	},
 	_1: _elm_lang$core$Platform_Cmd$none
-};
-var _fizwidget$game_of_life$Main$pauseIfFinished = function (_p7) {
-	var _p8 = _p7;
-	var _p10 = _p8;
-	var _p9 = _p8.status;
-	if (_p9.ctor === 'Playing') {
-		return A2(
-			_fizwidget$game_of_life$Matrix$all,
-			F2(
-				function (x, y) {
-					return _elm_lang$core$Native_Utils.eq(x, y);
-				})(_fizwidget$game_of_life$Main$Dead),
-			_fizwidget$game_of_life$History$current(_p8.cells)) ? _elm_lang$core$Native_Utils.update(
-			_p10,
-			{status: _fizwidget$game_of_life$Main$Paused}) : _p10;
-	} else {
-		return _p10;
-	}
 };
 var _fizwidget$game_of_life$Main$Alive = {ctor: 'Alive'};
 var _fizwidget$game_of_life$Main$liveNeighbours = F2(
@@ -16309,29 +16309,6 @@ var _fizwidget$game_of_life$Main$updateCells = function (cells) {
 		_fizwidget$game_of_life$Main$updateCell(cells),
 		cells);
 };
-var _fizwidget$game_of_life$Main$onKeyDown = F2(
-	function (keyCode, model) {
-		var rightKey = 39;
-		var leftKey = 37;
-		return _elm_lang$core$Native_Utils.eq(
-			keyCode,
-			_elm_lang$core$Char$toCode(
-				_elm_lang$core$Native_Utils.chr('P'))) ? _elm_lang$core$Native_Utils.update(
-			model,
-			{
-				status: _fizwidget$game_of_life$Main$toggleStatus(model.status)
-			}) : (_elm_lang$core$Native_Utils.eq(keyCode, rightKey) ? _fizwidget$game_of_life$Main$pauseIfFinished(
-			_elm_lang$core$Native_Utils.update(
-				model,
-				{
-					cells: A2(_fizwidget$game_of_life$History$advance, model.cells, _fizwidget$game_of_life$Main$updateCells)
-				})) : (_elm_lang$core$Native_Utils.eq(keyCode, leftKey) ? _elm_lang$core$Native_Utils.update(
-			model,
-			{
-				status: _fizwidget$game_of_life$Main$Paused,
-				cells: _fizwidget$game_of_life$History$undo(model.cells)
-			}) : model));
-	});
 var _fizwidget$game_of_life$Main$toggleCell = function (cell) {
 	var _p12 = cell;
 	if (_p12.ctor === 'Alive') {
@@ -16345,90 +16322,89 @@ var _fizwidget$game_of_life$Main$toggleCoordinate = F2(
 		return A3(_fizwidget$game_of_life$Matrix$update, _fizwidget$game_of_life$Main$toggleCell, coordinate, cells);
 	});
 var _fizwidget$game_of_life$Main$update = F2(
-	function (msg, model) {
-		var _p13 = msg;
-		switch (_p13.ctor) {
+	function (msg, _p13) {
+		var _p14 = _p13;
+		var _p19 = _p14;
+		var _p18 = _p14.cells;
+		var _p15 = msg;
+		switch (_p15.ctor) {
 			case 'Play':
 				return _fizwidget$game_of_life$Main$noCmd(
 					_elm_lang$core$Native_Utils.update(
-						model,
+						_p19,
 						{status: _fizwidget$game_of_life$Main$Playing}));
 			case 'Pause':
 				return _fizwidget$game_of_life$Main$noCmd(
 					_elm_lang$core$Native_Utils.update(
-						model,
+						_p19,
 						{status: _fizwidget$game_of_life$Main$Paused}));
 			case 'Tick':
 				return _fizwidget$game_of_life$Main$noCmd(
-					_fizwidget$game_of_life$Main$pauseIfFinished(
+					_fizwidget$game_of_life$Main$pauseWhenSettled(
 						_elm_lang$core$Native_Utils.update(
-							model,
+							_p19,
 							{
-								cells: A2(_fizwidget$game_of_life$History$advance, model.cells, _fizwidget$game_of_life$Main$updateCells)
+								cells: A2(_fizwidget$game_of_life$History$record, _fizwidget$game_of_life$Main$updateCells, _p18)
 							})));
+			case 'SetSpeed':
+				return _fizwidget$game_of_life$Main$noCmd(
+					_elm_lang$core$Native_Utils.update(
+						_p19,
+						{speed: _p15._0}));
 			case 'MouseDown':
 				return _fizwidget$game_of_life$Main$noCmd(
 					_elm_lang$core$Native_Utils.update(
-						model,
+						_p19,
 						{
 							mouse: _fizwidget$game_of_life$Main$Down,
 							cells: A2(
-								_fizwidget$game_of_life$History$advance,
-								model.cells,
-								_fizwidget$game_of_life$Main$toggleCoordinate(_p13._0))
+								_fizwidget$game_of_life$History$record,
+								_fizwidget$game_of_life$Main$toggleCoordinate(_p15._0),
+								_p18)
 						}));
 			case 'MouseUp':
 				return _fizwidget$game_of_life$Main$noCmd(
 					_elm_lang$core$Native_Utils.update(
-						model,
+						_p19,
 						{mouse: _fizwidget$game_of_life$Main$Up}));
 			case 'MouseOver':
-				var _p14 = model.mouse;
-				if (_p14.ctor === 'Up') {
-					return _fizwidget$game_of_life$Main$noCmd(model);
+				var _p16 = _p14.mouse;
+				if (_p16.ctor === 'Up') {
+					return _fizwidget$game_of_life$Main$noCmd(_p19);
 				} else {
 					return _fizwidget$game_of_life$Main$noCmd(
 						_elm_lang$core$Native_Utils.update(
-							model,
+							_p19,
 							{
 								cells: A2(
-									_fizwidget$game_of_life$History$advance,
-									model.cells,
-									_fizwidget$game_of_life$Main$toggleCoordinate(_p13._0))
+									_fizwidget$game_of_life$History$record,
+									_fizwidget$game_of_life$Main$toggleCoordinate(_p15._0),
+									_p18)
 							}));
 				}
-			case 'KeyDown':
-				return _fizwidget$game_of_life$Main$noCmd(
-					A2(_fizwidget$game_of_life$Main$onKeyDown, _p13._0, model));
 			default:
-				return _fizwidget$game_of_life$Main$noCmd(
+				var _p17 = _p15._0;
+				return _elm_lang$core$Native_Utils.eq(
+					_p17,
+					_elm_lang$core$Char$toCode(
+						_elm_lang$core$Native_Utils.chr('P'))) ? _fizwidget$game_of_life$Main$noCmd(
 					_elm_lang$core$Native_Utils.update(
-						model,
-						{speed: _p13._0}));
-		}
-	});
-var _fizwidget$game_of_life$Main$SetSpeed = function (a) {
-	return {ctor: 'SetSpeed', _0: a};
-};
-var _fizwidget$game_of_life$Main$viewSpeedButton = F2(
-	function (status, speed) {
-		var _p15 = {ctor: '_Tuple2', _0: status, _1: speed};
-		if ((_p15.ctor === '_Tuple2') && (_p15._0.ctor === 'Playing')) {
-			if (_p15._1.ctor === 'Slow') {
-				return A3(
-					_fizwidget$game_of_life$Main$viewButton,
-					'Faster',
-					_fizwidget$game_of_life$Main$SetSpeed(_fizwidget$game_of_life$Main$Fast),
-					{ctor: '[]'});
-			} else {
-				return A3(
-					_fizwidget$game_of_life$Main$viewButton,
-					'Slower',
-					_fizwidget$game_of_life$Main$SetSpeed(_fizwidget$game_of_life$Main$Slow),
-					{ctor: '[]'});
-			}
-		} else {
-			return _fizwidget$game_of_life$Main$blank;
+						_p19,
+						{
+							status: _fizwidget$game_of_life$Main$toggleStatus(_p14.status)
+						})) : (_elm_lang$core$Native_Utils.eq(_p17, _fizwidget$game_of_life$Main$rightKey) ? _fizwidget$game_of_life$Main$noCmd(
+					_elm_lang$core$Native_Utils.update(
+						_p19,
+						{
+							status: _fizwidget$game_of_life$Main$Paused,
+							cells: A2(_fizwidget$game_of_life$History$record, _fizwidget$game_of_life$Main$updateCells, _p18)
+						})) : (_elm_lang$core$Native_Utils.eq(_p17, _fizwidget$game_of_life$Main$leftKey) ? _fizwidget$game_of_life$Main$noCmd(
+					_elm_lang$core$Native_Utils.update(
+						_p19,
+						{
+							status: _fizwidget$game_of_life$Main$Paused,
+							cells: _fizwidget$game_of_life$History$undo(_p18)
+						})) : _fizwidget$game_of_life$Main$noCmd(_p19)));
 		}
 	});
 var _fizwidget$game_of_life$Main$KeyDown = function (a) {
@@ -16542,6 +16518,56 @@ var _fizwidget$game_of_life$Main$viewCells = F2(
 						_fizwidget$game_of_life$Main$cellSize(cells)),
 					cells)));
 	});
+var _fizwidget$game_of_life$Main$SetSpeed = function (a) {
+	return {ctor: 'SetSpeed', _0: a};
+};
+var _fizwidget$game_of_life$Main$viewSpeedButton = F2(
+	function (status, speed) {
+		var _p20 = {ctor: '_Tuple2', _0: status, _1: speed};
+		if ((_p20.ctor === '_Tuple2') && (_p20._0.ctor === 'Playing')) {
+			if (_p20._1.ctor === 'Slow') {
+				return A3(
+					_fizwidget$game_of_life$Main$viewButton,
+					'Faster',
+					_fizwidget$game_of_life$Main$SetSpeed(_fizwidget$game_of_life$Main$Fast),
+					{ctor: '[]'});
+			} else {
+				return A3(
+					_fizwidget$game_of_life$Main$viewButton,
+					'Slower',
+					_fizwidget$game_of_life$Main$SetSpeed(_fizwidget$game_of_life$Main$Slow),
+					{ctor: '[]'});
+			}
+		} else {
+			return _fizwidget$game_of_life$Main$blank;
+		}
+	});
+var _fizwidget$game_of_life$Main$Tick = {ctor: 'Tick'};
+var _fizwidget$game_of_life$Main$subscriptions = function (_p21) {
+	var _p22 = _p21;
+	var keyDowns = _elm_lang$keyboard$Keyboard$downs(_fizwidget$game_of_life$Main$KeyDown);
+	var ticks = function () {
+		var _p23 = _p22.status;
+		if (_p23.ctor === 'Playing') {
+			return A2(
+				_elm_lang$core$Time$every,
+				_fizwidget$game_of_life$Main$tickInterval(_p22.speed),
+				_elm_lang$core$Basics$always(_fizwidget$game_of_life$Main$Tick));
+		} else {
+			return _elm_lang$core$Platform_Sub$none;
+		}
+	}();
+	return _elm_lang$core$Platform_Sub$batch(
+		{
+			ctor: '::',
+			_0: ticks,
+			_1: {
+				ctor: '::',
+				_0: keyDowns,
+				_1: {ctor: '[]'}
+			}
+		});
+};
 var _fizwidget$game_of_life$Main$Pause = {ctor: 'Pause'};
 var _fizwidget$game_of_life$Main$Play = {ctor: 'Play'};
 var _fizwidget$game_of_life$Main$viewStatusButton = F2(
@@ -16555,8 +16581,8 @@ var _fizwidget$game_of_life$Main$viewStatusButton = F2(
 			cells)) {
 			return _fizwidget$game_of_life$Main$blank;
 		} else {
-			var _p16 = status;
-			if (_p16.ctor === 'Playing') {
+			var _p24 = status;
+			if (_p24.ctor === 'Playing') {
 				return A3(
 					_fizwidget$game_of_life$Main$viewButton,
 					'Pause',
@@ -16610,11 +16636,11 @@ var _fizwidget$game_of_life$Main$viewControls = F3(
 				}
 			});
 	});
-var _fizwidget$game_of_life$Main$view = function (_p17) {
-	var _p18 = _p17;
-	var _p19 = _p18.speed;
-	var transitionDuration = _fizwidget$game_of_life$Main$getTransitionDuration(_p19);
-	var currentCells = _fizwidget$game_of_life$History$current(_p18.cells);
+var _fizwidget$game_of_life$Main$view = function (_p25) {
+	var _p26 = _p25;
+	var _p27 = _p26.speed;
+	var transitionDuration = _fizwidget$game_of_life$Main$getTransitionDuration(_p27);
+	var currentCells = _fizwidget$game_of_life$History$now(_p26.cells);
 	return A2(
 		_rtfeldman$elm_css$Html_Styled$div,
 		{
@@ -16641,33 +16667,7 @@ var _fizwidget$game_of_life$Main$view = function (_p17) {
 				A2(_fizwidget$game_of_life$Main$viewCells, transitionDuration, currentCells)),
 			_1: {
 				ctor: '::',
-				_0: A3(_fizwidget$game_of_life$Main$viewControls, _p18.status, _p19, currentCells),
-				_1: {ctor: '[]'}
-			}
-		});
-};
-var _fizwidget$game_of_life$Main$Tick = {ctor: 'Tick'};
-var _fizwidget$game_of_life$Main$subscriptions = function (_p20) {
-	var _p21 = _p20;
-	var keyDowns = _elm_lang$keyboard$Keyboard$downs(_fizwidget$game_of_life$Main$KeyDown);
-	var ticks = function () {
-		var _p22 = _p21.status;
-		if (_p22.ctor === 'Playing') {
-			return A2(
-				_elm_lang$core$Time$every,
-				_fizwidget$game_of_life$Main$tickInterval(_p21.speed),
-				_elm_lang$core$Basics$always(_fizwidget$game_of_life$Main$Tick));
-		} else {
-			return _elm_lang$core$Platform_Sub$none;
-		}
-	}();
-	return _elm_lang$core$Platform_Sub$batch(
-		{
-			ctor: '::',
-			_0: ticks,
-			_1: {
-				ctor: '::',
-				_0: keyDowns,
+				_0: A3(_fizwidget$game_of_life$Main$viewControls, _p26.status, _p27, currentCells),
 				_1: {ctor: '[]'}
 			}
 		});
@@ -16675,9 +16675,9 @@ var _fizwidget$game_of_life$Main$subscriptions = function (_p20) {
 var _fizwidget$game_of_life$Main$main = _elm_lang$html$Html$program(
 	{
 		init: _fizwidget$game_of_life$Main$init,
-		view: function (_p23) {
+		view: function (_p28) {
 			return _rtfeldman$elm_css$Html_Styled$toUnstyled(
-				_fizwidget$game_of_life$Main$view(_p23));
+				_fizwidget$game_of_life$Main$view(_p28));
 		},
 		update: _fizwidget$game_of_life$Main$update,
 		subscriptions: _fizwidget$game_of_life$Main$subscriptions
