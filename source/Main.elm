@@ -11,6 +11,7 @@ import Keyboard as Keyboard exposing (KeyCode)
 import Char
 import Time as Time exposing (Time, millisecond)
 import Matrix as Matrix exposing (Matrix, Coordinate)
+import History as History exposing (History)
 
 
 -- MODEL
@@ -42,7 +43,7 @@ type alias Cells =
 
 type alias Model =
     { status : Status
-    , cells : Cells
+    , cells : History Cells
     , mouse : Mouse
     , speed : Speed
     }
@@ -55,7 +56,7 @@ type alias Model =
 init : ( Model, Cmd Msg )
 init =
     ( { status = Paused
-      , cells = emptyConfiguration
+      , cells = History.begin initialCells
       , mouse = Up
       , speed = Slow
       }
@@ -63,22 +64,9 @@ init =
     )
 
 
-emptyConfiguration : Cells
-emptyConfiguration =
+initialCells : Cells
+initialCells =
     Matrix.create { width = 18, height = 18 } Dead
-
-
-lineConfiguration : Cells
-lineConfiguration =
-    Matrix.create { width = 18, height = 18 } Dead
-        |> Matrix.set { x = 5, y = 5 } Alive
-        |> Matrix.set { x = 6, y = 5 } Alive
-        |> Matrix.set { x = 7, y = 5 } Alive
-        |> Matrix.set { x = 8, y = 5 } Alive
-        |> Matrix.set { x = 9, y = 5 } Alive
-        |> Matrix.set { x = 10, y = 5 } Alive
-        |> Matrix.set { x = 11, y = 5 } Alive
-        |> Matrix.set { x = 12, y = 5 } Alive
 
 
 
@@ -87,10 +75,9 @@ lineConfiguration =
 
 type Msg
     = Tick
-    | Toggle Coordinate
     | Play
     | Pause
-    | MouseDown
+    | MouseDown Coordinate
     | MouseUp
     | MouseOver Coordinate
     | KeyDown KeyCode
@@ -109,16 +96,15 @@ update msg model =
                 |> noCmd
 
         Tick ->
-            { model | cells = updateCells model.cells }
+            { model | cells = History.advance model.cells updateCells }
                 |> pauseIfFinished
                 |> noCmd
 
-        Toggle coordinate ->
-            { model | cells = toggleCoordinate coordinate model.cells }
-                |> noCmd
-
-        MouseDown ->
-            { model | mouse = Down }
+        MouseDown coordinate ->
+            { model
+                | mouse = Down
+                , cells = History.advance model.cells (toggleCoordinate coordinate)
+            }
                 |> noCmd
 
         MouseUp ->
@@ -131,15 +117,12 @@ update msg model =
                     noCmd model
 
                 Down ->
-                    { model | cells = toggleCoordinate coordinate model.cells }
+                    { model | cells = History.advance model.cells (toggleCoordinate coordinate) }
                         |> noCmd
 
-        KeyDown keyCode ->
-            if Char.fromCode keyCode == 'P' then
-                { model | status = toggleStatus model.status }
-                    |> noCmd
-            else
-                noCmd model
+        KeyDown key ->
+            onKeyDown key model
+                |> noCmd
 
         SetSpeed speed ->
             { model | speed = speed }
@@ -149,6 +132,26 @@ update msg model =
 noCmd : Model -> ( Model, Cmd Msg )
 noCmd model =
     ( model, Cmd.none )
+
+
+onKeyDown : KeyCode -> Model -> Model
+onKeyDown keyCode model =
+    let
+        leftKey =
+            37
+
+        rightKey =
+            39
+    in
+        if keyCode == Char.toCode 'P' then
+            { model | status = toggleStatus model.status }
+        else if keyCode == rightKey then
+            { model | cells = History.advance model.cells updateCells }
+                |> pauseIfFinished
+        else if keyCode == leftKey then
+            { model | status = Paused, cells = History.undo model.cells }
+        else
+            model
 
 
 toggleStatus : Status -> Status
@@ -193,7 +196,7 @@ pauseIfFinished : Model -> Model
 pauseIfFinished ({ status, cells } as model) =
     case status of
         Playing ->
-            if Matrix.all ((==) Dead) cells then
+            if Matrix.all ((==) Dead) (History.current cells) then
                 { model | status = Paused }
             else
                 model
@@ -224,6 +227,9 @@ toggleCell cell =
 view : Model -> Html Msg
 view { cells, status, speed } =
     let
+        currentCells =
+            History.current cells
+
         transitionDuration =
             getTransitionDuration speed
     in
@@ -233,11 +239,9 @@ view { cells, status, speed } =
                 , justifyContent center
                 , alignItems center
                 ]
-            , onMouseDown MouseDown
-            , onMouseUp MouseUp
             ]
-            [ squareContainer (viewCells transitionDuration cells)
-            , viewControls status speed cells
+            [ squareContainer (viewCells transitionDuration currentCells)
+            , viewControls status speed currentCells
             ]
 
 
@@ -286,7 +290,8 @@ viewCell transitionDuration size coordinate cell =
             , justifyContent center
             , alignItems center
             ]
-        , onMouseDown (Toggle coordinate)
+        , onMouseDown (MouseDown coordinate)
+        , onMouseUp MouseUp
         , onMouseEnter (MouseOver coordinate)
         ]
         [ viewCellContent transitionDuration cell coordinate ]
@@ -448,8 +453,11 @@ subscriptions { status, speed } =
 
                 Paused ->
                     Sub.none
+
+        keyDowns =
+            Keyboard.downs KeyDown
     in
-        Sub.batch [ Keyboard.downs KeyDown, ticks ]
+        Sub.batch [ ticks, keyDowns ]
 
 
 
