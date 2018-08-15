@@ -96,7 +96,7 @@ update msg ({ status, mouse, cells } as model) =
                 |> noCmd
 
         Tick ->
-            { model | cells = History.record updateCells cells }
+            { model | cells = History.record nextGeneration cells }
                 |> pauseWhenSettled
                 |> noCmd
 
@@ -105,7 +105,10 @@ update msg ({ status, mouse, cells } as model) =
                 |> noCmd
 
         MouseDown coordinate ->
-            { model | mouse = Down, cells = History.record (toggleCoordinate coordinate) cells }
+            { model
+                | mouse = Down
+                , cells = History.record (toggleCell coordinate) cells
+            }
                 |> noCmd
 
         MouseUp ->
@@ -118,21 +121,37 @@ update msg ({ status, mouse, cells } as model) =
                     noCmd model
 
                 Down ->
-                    { model | cells = History.record (toggleCoordinate coordinate) cells }
+                    { model | cells = History.record (toggleCell coordinate) cells }
                         |> noCmd
 
         KeyDown keyCode ->
-            if keyCode == Char.toCode 'P' then
-                { model | status = toggleStatus status }
-                    |> noCmd
-            else if keyCode == rightKey then
-                { model | status = Paused, cells = History.record updateCells cells }
-                    |> noCmd
-            else if keyCode == leftKey then
-                { model | status = Paused, cells = History.undo cells }
-                    |> noCmd
-            else
-                noCmd model
+            onKeyDown keyCode model
+                |> noCmd
+
+
+onKeyDown : KeyCode -> Model -> Model
+onKeyDown keyCode ({ status, cells } as model) =
+    if keyCode == Char.toCode 'P' then
+        { model | status = toggleStatus status }
+    else if keyCode == rightKey then
+        { model
+            | status = Paused
+            , cells = History.redo cells |> Maybe.withDefault (History.record nextGeneration cells)
+        }
+    else if keyCode == leftKey then
+        { model
+            | status = Paused
+            , cells = History.undo cells
+        }
+    else
+        model
+
+
+stepForward : History Cells -> History Cells
+stepForward cells =
+    cells
+        |> History.redo
+        |> Maybe.withDefault (History.record nextGeneration cells)
 
 
 leftKey : KeyCode
@@ -150,6 +169,19 @@ noCmd model =
     ( model, Cmd.none )
 
 
+pauseWhenSettled : Model -> Model
+pauseWhenSettled ({ status, cells } as model) =
+    case status of
+        Playing ->
+            if History.didChange cells then
+                model
+            else
+                { model | status = Paused }
+
+        Paused ->
+            model
+
+
 toggleStatus : Status -> Status
 toggleStatus status =
     case status of
@@ -160,8 +192,8 @@ toggleStatus status =
             Playing
 
 
-updateCells : Cells -> Cells
-updateCells cells =
+nextGeneration : Cells -> Cells
+nextGeneration cells =
     Matrix.coordinateMap (updateCell cells) cells
 
 
@@ -188,32 +220,18 @@ liveNeighbours cells coordinate =
         |> List.length
 
 
-pauseWhenSettled : Model -> Model
-pauseWhenSettled ({ status, cells } as model) =
-    case status of
-        Playing ->
-            if History.didChange cells then
-                model
-            else
-                { model | status = Paused }
+toggleCell : Coordinate -> Cells -> Cells
+toggleCell coordinate cells =
+    let
+        toggle cell =
+            case cell of
+                Alive ->
+                    Dead
 
-        Paused ->
-            model
-
-
-toggleCoordinate : Coordinate -> Cells -> Cells
-toggleCoordinate coordinate cells =
-    Matrix.update toggleCell coordinate cells
-
-
-toggleCell : Cell -> Cell
-toggleCell cell =
-    case cell of
-        Alive ->
-            Dead
-
-        Dead ->
-            Alive
+                Dead ->
+                    Alive
+    in
+        Matrix.update toggle coordinate cells
 
 
 
@@ -392,7 +410,7 @@ viewSpeedButton status speed =
         ( Playing, Fast ) ->
             viewButton "Slower" (SetSpeed Slow) []
 
-        _ ->
+        ( Paused, _ ) ->
             blank
 
 
