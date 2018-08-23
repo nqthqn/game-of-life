@@ -25,32 +25,32 @@ now (History _ present _) =
 
 
 record : (a -> a) -> History a -> History a
-record step (History _ present past) =
-    History [] (step present) (present :: past)
+record step (History past present _) =
+    History (present :: past) (step present) []
 
 
 undo : History a -> History a
-undo (History future present past) =
+undo (History past present future) =
     case past of
-        head :: tail ->
-            History (present :: future) head tail
+        nextPresent :: nextPast ->
+            History nextPast nextPresent (present :: future)
 
         [] ->
-            History future present past
+            History past present future
 
 
 redo : History a -> Maybe (History a)
-redo (History future present past) =
+redo (History past present future) =
     case future of
-        head :: tail ->
-            Just <| History tail head (present :: past)
+        nextPresent :: nextFuture ->
+            Just <| History (present :: past) nextPresent nextFuture
 
         [] ->
             Nothing
 
 
 didChange : History a -> Bool
-didChange (History _ present past) =
+didChange (History past present _) =
     List.head past
         |> Maybe.map ((/=) present)
         |> Maybe.withDefault True

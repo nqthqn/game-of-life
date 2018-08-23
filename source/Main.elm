@@ -77,6 +77,8 @@ type Msg
     = Play
     | Pause
     | Tick
+    | Undo
+    | Redo
     | SetSpeed Speed
     | MouseDown Coordinate
     | MouseUp
@@ -85,115 +87,96 @@ type Msg
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update msg ({ status, mouse, cells } as model) =
+update msg model =
+    ( updateModel msg model, Cmd.none )
+
+
+updateModel : Msg -> Model -> Model
+updateModel msg ({ status, mouse, cells } as model) =
     case msg of
         Play ->
             { model | status = Playing }
-                |> noCmd
 
         Pause ->
             { model | status = Paused }
-                |> noCmd
 
         Tick ->
-            { model | cells = History.record nextGeneration cells }
-                |> pauseWhenSettled
-                |> noCmd
+            { model | cells = History.record step cells }
+                |> pauseIfSettled
+
+        Undo ->
+            undo model
+
+        Redo ->
+            redo model
 
         SetSpeed speed ->
             { model | speed = speed }
-                |> noCmd
 
         MouseDown coordinate ->
             { model
                 | mouse = Down
-                , cells = History.record (toggleCell coordinate) cells
+                , cells = History.record (toggleCoordinate coordinate) cells
             }
-                |> noCmd
 
         MouseUp ->
             { model | mouse = Up }
-                |> noCmd
 
         MouseOver coordinate ->
             case mouse of
                 Up ->
-                    noCmd model
+                    model
 
                 Down ->
-                    { model | cells = History.record (toggleCell coordinate) cells }
-                        |> noCmd
+                    { model | cells = History.record (toggleCoordinate coordinate) cells }
 
         KeyDown keyCode ->
-            onKeyDown keyCode model
-                |> noCmd
-
-
-onKeyDown : KeyCode -> Model -> Model
-onKeyDown keyCode ({ status, cells } as model) =
-    if keyCode == Char.toCode 'P' then
-        { model | status = toggleStatus status }
-    else if keyCode == rightKey then
-        { model
-            | status = Paused
-            , cells = History.redo cells |> Maybe.withDefault (History.record nextGeneration cells)
-        }
-    else if keyCode == leftKey then
-        { model
-            | status = Paused
-            , cells = History.undo cells
-        }
-    else
-        model
-
-
-stepForward : History Cells -> History Cells
-stepForward cells =
-    cells
-        |> History.redo
-        |> Maybe.withDefault (History.record nextGeneration cells)
-
-
-leftKey : KeyCode
-leftKey =
-    37
-
-
-rightKey : KeyCode
-rightKey =
-    39
-
-
-noCmd : Model -> ( Model, Cmd Msg )
-noCmd model =
-    ( model, Cmd.none )
-
-
-pauseWhenSettled : Model -> Model
-pauseWhenSettled ({ status, cells } as model) =
-    case status of
-        Playing ->
-            if History.didChange cells then
-                model
+            if keyCode == leftArrow then
+                undo model
+            else if keyCode == rightArrow then
+                redo model
+            else if keyCode == Char.toCode 'P' then
+                toggleStatus model
             else
-                { model | status = Paused }
-
-        Paused ->
-            model
+                model
 
 
-toggleStatus : Status -> Status
-toggleStatus status =
-    case status of
+undo : Model -> Model
+undo model =
+    { model
+        | status = Paused
+        , cells = History.undo model.cells
+    }
+
+
+redo : Model -> Model
+redo ({ cells } as model) =
+    { model
+        | status = Paused
+        , cells = History.redo cells |> Maybe.withDefault (History.record step cells)
+    }
+
+
+toggleStatus : Model -> Model
+toggleStatus model =
+    case model.status of
         Playing ->
-            Paused
+            { model | status = Paused }
 
         Paused ->
-            Playing
+            { model | status = Playing }
 
 
-nextGeneration : Cells -> Cells
-nextGeneration cells =
+pauseIfSettled : Model -> Model
+pauseIfSettled ({ status, cells } as model) =
+    if History.didChange cells then
+        model
+    else
+        { model | status = Paused }
+
+
+step : Cells -> Cells
+step cells =
     Matrix.coordinateMap (updateCell cells) cells
 
 
@@ -220,18 +203,19 @@ liveNeighbours cells coordinate =
         |> List.length
 
 
-toggleCell : Coordinate -> Cells -> Cells
-toggleCell coordinate cells =
-    let
-        toggle cell =
-            case cell of
-                Alive ->
-                    Dead
+toggleCoordinate : Coordinate -> Cells -> Cells
+toggleCoordinate coordinate cells =
+    Matrix.update toggleCell coordinate cells
 
-                Dead ->
-                    Alive
-    in
-        Matrix.update toggle coordinate cells
+
+toggleCell : Cell -> Cell
+toggleCell cell =
+    case cell of
+        Alive ->
+            Dead
+
+        Dead ->
+            Alive
 
 
 
@@ -336,7 +320,11 @@ getTransitionDuration speed =
 
 cellSize : Cells -> Percentage
 cellSize cells =
-    100.0 / toFloat (Matrix.height cells)
+    let
+        cellHeight =
+            toFloat (Matrix.height cells)
+    in
+        100.0 / cellHeight
 
 
 cellContentSize : Cell -> Percentage
@@ -356,6 +344,9 @@ type alias Percentage =
 cellColor : Cell -> Coordinate -> Color
 cellColor cell { x, y } =
     case cell of
+        Dead ->
+            rgb 244 245 247
+
         Alive ->
             case ( x % 2 == 0, y % 2 == 0 ) of
                 ( True, True ) ->
@@ -370,12 +361,24 @@ cellColor cell { x, y } =
                 ( False, False ) ->
                     rgba 101 84 192 0.8
 
-        Dead ->
-            rgb 244 245 247
-
 
 viewControls : Status -> Speed -> Cells -> Html Msg
 viewControls status speed cells =
+    div []
+        [ bottomLeft
+            [ viewStatusButton status |> ifNotBlank cells
+            , viewSpeedButton status speed
+            ]
+        , bottomRight
+            [ viewUndoButton status
+            , viewRedoButton status
+            ]
+            |> ifNotBlank cells
+        ]
+
+
+bottomLeft : List (Html msg) -> Html msg
+bottomLeft =
     div
         [ css
             [ position fixed
@@ -383,22 +386,35 @@ viewControls status speed cells =
             , bottom (px 20)
             ]
         ]
-        [ viewStatusButton status cells
-        , viewSpeedButton status speed
+
+
+bottomRight : List (Html msg) -> Html msg
+bottomRight =
+    div
+        [ css
+            [ position fixed
+            , right (px 20)
+            , bottom (px 20)
+            ]
         ]
 
 
-viewStatusButton : Status -> Cells -> Html Msg
-viewStatusButton status cells =
+ifNotBlank : Cells -> Html msg -> Html msg
+ifNotBlank cells children =
     if Matrix.all ((==) Dead) cells then
-        blank
+        div [] []
     else
-        case status of
-            Playing ->
-                viewButton "Pause" Pause []
+        children
 
-            Paused ->
-                viewButton "Play" Play [ backgroundColor (rgba 54 179 126 0.9) ]
+
+viewStatusButton : Status -> Html Msg
+viewStatusButton status =
+    case status of
+        Playing ->
+            viewButton "Pause" Pause []
+
+        Paused ->
+            viewButton "Play" Play [ backgroundColor (rgba 54 179 126 0.8) ]
 
 
 viewSpeedButton : Status -> Speed -> Html Msg
@@ -411,7 +427,27 @@ viewSpeedButton status speed =
             viewButton "Slower" (SetSpeed Slow) []
 
         ( Paused, _ ) ->
-            blank
+            div [] []
+
+
+viewUndoButton : Status -> Html Msg
+viewUndoButton status =
+    viewButton "⬅︎" Undo (undoRedoButtonStyles status)
+
+
+viewRedoButton : Status -> Html Msg
+viewRedoButton status =
+    viewButton "➡︎" Redo (undoRedoButtonStyles status)
+
+
+undoRedoButtonStyles : Status -> List Style
+undoRedoButtonStyles status =
+    case status of
+        Playing ->
+            []
+
+        Paused ->
+            [ backgroundColor <| rgba 80 95 121 0.6 ]
 
 
 viewButton : String -> Msg -> List Style -> Html Msg
@@ -438,13 +474,26 @@ buttonStyles =
     ]
 
 
-blank : Html msg
-blank =
-    div [] []
-
-
 
 -- SUBSCRIPTIONS
+
+
+subscriptions : Model -> Sub Msg
+subscriptions { status, speed } =
+    Sub.batch
+        [ Keyboard.downs KeyDown
+        , tickSubscription status speed
+        ]
+
+
+tickSubscription : Status -> Speed -> Sub Msg
+tickSubscription status speed =
+    case status of
+        Playing ->
+            Time.every (tickInterval speed) (always Tick)
+
+        Paused ->
+            Sub.none
 
 
 tickInterval : Speed -> Time
@@ -457,21 +506,18 @@ tickInterval speed =
             300 * millisecond
 
 
-subscriptions : Model -> Sub Msg
-subscriptions { status, speed } =
-    let
-        ticks =
-            case status of
-                Playing ->
-                    Time.every (tickInterval speed) (always Tick)
 
-                Paused ->
-                    Sub.none
+-- UTIL
 
-        keyDowns =
-            Keyboard.downs KeyDown
-    in
-        Sub.batch [ ticks, keyDowns ]
+
+leftArrow : KeyCode
+leftArrow =
+    37
+
+
+rightArrow : KeyCode
+rightArrow =
+    39
 
 
 
