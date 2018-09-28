@@ -4,13 +4,14 @@ import Browser exposing (Document)
 import Browser.Events as Events
 import Css exposing (..)
 import Css.Transitions as Transitions exposing (easeInOut, transition)
-import History as History exposing (History)
-import Html
-import Html.Styled exposing (Html, button, div, text, toUnstyled)
-import Html.Styled.Attributes exposing (css)
-import Html.Styled.Events exposing (onClick, onMouseDown, onMouseEnter, onMouseUp)
+import History exposing (History)
+import Html.Styled as Html exposing (Html, button, div, text, textarea, toUnstyled)
+import Html.Styled.Attributes exposing (autofocus, cols, css, disabled, placeholder, rows, value)
+import Html.Styled.Events exposing (onClick, onInput, onMouseDown, onMouseEnter, onMouseUp)
 import Json.Decode as Decode exposing (Decoder)
-import Matrix as Matrix exposing (Coordinate, Matrix)
+import Matrix exposing (Coordinate, Dimensions, Matrix)
+import Maybe.Extra as Maybe
+import Pattern exposing (Pattern)
 import Time
 
 
@@ -42,11 +43,17 @@ type alias Cells =
     Matrix Cell
 
 
+type ImportField
+    = Open String
+    | Closed
+
+
 type alias Model =
     { status : Status
     , cells : History Cells
     , mouse : Mouse
     , speed : Speed
+    , importField : ImportField
     }
 
 
@@ -60,6 +67,7 @@ init =
       , cells = History.begin initialCells
       , mouse = Up
       , speed = Slow
+      , importField = Closed
       }
     , Cmd.none
     )
@@ -77,7 +85,7 @@ initialCells =
 type Msg
     = Play
     | Pause
-    | Tick
+    | Step
     | Undo
     | Redo
     | SetSpeed Speed
@@ -85,6 +93,8 @@ type Msg
     | MouseUp
     | MouseOver Coordinate
     | KeyDown Key
+    | OpenImportField
+    | ImportFieldChange String
 
 
 type Key
@@ -100,7 +110,7 @@ update msg model =
 
 
 updateModel : Msg -> Model -> Model
-updateModel msg ({ status, mouse, cells } as model) =
+updateModel msg ({ status, mouse, cells, importField } as model) =
     case msg of
         Play ->
             { model | status = Playing }
@@ -108,9 +118,9 @@ updateModel msg ({ status, mouse, cells } as model) =
         Pause ->
             { model | status = Paused }
 
-        Tick ->
+        Step ->
             { model | cells = History.record step cells }
-                |> pauseIfSettled
+                |> pauseIfStable
 
         Undo ->
             undo model
@@ -132,11 +142,11 @@ updateModel msg ({ status, mouse, cells } as model) =
 
         MouseOver coordinate ->
             case mouse of
-                Up ->
-                    model
-
                 Down ->
                     { model | cells = History.record (toggleCoordinate coordinate) cells }
+
+                Up ->
+                    model
 
         KeyDown key ->
             case key of
@@ -151,6 +161,20 @@ updateModel msg ({ status, mouse, cells } as model) =
 
                 OtherKey ->
                     model
+
+        OpenImportField ->
+            { model | importField = Open "" }
+
+        ImportFieldChange text ->
+            case parseCells text of
+                Nothing ->
+                    { model | importField = Open text }
+
+                Just parsedCells ->
+                    { model
+                        | importField = Closed
+                        , cells = History.record (always parsedCells) cells
+                    }
 
 
 undo : Model -> Model
@@ -179,13 +203,13 @@ toggleStatus model =
             { model | status = Playing }
 
 
-pauseIfSettled : Model -> Model
-pauseIfSettled ({ status, cells } as model) =
-    if History.didChange cells then
-        model
+pauseIfStable : Model -> Model
+pauseIfStable ({ status, cells } as model) =
+    if History.isStable cells then
+        { model | status = Paused }
 
     else
-        { model | status = Paused }
+        model
 
 
 step : Cells -> Cells
@@ -231,6 +255,47 @@ toggleCell cell =
             Alive
 
 
+parseCells : String -> Maybe Cells
+parseCells text =
+    Pattern.parseLife106Format text
+        |> Maybe.map createCells
+
+
+createCells : Pattern -> Cells
+createCells pattern =
+    let
+        width =
+            Pattern.width pattern
+                |> (*) 2
+                |> max 18
+
+        height =
+            Pattern.height pattern
+                |> (*) 2
+                |> max 18
+
+        size =
+            { width = width
+            , height = height
+            }
+
+        center =
+            { x = width // 2
+            , y = height // 2
+            }
+
+        centeredPattern =
+            Pattern.centerAt center pattern
+
+        emptyMatrix =
+            Matrix.create size Dead
+    in
+    List.foldl
+        (Matrix.set Alive)
+        emptyMatrix
+        (Pattern.toCoordinates pattern)
+
+
 
 -- VIEW
 
@@ -243,13 +308,13 @@ document model =
 
 
 view : Model -> Html Msg
-view { cells, status, speed } =
+view { cells, status, speed, importField } =
     let
         currentCells =
             History.now cells
 
         transitionDuration =
-            getTransitionDuration speed
+            calculateTransitionDuration speed
     in
     div
         [ css
@@ -258,8 +323,8 @@ view { cells, status, speed } =
             , alignItems center
             ]
         ]
-        [ squareContainer (viewCells transitionDuration currentCells)
-        , viewControls status speed currentCells
+        [ viewCells transitionDuration currentCells |> squareContainer
+        , viewControls status speed currentCells importField
         ]
 
 
@@ -333,14 +398,14 @@ viewCellContent transitionDuration cell coordinate =
         []
 
 
-getTransitionDuration : Speed -> Milliseconds
-getTransitionDuration speed =
+calculateTransitionDuration : Speed -> Milliseconds
+calculateTransitionDuration speed =
     tickInterval speed + 200
 
 
 cellSize : Cells -> Percentage
 cellSize cells =
-    100.0 / (Matrix.height cells |> toFloat)
+    100.0 / (Matrix.width cells |> toFloat)
 
 
 cellContentSize : Cell -> Percentage
@@ -378,11 +443,12 @@ cellColor cell { x, y } =
                     rgba 101 84 192 0.8
 
 
-viewControls : Status -> Speed -> Cells -> Html Msg
-viewControls status speed cells =
+viewControls : Status -> Speed -> Cells -> ImportField -> Html Msg
+viewControls status speed cells importField =
     div []
         [ bottomLeft
-            [ viewStatusButton status |> ifNotBlank cells
+            [ viewImportField importField
+            , viewStatusButton status |> ifNotBlank cells
             , viewSpeedButton speed
             ]
         , bottomRight
@@ -445,6 +511,25 @@ viewSpeedButton speed =
             viewButton "Slower" (SetSpeed Slow) []
 
 
+viewImportField : ImportField -> Html Msg
+viewImportField importField =
+    case importField of
+        Open input ->
+            textarea
+                [ rows 32
+                , cols 30
+                , autofocus True
+                , placeholder "Paste a 'Life 1.06' pattern here"
+                , css [ borderRadius (px 4), resize none ]
+                , value input
+                , onInput ImportFieldChange
+                ]
+                []
+
+        Closed ->
+            viewButton "Import" OpenImportField []
+
+
 viewUndoButton : Status -> Html Msg
 viewUndoButton status =
     viewButton "⬅︎" Undo []
@@ -495,7 +580,7 @@ tickSubscription : Status -> Speed -> Sub Msg
 tickSubscription status speed =
     case status of
         Playing ->
-            Time.every (tickInterval speed) (always Tick)
+            Time.every (tickInterval speed) (always Step)
 
         Paused ->
             Sub.none
@@ -525,17 +610,18 @@ keyDecoder =
 
 toKey : String -> Key
 toKey value =
-    if value == "ArrowLeft" then
-        LeftKey
+    case value of
+        "ArrowLeft" ->
+            LeftKey
 
-    else if value == "ArrowRight" then
-        RightKey
+        "ArrowRight" ->
+            RightKey
 
-    else if value == "p" then
-        PKey
+        "p" ->
+            PKey
 
-    else
-        OtherKey
+        _ ->
+            OtherKey
 
 
 type alias Milliseconds =
