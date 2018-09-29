@@ -7,11 +7,11 @@ import Css.Transitions as Transitions exposing (easeInOut, transition)
 import History exposing (History)
 import Html.Styled as Html exposing (Html, button, div, text, textarea, toUnstyled)
 import Html.Styled.Attributes exposing (autofocus, cols, css, disabled, placeholder, rows, value)
-import Html.Styled.Events exposing (onClick, onInput, onMouseDown, onMouseEnter, onMouseUp)
+import Html.Styled.Events exposing (onClick, onInput)
 import Json.Decode as Decode exposing (Decoder)
-import Matrix exposing (Coordinate, Dimensions, Matrix)
 import Maybe.Extra as Maybe
 import Pattern exposing (Pattern)
+import Simulation exposing (Cell(..), Cells)
 import Time
 
 
@@ -32,15 +32,6 @@ type Mouse
 type Speed
     = Slow
     | Fast
-
-
-type Cell
-    = Alive
-    | Dead
-
-
-type alias Cells =
-    Matrix Cell
 
 
 type ImportField
@@ -64,18 +55,13 @@ type alias Model =
 init : ( Model, Cmd Msg )
 init =
     ( { status = Paused
-      , cells = History.begin initialCells
+      , cells = History.begin Simulation.begin
       , mouse = Up
       , speed = Slow
       , importField = Closed
       }
     , Cmd.none
     )
-
-
-initialCells : Cells
-initialCells =
-    Matrix.create { width = 18, height = 18 } Dead
 
 
 
@@ -104,13 +90,19 @@ type Key
     | OtherKey
 
 
+type alias Coordinate =
+    { x : Int
+    , y : Int
+    }
+
+
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     ( updateModel msg model, Cmd.none )
 
 
 updateModel : Msg -> Model -> Model
-updateModel msg ({ status, mouse, cells, importField } as model) =
+updateModel msg model =
     case msg of
         Play ->
             { model | status = Playing }
@@ -119,7 +111,7 @@ updateModel msg ({ status, mouse, cells, importField } as model) =
             { model | status = Paused }
 
         Step ->
-            { model | cells = History.record step cells }
+            { model | cells = History.record Simulation.step model.cells }
                 |> pauseIfStable
 
         Undo ->
@@ -134,16 +126,16 @@ updateModel msg ({ status, mouse, cells, importField } as model) =
         MouseDown coordinate ->
             { model
                 | mouse = Down
-                , cells = History.record (toggleCoordinate coordinate) cells
+                , cells = History.record (Simulation.toggleCoordinate coordinate) model.cells
             }
 
         MouseUp ->
             { model | mouse = Up }
 
         MouseOver coordinate ->
-            case mouse of
+            case model.mouse of
                 Down ->
-                    { model | cells = History.record (toggleCoordinate coordinate) cells }
+                    { model | cells = History.record (Simulation.toggleCoordinate coordinate) model.cells }
 
                 Up ->
                     model
@@ -173,7 +165,7 @@ updateModel msg ({ status, mouse, cells, importField } as model) =
                 Just parsedCells ->
                     { model
                         | importField = Closed
-                        , cells = History.record (always parsedCells) cells
+                        , cells = History.record (always parsedCells) model.cells
                     }
 
 
@@ -186,10 +178,12 @@ undo model =
 
 
 redo : Model -> Model
-redo ({ cells } as model) =
+redo model =
     { model
         | status = Paused
-        , cells = History.redo cells |> Maybe.withDefault (History.record step cells)
+        , cells =
+            History.redo model.cells
+                |> Maybe.withDefault (History.record Simulation.step model.cells)
     }
 
 
@@ -204,96 +198,18 @@ toggleStatus model =
 
 
 pauseIfStable : Model -> Model
-pauseIfStable ({ status, cells } as model) =
-    if History.isStable cells then
+pauseIfStable model =
+    if History.isStable model.cells then
         { model | status = Paused }
 
     else
         model
 
 
-step : Cells -> Cells
-step cells =
-    Matrix.coordinateMap (updateCell cells) cells
-
-
-updateCell : Cells -> Coordinate -> Cell -> Cell
-updateCell cells coordinate cell =
-    case ( cell, liveNeighbours cells coordinate ) of
-        ( Alive, 2 ) ->
-            Alive
-
-        ( Alive, 3 ) ->
-            Alive
-
-        ( Dead, 3 ) ->
-            Alive
-
-        _ ->
-            Dead
-
-
-liveNeighbours : Cells -> Coordinate -> Int
-liveNeighbours cells coordinate =
-    Matrix.neighbours cells coordinate
-        |> List.filter ((==) Alive)
-        |> List.length
-
-
-toggleCoordinate : Coordinate -> Cells -> Cells
-toggleCoordinate coordinate cells =
-    Matrix.update toggleCell coordinate cells
-
-
-toggleCell : Cell -> Cell
-toggleCell cell =
-    case cell of
-        Alive ->
-            Dead
-
-        Dead ->
-            Alive
-
-
 parseCells : String -> Maybe Cells
 parseCells text =
-    Pattern.parseLife106Format text
-        |> Maybe.map createCells
-
-
-createCells : Pattern -> Cells
-createCells pattern =
-    let
-        width =
-            Pattern.width pattern
-                |> (*) 2
-                |> max 18
-
-        height =
-            Pattern.height pattern
-                |> (*) 2
-                |> max 18
-
-        size =
-            { width = width
-            , height = height
-            }
-
-        center =
-            { x = width // 2
-            , y = height // 2
-            }
-
-        centeredPattern =
-            Pattern.centerAt center pattern
-
-        emptyMatrix =
-            Matrix.create size Dead
-    in
-    List.foldl
-        (Matrix.set Alive)
-        emptyMatrix
-        (Pattern.toCoordinates pattern)
+    Pattern.parseLife106 text
+        |> Maybe.map Simulation.beginWithPattern
 
 
 
@@ -315,6 +231,12 @@ view { cells, status, speed, importField } =
 
         transitionDuration =
             calculateTransitionDuration speed
+
+        handlers =
+            { mouseOver = MouseOver
+            , mouseDown = MouseDown
+            , mouseUp = MouseUp
+            }
     in
     div
         [ css
@@ -323,79 +245,9 @@ view { cells, status, speed, importField } =
             , alignItems center
             ]
         ]
-        [ viewCells transitionDuration currentCells |> squareContainer
+        [ Simulation.view transitionDuration currentCells handlers
         , viewControls status speed currentCells importField
         ]
-
-
-squareContainer : Html msg -> Html msg
-squareContainer content =
-    div
-        [ css
-            [ position relative
-            , width (pct 100)
-            , after
-                [ property "content" "''"
-                , display block
-                , paddingBottom (pct 100)
-                ]
-            ]
-        ]
-        [ content ]
-
-
-viewCells : Milliseconds -> Cells -> Html Msg
-viewCells transitionDuration cells =
-    div
-        [ css
-            [ displayFlex
-            , alignItems center
-            , justifyContent center
-            , flexWrap wrap
-            , position absolute
-            , width (pct 100)
-            , height (pct 100)
-            ]
-        ]
-        (cells
-            |> Matrix.coordinateMap (viewCell transitionDuration (cellSize cells))
-            |> Matrix.toList
-        )
-
-
-viewCell : Milliseconds -> Percentage -> Coordinate -> Cell -> Html Msg
-viewCell transitionDuration size coordinate cell =
-    div
-        [ css
-            [ width (pct size)
-            , height (pct size)
-            , displayFlex
-            , justifyContent center
-            , alignItems center
-            ]
-        , onMouseDown (MouseDown coordinate)
-        , onMouseUp MouseUp
-        , onMouseEnter (MouseOver coordinate)
-        ]
-        [ viewCellContent transitionDuration cell coordinate ]
-
-
-viewCellContent : Milliseconds -> Cell -> Coordinate -> Html msg
-viewCellContent transitionDuration cell coordinate =
-    div
-        [ css
-            [ width (pct (cellContentSize cell))
-            , height (pct (cellContentSize cell))
-            , backgroundColor (cellColor cell coordinate)
-            , borderRadius (pct 30)
-            , transition
-                [ Transitions.backgroundColor3 transitionDuration 0 easeInOut
-                , Transitions.width transitionDuration
-                , Transitions.height transitionDuration
-                ]
-            ]
-        ]
-        []
 
 
 calculateTransitionDuration : Speed -> Milliseconds
@@ -403,52 +255,12 @@ calculateTransitionDuration speed =
     tickInterval speed + 200
 
 
-cellSize : Cells -> Percentage
-cellSize cells =
-    100.0 / (Matrix.width cells |> toFloat)
-
-
-cellContentSize : Cell -> Percentage
-cellContentSize cell =
-    case cell of
-        Alive ->
-            70
-
-        Dead ->
-            40
-
-
-type alias Percentage =
-    Float
-
-
-cellColor : Cell -> Coordinate -> Color
-cellColor cell { x, y } =
-    case cell of
-        Dead ->
-            rgb 244 245 247
-
-        Alive ->
-            case ( modBy 2 x == 0, modBy 2 y == 0 ) of
-                ( True, True ) ->
-                    rgba 255 171 0 0.8
-
-                ( True, False ) ->
-                    rgba 54 179 126 0.8
-
-                ( False, True ) ->
-                    rgba 0 184 217 0.8
-
-                ( False, False ) ->
-                    rgba 101 84 192 0.8
-
-
 viewControls : Status -> Speed -> Cells -> ImportField -> Html Msg
 viewControls status speed cells importField =
     div []
         [ bottomLeft
             [ viewImportField importField
-            , viewStatusButton status |> ifNotBlank cells
+            , viewStatusButton status |> unlessSimulationFinished cells
             , viewSpeedButton speed
             ]
         , bottomRight
@@ -482,9 +294,9 @@ bottomRight =
         ]
 
 
-ifNotBlank : Cells -> Html msg -> Html msg
-ifNotBlank cells children =
-    if Matrix.all ((==) Dead) cells then
+unlessSimulationFinished : Cells -> Html msg -> Html msg
+unlessSimulationFinished cells children =
+    if Simulation.isFinished cells then
         div [] []
 
     else
