@@ -5,7 +5,7 @@ module Matrix exposing
     , all
     , coordinateMap
     , create
-    , foldl
+    , fold
     , get
     , height
     , map
@@ -124,8 +124,8 @@ coordinateMap f (Matrix dimensions array) =
         |> Matrix dimensions
 
 
-foldl : (a -> b -> b) -> b -> Matrix a -> b
-foldl f initial (Matrix _ array) =
+fold : (a -> b -> b) -> b -> Matrix a -> b
+fold f initial (Matrix _ array) =
     Array.foldl f initial array
 
 
@@ -145,7 +145,7 @@ neighbours : Matrix a -> Coordinate -> List a
 neighbours matrix coordinate =
     [ ( 1, 1 ), ( 1, 0 ), ( 1, -1 ), ( 0, -1 ), ( -1, -1 ), ( -1, 0 ), ( -1, 1 ), ( 0, 1 ) ]
         |> List.map (offsetBy coordinate)
-        |> List.filterMap ((\b a -> get a b) matrix)
+        |> List.filterMap (\neighbourCoordinate -> get neighbourCoordinate matrix)
 
 
 offsetBy : Coordinate -> ( Int, Int ) -> Coordinate

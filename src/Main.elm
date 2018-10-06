@@ -2,17 +2,17 @@ module Main exposing (main)
 
 import Browser exposing (Document)
 import Browser.Events as Events
+import Button
 import Css exposing (..)
-import Css.Transitions as Transitions exposing (easeInOut, transition)
 import History exposing (History)
-import Html.Styled as Html exposing (Html, button, div, text, textarea, toUnstyled)
-import Html.Styled.Attributes exposing (autofocus, cols, css, disabled, placeholder, rows, value)
-import Html.Styled.Events exposing (onClick, onInput)
+import Html.Styled as Html exposing (Html, div, textarea, toUnstyled)
+import Html.Styled.Attributes exposing (autofocus, cols, css, placeholder, rows, value)
+import Html.Styled.Events exposing (onInput)
 import Json.Decode as Decode exposing (Decoder)
-import Maybe.Extra as Maybe
+import Overlay
 import Pattern exposing (Pattern)
-import Simulation exposing (Cell(..), Cells)
 import Time
+import World exposing (World)
 
 
 
@@ -40,8 +40,8 @@ type ImportField
 
 
 type alias Model =
-    { status : Status
-    , cells : History Cells
+    { world : History World
+    , status : Status
     , mouse : Mouse
     , speed : Speed
     , importField : ImportField
@@ -54,14 +54,17 @@ type alias Model =
 
 init : ( Model, Cmd Msg )
 init =
-    ( { status = Paused
-      , cells = History.begin Simulation.begin
-      , mouse = Up
-      , speed = Slow
-      , importField = Closed
-      }
-    , Cmd.none
-    )
+    ( initialModel, Cmd.none )
+
+
+initialModel : Model
+initialModel =
+    { status = Paused
+    , world = History.begin World.empty
+    , mouse = Up
+    , speed = Slow
+    , importField = Closed
+    }
 
 
 
@@ -79,7 +82,7 @@ type Msg
     | MouseUp
     | MouseOver Coordinate
     | KeyDown Key
-    | OpenImportField
+    | ImportFieldOpen
     | ImportFieldChange String
 
 
@@ -111,14 +114,14 @@ updateModel msg model =
             { model | status = Paused }
 
         Step ->
-            { model | cells = History.record Simulation.step model.cells }
-                |> pauseIfStable
+            { model | world = History.record World.step model.world }
+                |> pauseIfUnchanged
 
         Undo ->
             undo model
 
         Redo ->
-            redo model
+            redoOrStep model
 
         SetSpeed speed ->
             { model | speed = speed }
@@ -126,7 +129,7 @@ updateModel msg model =
         MouseDown coordinate ->
             { model
                 | mouse = Down
-                , cells = History.record (Simulation.toggleCoordinate coordinate) model.cells
+                , world = toggleCell coordinate model.world
             }
 
         MouseUp ->
@@ -135,7 +138,7 @@ updateModel msg model =
         MouseOver coordinate ->
             case model.mouse of
                 Down ->
-                    { model | cells = History.record (Simulation.toggleCoordinate coordinate) model.cells }
+                    { model | world = toggleCell coordinate model.world }
 
                 Up ->
                     model
@@ -146,7 +149,7 @@ updateModel msg model =
                     undo model
 
                 RightKey ->
-                    redo model
+                    redoOrStep model
 
                 PKey ->
                     toggleStatus model
@@ -154,18 +157,18 @@ updateModel msg model =
                 OtherKey ->
                     model
 
-        OpenImportField ->
+        ImportFieldOpen ->
             { model | importField = Open "" }
 
         ImportFieldChange text ->
-            case parseCells text of
+            case parsePattern text of
                 Nothing ->
                     { model | importField = Open text }
 
-                Just parsedCells ->
+                Just newWorld ->
                     { model
                         | importField = Closed
-                        , cells = History.record (always parsedCells) model.cells
+                        , world = History.record (always newWorld) model.world
                     }
 
 
@@ -173,17 +176,19 @@ undo : Model -> Model
 undo model =
     { model
         | status = Paused
-        , cells = History.undo model.cells
+        , world =
+            History.undo model.world
+                |> Maybe.withDefault model.world
     }
 
 
-redo : Model -> Model
-redo model =
+redoOrStep : Model -> Model
+redoOrStep model =
     { model
         | status = Paused
-        , cells =
-            History.redo model.cells
-                |> Maybe.withDefault (History.record Simulation.step model.cells)
+        , world =
+            History.redo model.world
+                |> Maybe.withDefault (History.record World.step model.world)
     }
 
 
@@ -197,19 +202,24 @@ toggleStatus model =
             { model | status = Playing }
 
 
-pauseIfStable : Model -> Model
-pauseIfStable model =
-    if History.isStable model.cells then
+pauseIfUnchanged : Model -> Model
+pauseIfUnchanged model =
+    if History.isUnchanged model.world then
         { model | status = Paused }
 
     else
         model
 
 
-parseCells : String -> Maybe Cells
-parseCells text =
+toggleCell : Coordinate -> History World -> History World
+toggleCell coordinate world =
+    History.record (World.toggleCell coordinate) world
+
+
+parsePattern : String -> Maybe World
+parsePattern text =
     Pattern.parseLife106 text
-        |> Maybe.map Simulation.beginWithPattern
+        |> Maybe.map World.withPattern
 
 
 
@@ -224,10 +234,10 @@ document model =
 
 
 view : Model -> Html Msg
-view { cells, status, speed, importField } =
+view { world, status, speed, importField } =
     let
-        currentCells =
-            History.now cells
+        currentWorld =
+            History.now world
 
         transitionDuration =
             calculateTransitionDuration speed
@@ -245,8 +255,8 @@ view { cells, status, speed, importField } =
             , alignItems center
             ]
         ]
-        [ Simulation.view transitionDuration currentCells handlers
-        , viewControls status speed currentCells importField
+        [ World.view transitionDuration currentWorld handlers
+        , viewControls status speed currentWorld importField
         ]
 
 
@@ -255,48 +265,24 @@ calculateTransitionDuration speed =
     tickInterval speed + 200
 
 
-viewControls : Status -> Speed -> Cells -> ImportField -> Html Msg
-viewControls status speed cells importField =
-    div []
-        [ bottomLeft
+viewControls : Status -> Speed -> World -> ImportField -> Html Msg
+viewControls status speed world importField =
+    Overlay.view
+        { bottomLeft =
             [ viewImportField importField
-            , viewStatusButton status |> unlessSimulationFinished cells
+            , viewStatusButton status |> hideIfFinished world
             , viewSpeedButton speed
             ]
-        , bottomRight
+        , bottomRight =
             [ viewUndoButton status
             , viewRedoButton status
             ]
-        ]
+        }
 
 
-bottomLeft : List (Html msg) -> Html msg
-bottomLeft =
-    div
-        [ css
-            [ position fixed
-            , left (px 20)
-            , bottom (px 20)
-            , displayFlex
-            , flexDirection column
-            ]
-        ]
-
-
-bottomRight : List (Html msg) -> Html msg
-bottomRight =
-    div
-        [ css
-            [ position fixed
-            , right (px 20)
-            , bottom (px 20)
-            ]
-        ]
-
-
-unlessSimulationFinished : Cells -> Html msg -> Html msg
-unlessSimulationFinished cells children =
-    if Simulation.isFinished cells then
+hideIfFinished : World -> Html msg -> Html msg
+hideIfFinished world children =
+    if World.isFinished world then
         div [] []
 
     else
@@ -307,73 +293,49 @@ viewStatusButton : Status -> Html Msg
 viewStatusButton status =
     case status of
         Playing ->
-            viewButton "Pause" Pause []
+            Button.view "Pause" Pause []
 
         Paused ->
-            viewButton "Play" Play [ backgroundColor (rgba 54 179 126 0.8) ]
+            Button.view "Play" Play [ backgroundColor (rgba 54 179 126 0.8) ]
 
 
 viewSpeedButton : Speed -> Html Msg
 viewSpeedButton speed =
     case speed of
         Slow ->
-            viewButton "Faster" (SetSpeed Fast) []
+            Button.view "Faster" (SetSpeed Fast) []
 
         Fast ->
-            viewButton "Slower" (SetSpeed Slow) []
+            Button.view "Slower" (SetSpeed Slow) []
 
 
 viewImportField : ImportField -> Html Msg
 viewImportField importField =
     case importField of
-        Open input ->
+        Closed ->
+            Button.view "Import" ImportFieldOpen []
+
+        Open text ->
             textarea
-                [ rows 32
+                [ rows 22
                 , cols 30
                 , autofocus True
                 , placeholder "Paste a 'Life 1.06' pattern here"
                 , css [ borderRadius (px 4), resize none ]
-                , value input
+                , value text
                 , onInput ImportFieldChange
                 ]
                 []
 
-        Closed ->
-            viewButton "Import" OpenImportField []
-
 
 viewUndoButton : Status -> Html Msg
 viewUndoButton status =
-    viewButton "⬅︎" Undo []
+    Button.view "⬅︎" Undo []
 
 
 viewRedoButton : Status -> Html Msg
 viewRedoButton status =
-    viewButton "➡︎" Redo []
-
-
-viewButton : String -> Msg -> List Style -> Html Msg
-viewButton description clickMsg styles =
-    button
-        [ onClick clickMsg, css (buttonStyles ++ styles) ]
-        [ text description ]
-
-
-buttonStyles : List Style
-buttonStyles =
-    [ width (px 100)
-    , height (px 40)
-    , margin (px 5)
-    , border2 (px 0) none
-    , borderRadius (px 15)
-    , color (rgb 255 255 255)
-    , backgroundColor (rgba 179 186 197 0.6)
-    , fontSize (px 20)
-    , transition
-        [ Transitions.backgroundColor3 200 0 easeInOut
-        , Transitions.visibility3 200 0 easeInOut
-        ]
-    ]
+    Button.view "➡︎" Redo []
 
 
 

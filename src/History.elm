@@ -1,7 +1,7 @@
 module History exposing
     ( History
     , begin
-    , isStable
+    , isUnchanged
     , now
     , record
     , redo
@@ -28,28 +28,28 @@ record step (History past present _) =
     History (present :: past) (step present) []
 
 
-undo : History a -> History a
+undo : History a -> Maybe (History a)
 undo (History past present future) =
     case past of
         nextPresent :: nextPast ->
-            History nextPast nextPresent (present :: future)
+            Just (History nextPast nextPresent (present :: future))
 
         [] ->
-            History past present future
+            Nothing
 
 
 redo : History a -> Maybe (History a)
 redo (History past present future) =
     case future of
         nextPresent :: nextFuture ->
-            Just <| History (present :: past) nextPresent nextFuture
+            Just (History (present :: past) nextPresent nextFuture)
 
         [] ->
             Nothing
 
 
-isStable : History a -> Bool
-isStable (History past present _) =
+isUnchanged : History a -> Bool
+isUnchanged (History past present _) =
     List.head past
         |> Maybe.map ((==) present)
         |> Maybe.withDefault True

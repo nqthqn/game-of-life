@@ -1,12 +1,12 @@
-module Simulation exposing
+module World exposing
     ( Cell(..)
-    , Cells
-    , begin
-    , beginWithPattern
+    , World
+    , empty
     , isFinished
     , step
-    , toggleCoordinate
+    , toggleCell
     , view
+    , withPattern
     )
 
 import Css exposing (..)
@@ -31,70 +31,61 @@ type alias Cells =
     Matrix Cell
 
 
+type World
+    = World Cells
+
+
 
 -- CREATE
 
 
-begin : Cells
-begin =
+empty : World
+empty =
     Matrix.create { width = 18, height = 18 } Dead
+        |> World
 
 
-beginWithPattern : Pattern -> Cells
-beginWithPattern pattern =
+withPattern : Pattern -> World
+withPattern pattern =
     let
-        width =
-            Pattern.width pattern
-                |> (*) 2
-                |> max 18
-
-        height =
-            Pattern.height pattern
-                |> (*) 2
-                |> max 18
-
         size =
-            { width = width
-            , height = height
-            }
+            max (Pattern.width pattern) (Pattern.height pattern)
+                |> toFloat
+                |> (*) 1.2
+                |> max 18
+                |> Basics.round
 
         center =
-            { x = width // 2
-            , y = height // 2
+            { x = size // 2
+            , y = size // 2
             }
 
         centeredPattern =
             Pattern.centerAt center pattern
 
-        emptyMatrix =
-            Matrix.create size Dead
+        deadCells =
+            Matrix.create { width = size, height = size } Dead
     in
-    List.foldl
-        (Matrix.set Alive)
-        emptyMatrix
-        (Pattern.toCoordinates centeredPattern)
+    World <|
+        List.foldl
+            (Matrix.set Alive)
+            deadCells
+            (Pattern.toCoordinates centeredPattern)
 
 
 
--- SIMULATION
+-- OPERATIONS
 
 
-type alias Milliseconds =
-    Float
-
-
-
--- STEP
-
-
-step : Cells -> Cells
-step cells =
+step : World -> World
+step (World cells) =
     Matrix.coordinateMap (stepCell cells) cells
+        |> World
 
 
 stepCell : Cells -> Coordinate -> Cell -> Cell
 stepCell cells coordinate cell =
-    case ( cell, liveNeighbours cells coordinate ) of
+    case ( cell, countLiveNeighbours cells coordinate ) of
         ( Alive, 2 ) ->
             Alive
 
@@ -108,43 +99,43 @@ stepCell cells coordinate cell =
             Dead
 
 
-liveNeighbours : Cells -> Coordinate -> Int
-liveNeighbours cells coordinate =
+countLiveNeighbours : Cells -> Coordinate -> Int
+countLiveNeighbours cells coordinate =
     Matrix.neighbours cells coordinate
         |> List.filter ((==) Alive)
         |> List.length
 
 
+toggleCell : Coordinate -> World -> World
+toggleCell coordinate (World cells) =
+    let
+        toggle cell =
+            case cell of
+                Alive ->
+                    Dead
 
--- TOGGLE
-
-
-toggleCoordinate : Coordinate -> Cells -> Cells
-toggleCoordinate coordinate cells =
-    Matrix.update toggleCell coordinate cells
-
-
-toggleCell : Cell -> Cell
-toggleCell cell =
-    case cell of
-        Alive ->
-            Dead
-
-        Dead ->
-            Alive
+                Dead ->
+                    Alive
+    in
+    Matrix.update toggle coordinate cells
+        |> World
 
 
-
--- UTILS
-
-
-isFinished : Cells -> Bool
-isFinished =
-    Matrix.all ((==) Dead)
+isFinished : World -> Bool
+isFinished (World cells) =
+    Matrix.all ((==) Dead) cells
 
 
 
 -- VIEW
+
+
+type alias Percentage =
+    Float
+
+
+type alias Milliseconds =
+    Float
 
 
 type alias Handlers msg =
@@ -154,12 +145,8 @@ type alias Handlers msg =
     }
 
 
-type alias Percentage =
-    Float
-
-
-view : Milliseconds -> Cells -> Handlers msg -> Html msg
-view transitionDuration cells handlers =
+view : Milliseconds -> World -> Handlers msg -> Html msg
+view transitionDuration world handlers =
     squareContainer <|
         div
             [ css
@@ -172,10 +159,14 @@ view transitionDuration cells handlers =
                 , height (pct 100)
                 ]
             ]
-            (cells
-                |> Matrix.coordinateMap (viewCell transitionDuration (cellSize cells) handlers)
-                |> Matrix.toList
-            )
+            (viewWorld transitionDuration world handlers)
+
+
+viewWorld : Milliseconds -> World -> Handlers msg -> List (Html msg)
+viewWorld transitionDuration (World cells) handlers =
+    cells
+        |> Matrix.coordinateMap (viewCell transitionDuration (cellSize cells) handlers)
+        |> Matrix.toList
 
 
 viewCell : Milliseconds -> Percentage -> Handlers msg -> Coordinate -> Cell -> Html msg

@@ -10,14 +10,14 @@ module Pattern exposing
 import Maybe.Extra as Maybe
 
 
+type Pattern
+    = Pattern (List Coordinate)
+
+
 type alias Coordinate =
     { x : Int
     , y : Int
     }
-
-
-type Pattern
-    = Pattern (List Coordinate)
 
 
 toCoordinates : Pattern -> List Coordinate
@@ -28,14 +28,16 @@ toCoordinates (Pattern pattern) =
 parseLife106 : String -> Maybe Pattern
 parseLife106 text =
     String.lines text
-        |> stripHeader
+        |> List.map String.trim
+        |> List.filter (not << String.isEmpty)
+        |> stripOptionalHeader
         |> List.map parseCoordinate
         |> Maybe.combine
         |> Maybe.map Pattern
 
 
-stripHeader : List String -> List String
-stripHeader lines =
+stripOptionalHeader : List String -> List String
+stripOptionalHeader lines =
     case lines of
         "#Life 1.06" :: tail ->
             tail
@@ -72,16 +74,16 @@ toCoordinate ( first, second ) =
 
 width : Pattern -> Int
 width (Pattern coordinates) =
-    range (List.map .x coordinates)
+    maxDifference (List.map .x coordinates)
 
 
 height : Pattern -> Int
 height (Pattern coordinates) =
-    range (List.map .y coordinates)
+    maxDifference (List.map .y coordinates)
 
 
-range : List number -> number
-range xs =
+maxDifference : List number -> number
+maxDifference xs =
     let
         min =
             List.minimum xs |> Maybe.withDefault 0
@@ -93,27 +95,30 @@ range xs =
 
 
 centerAt : Coordinate -> Pattern -> Pattern
-centerAt { x, y } (Pattern pattern) =
+centerAt center ((Pattern coordinates) as pattern) =
     let
-        xs =
-            List.map .x pattern
+        xCoordinates =
+            List.map .x coordinates
 
-        ys =
-            List.map .y pattern
+        yCoordinates =
+            List.map .y coordinates
 
-        minX =
-            List.minimum xs |> Maybe.withDefault 0
+        leftEdge =
+            List.minimum xCoordinates
+                |> Maybe.withDefault 0
 
-        minY =
-            List.minimum ys |> Maybe.withDefault 0
+        topEdge =
+            List.minimum yCoordinates
+                |> Maybe.withDefault 0
 
-        dx =
-            x - minX - (width (Pattern pattern) // 2)
+        xDistance =
+            center.x - leftEdge - (width pattern // 2)
 
-        dy =
-            y - minY - (height (Pattern pattern) // 2)
+        yDistance =
+            center.y - topEdge - (height pattern // 2)
     in
-    Pattern (List.map (offsetBy dx dy) pattern)
+    List.map (offsetBy xDistance yDistance) coordinates
+        |> Pattern
 
 
 offsetBy : Int -> Int -> Coordinate -> Coordinate
