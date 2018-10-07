@@ -1,19 +1,17 @@
-module World exposing
+module Simulation exposing
     ( Cell(..)
-    , World
-    , empty
+    , Simulation
+    , begin
+    , beginWithPattern
     , isFinished
     , step
     , toggleCell
     , view
-    , withPattern
     )
 
-import Css exposing (..)
-import Css.Transitions as Transitions exposing (easeInOut, transition)
-import Html.Styled as Html exposing (Html, div)
-import Html.Styled.Attributes exposing (css)
-import Html.Styled.Events exposing (onMouseDown, onMouseEnter, onMouseUp)
+import Html exposing (Html, div)
+import Html.Attributes exposing (class, style)
+import Html.Events exposing (onMouseDown, onMouseEnter, onMouseUp)
 import Matrix exposing (Coordinate, Matrix)
 import Pattern exposing (Pattern)
 
@@ -31,22 +29,22 @@ type alias Cells =
     Matrix Cell
 
 
-type World
-    = World Cells
+type Simulation
+    = Simulation Cells
 
 
 
 -- CREATE
 
 
-empty : World
-empty =
+begin : Simulation
+begin =
     Matrix.create { width = 18, height = 18 } Dead
-        |> World
+        |> Simulation
 
 
-withPattern : Pattern -> World
-withPattern pattern =
+beginWithPattern : Pattern -> Simulation
+beginWithPattern pattern =
     let
         size =
             max (Pattern.width pattern) (Pattern.height pattern)
@@ -66,7 +64,7 @@ withPattern pattern =
         deadCells =
             Matrix.create { width = size, height = size } Dead
     in
-    World <|
+    Simulation <|
         List.foldl
             (Matrix.set Alive)
             deadCells
@@ -77,10 +75,10 @@ withPattern pattern =
 -- OPERATIONS
 
 
-step : World -> World
-step (World cells) =
+step : Simulation -> Simulation
+step (Simulation cells) =
     Matrix.coordinateMap (stepCell cells) cells
-        |> World
+        |> Simulation
 
 
 stepCell : Cells -> Coordinate -> Cell -> Cell
@@ -106,8 +104,8 @@ countLiveNeighbours cells coordinate =
         |> List.length
 
 
-toggleCell : Coordinate -> World -> World
-toggleCell coordinate (World cells) =
+toggleCell : Coordinate -> Simulation -> Simulation
+toggleCell coordinate (Simulation cells) =
     let
         toggle cell =
             case cell of
@@ -118,11 +116,11 @@ toggleCell coordinate (World cells) =
                     Alive
     in
     Matrix.update toggle coordinate cells
-        |> World
+        |> Simulation
 
 
-isFinished : World -> Bool
-isFinished (World cells) =
+isFinished : Simulation -> Bool
+isFinished (Simulation cells) =
     Matrix.all ((==) Dead) cells
 
 
@@ -145,25 +143,16 @@ type alias Handlers msg =
     }
 
 
-view : Milliseconds -> World -> Handlers msg -> Html msg
-view transitionDuration world handlers =
+view : Milliseconds -> Simulation -> Handlers msg -> Html msg
+view transitionDuration simulation handlers =
     squareContainer <|
         div
-            [ css
-                [ displayFlex
-                , alignItems center
-                , justifyContent center
-                , flexWrap wrap
-                , position absolute
-                , width (pct 100)
-                , height (pct 100)
-                ]
-            ]
-            (viewWorld transitionDuration world handlers)
+            [ class "cells" ]
+            (viewSimulation transitionDuration simulation handlers)
 
 
-viewWorld : Milliseconds -> World -> Handlers msg -> List (Html msg)
-viewWorld transitionDuration (World cells) handlers =
+viewSimulation : Milliseconds -> Simulation -> Handlers msg -> List (Html msg)
+viewSimulation transitionDuration (Simulation cells) handlers =
     cells
         |> Matrix.coordinateMap (viewCell transitionDuration (cellSize cells) handlers)
         |> Matrix.toList
@@ -172,13 +161,9 @@ viewWorld transitionDuration (World cells) handlers =
 viewCell : Milliseconds -> Percentage -> Handlers msg -> Coordinate -> Cell -> Html msg
 viewCell transitionDuration size handlers coordinate cell =
     div
-        [ css
-            [ width (pct size)
-            , height (pct size)
-            , displayFlex
-            , justifyContent center
-            , alignItems center
-            ]
+        [ class "cell"
+        , style "width" (percentage size)
+        , style "height" (percentage size)
         , onMouseDown (handlers.mouseDown coordinate)
         , onMouseUp handlers.mouseUp
         , onMouseEnter (handlers.mouseOver coordinate)
@@ -188,20 +173,22 @@ viewCell transitionDuration size handlers coordinate cell =
 
 viewCellContent : Milliseconds -> Cell -> Coordinate -> Html msg
 viewCellContent transitionDuration cell coordinate =
+    let
+        size =
+            cellContentSize cell
+    in
     div
-        [ css
-            [ width (pct (cellContentSize cell))
-            , height (pct (cellContentSize cell))
-            , backgroundColor (cellColor cell coordinate)
-            , borderRadius (pct 30)
-            , transition
-                [ Transitions.backgroundColor3 transitionDuration 0 easeInOut
-                , Transitions.width transitionDuration
-                , Transitions.height transitionDuration
-                ]
-            ]
+        [ class "cell-content"
+        , class (cellColor cell coordinate)
+        , style "width" (percentage size)
+        , style "height" (percentage size)
         ]
         []
+
+
+percentage : Float -> String
+percentage value =
+    String.fromFloat value ++ "%"
 
 
 cellSize : Cells -> Percentage
@@ -219,38 +206,29 @@ cellContentSize cell =
             40
 
 
-cellColor : Cell -> Coordinate -> Color
+cellColor : Cell -> Coordinate -> String
 cellColor cell { x, y } =
     case cell of
         Dead ->
-            rgb 244 245 247
+            "dead-cell"
 
         Alive ->
             case ( modBy 2 x == 0, modBy 2 y == 0 ) of
                 ( True, True ) ->
-                    rgba 255 171 0 0.8
+                    "live-cell-1"
 
                 ( True, False ) ->
-                    rgba 54 179 126 0.8
+                    "live-cell-2"
 
                 ( False, True ) ->
-                    rgba 0 184 217 0.8
+                    "live-cell-3"
 
                 ( False, False ) ->
-                    rgba 101 84 192 0.8
+                    "live-cell-4"
 
 
 squareContainer : Html msg -> Html msg
 squareContainer content =
     div
-        [ css
-            [ position relative
-            , width (pct 100)
-            , after
-                [ property "content" "''"
-                , display block
-                , paddingBottom (pct 100)
-                ]
-            ]
-        ]
+        [ class "square-container" ]
         [ content ]

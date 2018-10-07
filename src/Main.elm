@@ -2,17 +2,14 @@ module Main exposing (main)
 
 import Browser exposing (Document)
 import Browser.Events as Events
-import Button
-import Css exposing (..)
 import History exposing (History)
-import Html.Styled as Html exposing (Html, div, textarea, toUnstyled)
-import Html.Styled.Attributes exposing (autofocus, cols, css, placeholder, rows, value)
-import Html.Styled.Events exposing (onInput)
+import Html exposing (Attribute, Html, button, div, text, textarea)
+import Html.Attributes exposing (autofocus, class, cols, placeholder, rows, value)
+import Html.Events exposing (onClick, onInput)
 import Json.Decode as Decode exposing (Decoder)
-import Overlay
 import Pattern exposing (Pattern)
+import Simulation exposing (Simulation)
 import Time
-import World exposing (World)
 
 
 
@@ -32,6 +29,7 @@ type Mouse
 type Speed
     = Slow
     | Fast
+    | FullSpeed
 
 
 type ImportField
@@ -40,7 +38,7 @@ type ImportField
 
 
 type alias Model =
-    { world : History World
+    { simulation : History Simulation
     , status : Status
     , mouse : Mouse
     , speed : Speed
@@ -60,7 +58,7 @@ init =
 initialModel : Model
 initialModel =
     { status = Paused
-    , world = History.begin World.empty
+    , simulation = History.begin Simulation.begin
     , mouse = Up
     , speed = Slow
     , importField = Closed
@@ -114,7 +112,7 @@ updateModel msg model =
             { model | status = Paused }
 
         Step ->
-            { model | world = History.record World.step model.world }
+            { model | simulation = History.record Simulation.step model.simulation }
                 |> pauseIfUnchanged
 
         Undo ->
@@ -129,7 +127,7 @@ updateModel msg model =
         MouseDown coordinate ->
             { model
                 | mouse = Down
-                , world = toggleCell coordinate model.world
+                , simulation = toggleCell coordinate model.simulation
             }
 
         MouseUp ->
@@ -138,7 +136,7 @@ updateModel msg model =
         MouseOver coordinate ->
             case model.mouse of
                 Down ->
-                    { model | world = toggleCell coordinate model.world }
+                    { model | simulation = toggleCell coordinate model.simulation }
 
                 Up ->
                     model
@@ -165,10 +163,10 @@ updateModel msg model =
                 Nothing ->
                     { model | importField = Open text }
 
-                Just newWorld ->
+                Just newSimulation ->
                     { model
                         | importField = Closed
-                        , world = History.record (always newWorld) model.world
+                        , simulation = History.record (always newSimulation) model.simulation
                     }
 
 
@@ -176,9 +174,9 @@ undo : Model -> Model
 undo model =
     { model
         | status = Paused
-        , world =
-            History.undo model.world
-                |> Maybe.withDefault model.world
+        , simulation =
+            History.undo model.simulation
+                |> Maybe.withDefault model.simulation
     }
 
 
@@ -186,9 +184,9 @@ redoOrStep : Model -> Model
 redoOrStep model =
     { model
         | status = Paused
-        , world =
-            History.redo model.world
-                |> Maybe.withDefault (History.record World.step model.world)
+        , simulation =
+            History.redo model.simulation
+                |> Maybe.withDefault (History.record Simulation.step model.simulation)
     }
 
 
@@ -204,22 +202,22 @@ toggleStatus model =
 
 pauseIfUnchanged : Model -> Model
 pauseIfUnchanged model =
-    if History.isUnchanged model.world then
+    if History.isUnchanged model.simulation then
         { model | status = Paused }
 
     else
         model
 
 
-toggleCell : Coordinate -> History World -> History World
-toggleCell coordinate world =
-    History.record (World.toggleCell coordinate) world
+toggleCell : Coordinate -> History Simulation -> History Simulation
+toggleCell coordinate simulation =
+    History.record (Simulation.toggleCell coordinate) simulation
 
 
-parsePattern : String -> Maybe World
+parsePattern : String -> Maybe Simulation
 parsePattern text =
     Pattern.parseLife106 text
-        |> Maybe.map World.withPattern
+        |> Maybe.map Simulation.beginWithPattern
 
 
 
@@ -229,15 +227,15 @@ parsePattern text =
 document : Model -> Document Msg
 document model =
     { title = "Game of Life"
-    , body = [ view model |> toUnstyled ]
+    , body = [ view model ]
     }
 
 
 view : Model -> Html Msg
-view { world, status, speed, importField } =
+view { simulation, status, speed, importField } =
     let
-        currentWorld =
-            History.now world
+        currentSimulation =
+            History.now simulation
 
         transitionDuration =
             calculateTransitionDuration speed
@@ -249,14 +247,9 @@ view { world, status, speed, importField } =
             }
     in
     div
-        [ css
-            [ displayFlex
-            , justifyContent center
-            , alignItems center
-            ]
-        ]
-        [ World.view transitionDuration currentWorld handlers
-        , viewControls status speed currentWorld importField
+        [ class "center" ]
+        [ Simulation.view transitionDuration currentSimulation handlers
+        , viewControls status speed currentSimulation importField
         ]
 
 
@@ -265,24 +258,24 @@ calculateTransitionDuration speed =
     tickInterval speed + 200
 
 
-viewControls : Status -> Speed -> World -> ImportField -> Html Msg
-viewControls status speed world importField =
-    Overlay.view
-        { bottomLeft =
+viewControls : Status -> Speed -> Simulation -> ImportField -> Html Msg
+viewControls status speed simulation importField =
+    div []
+        [ div [ class "bottom-left" ]
             [ viewImportField importField
-            , viewStatusButton status |> hideIfFinished world
+            , viewStatusButton status |> hideIfFinished simulation
             , viewSpeedButton speed
             ]
-        , bottomRight =
+        , div [ class "bottom-right" ]
             [ viewUndoButton status
             , viewRedoButton status
             ]
-        }
+        ]
 
 
-hideIfFinished : World -> Html msg -> Html msg
-hideIfFinished world children =
-    if World.isFinished world then
+hideIfFinished : Simulation -> Html msg -> Html msg
+hideIfFinished simulation children =
+    if Simulation.isFinished simulation then
         div [] []
 
     else
@@ -293,27 +286,30 @@ viewStatusButton : Status -> Html Msg
 viewStatusButton status =
     case status of
         Playing ->
-            Button.view "Pause" Pause []
+            viewButton "Pause" Pause []
 
         Paused ->
-            Button.view "Play" Play [ backgroundColor (rgba 54 179 126 0.8) ]
+            viewButton "Play" Play [ class "play-button" ]
 
 
 viewSpeedButton : Speed -> Html Msg
 viewSpeedButton speed =
     case speed of
         Slow ->
-            Button.view "Faster" (SetSpeed Fast) []
+            viewButton "Faster" (SetSpeed Fast) []
 
         Fast ->
-            Button.view "Slower" (SetSpeed Slow) []
+            viewButton "Faster!" (SetSpeed FullSpeed) []
+
+        FullSpeed ->
+            viewButton "Slower" (SetSpeed Slow) []
 
 
 viewImportField : ImportField -> Html Msg
 viewImportField importField =
     case importField of
         Closed ->
-            Button.view "Import" ImportFieldOpen []
+            viewButton "Import" ImportFieldOpen []
 
         Open text ->
             textarea
@@ -321,7 +317,7 @@ viewImportField importField =
                 , cols 30
                 , autofocus True
                 , placeholder "Paste a 'Life 1.06' pattern here"
-                , css [ borderRadius (px 4), resize none ]
+                , class "importer"
                 , value text
                 , onInput ImportFieldChange
                 ]
@@ -330,12 +326,19 @@ viewImportField importField =
 
 viewUndoButton : Status -> Html Msg
 viewUndoButton status =
-    Button.view "⬅︎" Undo []
+    viewButton "⬅︎" Undo []
 
 
 viewRedoButton : Status -> Html Msg
 viewRedoButton status =
-    Button.view "➡︎" Redo []
+    viewButton "➡︎" Redo []
+
+
+viewButton : String -> msg -> List (Attribute msg) -> Html msg
+viewButton description clickMsg attrs =
+    button
+        ([ class "button", onClick clickMsg ] ++ attrs)
+        [ text description ]
 
 
 
@@ -368,6 +371,9 @@ tickInterval speed =
 
         Fast ->
             300
+
+        FullSpeed ->
+            1
 
 
 keyDownSubscription : Sub Msg
