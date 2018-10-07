@@ -4386,7 +4386,7 @@ var author$project$Main$tickInterval = function (speed) {
 		case 1:
 			return 300;
 		default:
-			return 1;
+			return 50;
 	}
 };
 var elm$core$Basics$EQ = 1;
@@ -5149,8 +5149,8 @@ var author$project$Main$Redo = {$: 4};
 var author$project$Main$viewRedoButton = function (status) {
 	return A3(author$project$Main$viewButton, '➡︎', author$project$Main$Redo, _List_Nil);
 };
-var author$project$Main$Fast = 1;
-var author$project$Main$FullSpeed = 2;
+var author$project$Main$Fast = 2;
+var author$project$Main$Medium = 1;
 var author$project$Main$SetSpeed = function (a) {
 	return {$: 5, a: a};
 };
@@ -5160,19 +5160,19 @@ var author$project$Main$viewSpeedButton = function (speed) {
 		case 0:
 			return A3(
 				author$project$Main$viewButton,
-				'Faster',
+				'Medium',
 				author$project$Main$SetSpeed(1),
 				_List_Nil);
 		case 1:
 			return A3(
 				author$project$Main$viewButton,
-				'Faster!',
+				'Fast',
 				author$project$Main$SetSpeed(2),
 				_List_Nil);
 		default:
 			return A3(
 				author$project$Main$viewButton,
-				'Slower',
+				'Slow',
 				author$project$Main$SetSpeed(0),
 				_List_Nil);
 	}
