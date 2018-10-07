@@ -5138,7 +5138,7 @@ var author$project$Main$viewImportField = function (importField) {
 					elm$html$Html$Attributes$cols(30),
 					elm$html$Html$Attributes$autofocus(true),
 					elm$html$Html$Attributes$placeholder('Paste a \'Life 1.06\' pattern here'),
-					elm$html$Html$Attributes$class('importer'),
+					elm$html$Html$Attributes$class('import-field'),
 					elm$html$Html$Attributes$value(text),
 					elm$html$Html$Events$onInput(author$project$Main$ImportFieldChange)
 				]),
@@ -5406,7 +5406,7 @@ var author$project$Simulation$viewCell = F5(
 			elm$html$Html$div,
 			_List_fromArray(
 				[
-					elm$html$Html$Attributes$class('cell'),
+					elm$html$Html$Attributes$class('center-content'),
 					A2(
 					elm$html$Html$Attributes$style,
 					'width',
@@ -5462,7 +5462,7 @@ var author$project$Main$view = function (_n0) {
 		elm$html$Html$div,
 		_List_fromArray(
 			[
-				elm$html$Html$Attributes$class('center')
+				elm$html$Html$Attributes$class('center-content')
 			]),
 		_List_fromArray(
 			[
