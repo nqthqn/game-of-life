@@ -33,8 +33,12 @@ type Speed
 
 
 type ImportField
-    = Open String
+    = Open UserInput
     | Closed
+
+
+type alias UserInput =
+    String
 
 
 type alias Model =
@@ -81,7 +85,7 @@ type Msg
     | MouseOver Coordinate
     | KeyDown Key
     | ImportFieldOpen
-    | ImportFieldChange String
+    | ImportFieldChange UserInput
 
 
 type Key
@@ -262,9 +266,9 @@ viewControls : Status -> Speed -> Simulation -> ImportField -> Html Msg
 viewControls status speed simulation importField =
     div []
         [ div [ class "bottom-left" ]
-            [ viewImportField importField
-            , viewStatusButton status |> hideIfFinished simulation
+            [ viewStatusButton status simulation
             , viewSpeedButton speed
+            , viewImportField importField
             ]
         , div [ class "bottom-right" ]
             [ viewUndoButton status
@@ -273,23 +277,17 @@ viewControls status speed simulation importField =
         ]
 
 
-hideIfFinished : Simulation -> Html msg -> Html msg
-hideIfFinished simulation children =
-    if Simulation.isFinished simulation then
-        div [] []
+viewStatusButton : Status -> Simulation -> Html Msg
+viewStatusButton status simulation =
+    case ( status, Simulation.isFinished simulation ) of
+        ( Paused, True ) ->
+            viewButton "Play" Play []
 
-    else
-        children
+        ( Paused, False ) ->
+            viewButton "Play" Play [ class "green-button" ]
 
-
-viewStatusButton : Status -> Html Msg
-viewStatusButton status =
-    case status of
-        Playing ->
+        ( Playing, _ ) ->
             viewButton "Pause" Pause []
-
-        Paused ->
-            viewButton "Play" Play [ class "play-button" ]
 
 
 viewSpeedButton : Speed -> Html Msg
