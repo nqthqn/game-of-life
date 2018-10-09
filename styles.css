@@ -13,14 +13,12 @@
 
 /* Cells */
 
-.cells {
+.cells-container {
     display: flex;
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;
     position: absolute;
-    width: 100%;
-    height: 100%;
 }
 
 .cell {
@@ -79,13 +77,13 @@
 
 /* Overlay */
 
-.bottom-left {
+.bottom-left-overlay {
     position: fixed;
     left: 20px;
     bottom: 20px;
 }
 
-.bottom-right {
+.bottom-right-overlay {
     position: fixed;
     right: 20px;
     bottom: 20px;
