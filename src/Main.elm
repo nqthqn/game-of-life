@@ -8,8 +8,9 @@ import Html.Attributes exposing (autofocus, class, cols, placeholder, rows, valu
 import Html.Events exposing (onClick, onInput)
 import Json.Decode as Decode exposing (Decoder)
 import Pattern exposing (Pattern)
+import Random
+import Simulation exposing (Simulation, Speed(..), Zoom(..))
 import Time
-import World exposing (World)
 
 
 
@@ -26,12 +27,6 @@ type Mouse
     | Down
 
 
-type Speed
-    = Slow
-    | Medium
-    | Fast
-
-
 type ImportField
     = Open UserInput
     | Closed
@@ -42,11 +37,11 @@ type alias UserInput =
 
 
 type alias Model =
-    { world : History World
+    { simulation : History Simulation
     , status : Status
     , mouse : Mouse
     , speed : Speed
-    , zoom : World.Zoom
+    , zoom : Zoom
     , importField : ImportField
     }
 
@@ -57,16 +52,16 @@ type alias Model =
 
 init : ( Model, Cmd Msg )
 init =
-    ( initialModel, Cmd.none )
+    noCmd initialModel
 
 
 initialModel : Model
 initialModel =
     { status = Paused
-    , world = History.begin World.create
+    , simulation = History.begin Simulation.create
     , mouse = Up
     , speed = Slow
-    , zoom = World.Small
+    , zoom = Far
     , importField = Closed
     }
 
@@ -78,24 +73,19 @@ initialModel =
 type Msg
     = Play
     | Pause
-    | Step
+    | Tick
     | Undo
     | Redo
     | SetSpeed Speed
-    | SetZoom World.Zoom
+    | SetZoom Zoom
     | MouseDown Coordinate
-    | MouseUp
     | MouseOver Coordinate
-    | KeyDown Key
+    | MouseUp
     | ImportFieldOpen
     | ImportFieldChange UserInput
-
-
-type Key
-    = LeftKey
-    | RightKey
-    | PKey
-    | OtherKey
+    | Randomize
+    | RandomizationComplete Pattern
+    | NoOp
 
 
 type alias Coordinate =
@@ -106,88 +96,108 @@ type alias Coordinate =
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    ( updateModel msg model, Cmd.none )
-
-
-updateModel : Msg -> Model -> Model
-updateModel msg model =
     case msg of
         Play ->
             { model | status = Playing }
+                |> noCmd
 
         Pause ->
             { model | status = Paused }
+                |> noCmd
 
-        Step ->
-            { model | world = History.record World.step model.world }
+        Tick ->
+            { model | simulation = History.record Simulation.step model.simulation }
                 |> pauseIfUnchanged
+                |> noCmd
 
         Undo ->
             undo model
+                |> noCmd
 
         Redo ->
             redoOrStep model
+                |> noCmd
 
         SetSpeed speed ->
             { model | speed = speed }
+                |> noCmd
 
         SetZoom zoom ->
             { model | zoom = zoom }
+                |> noCmd
 
         MouseDown coordinate ->
-            { model
-                | mouse = Down
-                , world = toggleCell coordinate model.world
-            }
-
-        MouseUp ->
-            { model | mouse = Up }
+            noCmd
+                { model
+                    | mouse = Down
+                    , simulation = toggleCell coordinate model.simulation
+                }
 
         MouseOver coordinate ->
             case model.mouse of
                 Down ->
-                    { model | world = toggleCell coordinate model.world }
+                    { model | simulation = toggleCell coordinate model.simulation }
+                        |> noCmd
 
                 Up ->
                     model
+                        |> noCmd
 
-        KeyDown key ->
-            case key of
-                LeftKey ->
-                    undo model
-
-                RightKey ->
-                    redoOrStep model
-
-                PKey ->
-                    toggleStatus model
-
-                OtherKey ->
-                    model
+        MouseUp ->
+            { model | mouse = Up }
+                |> noCmd
 
         ImportFieldOpen ->
             { model | importField = Open "" }
+                |> noCmd
 
         ImportFieldChange text ->
             case parsePattern text of
                 Nothing ->
                     { model | importField = Open text }
+                        |> noCmd
 
-                Just newWorld ->
-                    { model
-                        | importField = Closed
-                        , world = History.record (always newWorld) model.world
-                        , zoom = World.Small
-                    }
+                Just newSimulation ->
+                    noCmd
+                        { model
+                            | importField = Closed
+                            , simulation = History.record (always newSimulation) model.simulation
+                            , zoom = Normal
+                        }
+
+        Randomize ->
+            model
+                |> withCmd randomizePattern
+
+        RandomizationComplete randomPattern ->
+            let
+                randomSimulation =
+                    Simulation.createWithPattern randomPattern
+            in
+            { model | simulation = History.record (always randomSimulation) model.simulation }
+                |> noCmd
+
+        NoOp ->
+            noCmd model
+
+
+noCmd : Model -> ( Model, Cmd msg )
+noCmd model =
+    ( model, Cmd.none )
+
+
+withCmd : Cmd Msg -> Model -> ( Model, Cmd Msg )
+withCmd cmd model =
+    ( model, cmd )
 
 
 undo : Model -> Model
 undo model =
     { model
         | status = Paused
-        , world =
-            History.undo model.world
-                |> Maybe.withDefault model.world
+        , simulation =
+            History.undo model.simulation
+                |> Maybe.withDefault model.simulation
     }
 
 
@@ -195,9 +205,9 @@ redoOrStep : Model -> Model
 redoOrStep model =
     { model
         | status = Paused
-        , world =
-            History.redo model.world
-                |> Maybe.withDefault (History.record World.step model.world)
+        , simulation =
+            History.redo model.simulation
+                |> Maybe.withDefault (History.record Simulation.step model.simulation)
     }
 
 
@@ -213,22 +223,27 @@ toggleStatus model =
 
 pauseIfUnchanged : Model -> Model
 pauseIfUnchanged model =
-    if History.isUnchanged model.world then
+    if History.isUnchanged model.simulation then
         { model | status = Paused }
 
     else
         model
 
 
-toggleCell : Coordinate -> History World -> History World
-toggleCell coordinate world =
-    History.record (World.toggleCell coordinate) world
+toggleCell : Coordinate -> History Simulation -> History Simulation
+toggleCell coordinate simulation =
+    History.record (Simulation.toggleCell coordinate) simulation
 
 
-parsePattern : String -> Maybe World
+parsePattern : String -> Maybe Simulation
 parsePattern text =
     Pattern.parseLife106 text
-        |> Maybe.map World.createWithPattern
+        |> Maybe.map Simulation.createWithPattern
+
+
+randomizePattern : Cmd Msg
+randomizePattern =
+    Random.generate RandomizationComplete Pattern.generator
 
 
 
@@ -243,14 +258,16 @@ document model =
 
 
 view : Model -> Html Msg
-view { world, status, speed, zoom, importField } =
+view { simulation, status, speed, zoom, importField } =
     let
-        currentWorld =
-            History.now world
+        currentSimulation =
+            History.now simulation
 
         transitionDuration =
             calculateTransitionDuration speed
 
+        -- Refactor mouse stuff to keep `isSelectionActive` in model, then
+        -- determine whether to dispatch `ToggleCell` or `NoOp` here.
         handlers =
             { mouseOver = MouseOver
             , mouseDown = MouseDown
@@ -259,8 +276,8 @@ view { world, status, speed, zoom, importField } =
     in
     div
         [ class "center-content" ]
-        [ World.view transitionDuration currentWorld zoom handlers
-        , viewControls status speed zoom currentWorld importField
+        [ Simulation.view transitionDuration currentSimulation zoom handlers
+        , viewControls status speed zoom currentSimulation importField
         ]
 
 
@@ -269,11 +286,11 @@ calculateTransitionDuration speed =
     tickInterval speed + 200
 
 
-viewControls : Status -> Speed -> World.Zoom -> World -> ImportField -> Html Msg
-viewControls status speed zoom world importField =
+viewControls : Status -> Speed -> Zoom -> Simulation -> ImportField -> Html Msg
+viewControls status speed zoom simulation importField =
     div []
         [ div [ class "bottom-left-overlay" ]
-            [ viewStatusButton status world
+            [ viewStatusButton status simulation
             , viewSpeedButton speed
             , viewZoomButton zoom
             , viewImportField importField
@@ -281,13 +298,14 @@ viewControls status speed zoom world importField =
         , div [ class "bottom-right-overlay" ]
             [ viewUndoButton status
             , viewRedoButton status
+            , viewRandomizeButton
             ]
         ]
 
 
-viewStatusButton : Status -> World -> Html Msg
-viewStatusButton status world =
-    case ( status, World.isFinished world ) of
+viewStatusButton : Status -> Simulation -> Html Msg
+viewStatusButton status simulation =
+    case ( status, Simulation.isFinished simulation ) of
         ( Paused, True ) ->
             viewButton "Play" Play []
 
@@ -300,28 +318,36 @@ viewStatusButton status world =
 
 viewSpeedButton : Speed -> Html Msg
 viewSpeedButton speed =
+    let
+        onClick =
+            SetSpeed (nextSpeed speed)
+    in
     case speed of
         Slow ->
-            viewButton "Slow" (SetSpeed Medium) []
+            viewButton "Slow" onClick []
 
         Medium ->
-            viewButton "Medium" (SetSpeed Fast) []
+            viewButton "Medium" onClick []
 
         Fast ->
-            viewButton "Fast" (SetSpeed Slow) []
+            viewButton "Fast" onClick []
 
 
-viewZoomButton : World.Zoom -> Html Msg
+viewZoomButton : Zoom -> Html Msg
 viewZoomButton zoom =
+    let
+        onClick =
+            SetZoom (nextZoomLevel zoom)
+    in
     case zoom of
-        World.Small ->
-            viewButton "1X" (SetZoom World.Medium) []
+        Far ->
+            viewButton "1X" onClick []
 
-        World.Medium ->
-            viewButton "1.5X" (SetZoom World.Large) []
+        Normal ->
+            viewButton "1.5X" onClick []
 
-        World.Large ->
-            viewButton "2X" (SetZoom World.Small) []
+        Close ->
+            viewButton "2X" onClick []
 
 
 viewImportField : ImportField -> Html Msg
@@ -353,6 +379,11 @@ viewRedoButton status =
     viewButton "➡︎" Redo []
 
 
+viewRandomizeButton : Html Msg
+viewRandomizeButton =
+    viewButton "Random" Randomize []
+
+
 viewButton : String -> msg -> List (Attribute msg) -> Html msg
 viewButton description clickMsg customAttributes =
     let
@@ -362,14 +393,40 @@ viewButton description clickMsg customAttributes =
     button attributes [ text description ]
 
 
+nextSpeed : Speed -> Speed
+nextSpeed speed =
+    case speed of
+        Slow ->
+            Medium
+
+        Medium ->
+            Fast
+
+        Fast ->
+            Slow
+
+
+nextZoomLevel : Zoom -> Zoom
+nextZoomLevel zoom =
+    case zoom of
+        Far ->
+            Normal
+
+        Normal ->
+            Close
+
+        Close ->
+            Far
+
+
 
 -- SUBSCRIPTIONS
 
 
 subscriptions : Model -> Sub Msg
-subscriptions { status, speed } =
+subscriptions { status, speed, zoom } =
     Sub.batch
-        [ keyDownSubscription
+        [ keyDownSubscription status speed zoom
         , tickSubscription status speed
         ]
 
@@ -378,7 +435,7 @@ tickSubscription : Status -> Speed -> Sub Msg
 tickSubscription status speed =
     case status of
         Playing ->
-            Time.every (tickInterval speed) (always Step)
+            Time.every (tickInterval speed) (always Tick)
 
         Paused ->
             Sub.none
@@ -397,32 +454,49 @@ tickInterval speed =
             50
 
 
-keyDownSubscription : Sub Msg
-keyDownSubscription =
+keyDownSubscription : Status -> Speed -> Zoom -> Sub Msg
+keyDownSubscription status speed zoom =
     Events.onKeyDown keyDecoder
-        |> Sub.map KeyDown
+        |> Sub.map (toMsg status speed zoom)
 
 
 keyDecoder : Decoder Key
 keyDecoder =
     Decode.field "key" Decode.string
-        |> Decode.map toKey
 
 
-toKey : String -> Key
-toKey value =
-    case value of
+toMsg : Status -> Speed -> Zoom -> Key -> Msg
+toMsg status speed zoom key =
+    case key of
         "ArrowLeft" ->
-            LeftKey
+            Undo
 
         "ArrowRight" ->
-            RightKey
+            Redo
 
         "p" ->
-            PKey
+            case status of
+                Playing ->
+                    Pause
+
+                Paused ->
+                    Play
+
+        "s" ->
+            SetSpeed (nextSpeed speed)
+
+        "r" ->
+            Randomize
+
+        "z" ->
+            SetZoom (nextZoomLevel zoom)
 
         _ ->
-            OtherKey
+            NoOp
+
+
+type alias Key =
+    String
 
 
 type alias Milliseconds =
