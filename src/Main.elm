@@ -2,8 +2,9 @@ module Main exposing (main)
 
 import Browser exposing (Document)
 import Browser.Events as Events
+import Common exposing (Theme(..), Zoom(..))
 import Controls exposing (ImportField(..), Speed(..), Status(..), UserInput)
-import GameOfLife exposing (GameOfLife, Zoom(..))
+import GameOfLife exposing (GameOfLife)
 import History exposing (History)
 import Html exposing (Html, div)
 import Html.Attributes exposing (class)
@@ -28,6 +29,7 @@ type alias Model =
     , mouse : Mouse
     , speed : Speed
     , zoom : Zoom
+    , theme : Theme
     , importField : ImportField
     }
 
@@ -48,6 +50,7 @@ initialModel =
     , mouse = Up
     , speed = Slow
     , zoom = Far
+    , theme = Light
     , importField = Closed
     }
 
@@ -57,12 +60,13 @@ initialModel =
 
 
 type Msg
-    = Undo
+    = ClockTick
+    | Undo
     | Redo
-    | ClockTick
     | ChangeStatus Status
     | ChangeSpeed Speed
     | ChangeZoom Zoom
+    | ChangeTheme Theme
     | MouseDown Coordinate
     | MouseOver Coordinate
     | MouseUp
@@ -82,24 +86,21 @@ type alias Coordinate =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
+        ClockTick ->
+            stepGame model
+                |> ifGameFinished pauseGame
+                |> withoutCmd
+
         Undo ->
-            model
-                |> pause
-                |> maybeUndo
+            tryUndoStep model
                 |> Maybe.withDefault model
+                |> pauseGame
                 |> withoutCmd
 
         Redo ->
-            model
-                |> pause
-                |> maybeRedo
-                |> Maybe.withDefault (stepSimulation model)
-                |> withoutCmd
-
-        ClockTick ->
-            model
-                |> stepSimulation
-                |> pauseIfUnchanged
+            tryRedoStep model
+                |> Maybe.withDefault (stepGame model)
+                |> pauseGame
                 |> withoutCmd
 
         ChangeStatus status ->
@@ -112,6 +113,10 @@ update msg model =
 
         ChangeZoom zoom ->
             { model | zoom = zoom }
+                |> withoutCmd
+
+        ChangeTheme theme ->
+            { model | theme = theme }
                 |> withoutCmd
 
         MouseDown coordinate ->
@@ -162,18 +167,13 @@ update msg model =
 -- UPDATE HELPERS
 
 
-withCmd : Cmd Msg -> Model -> ( Model, Cmd Msg )
-withCmd cmd model =
-    ( model, cmd )
-
-
 withoutCmd : Model -> ( Model, Cmd msg )
 withoutCmd model =
     ( model, Cmd.none )
 
 
-pause : Model -> Model
-pause model =
+pauseGame : Model -> Model
+pauseGame model =
     { model | status = Paused }
 
 
@@ -193,20 +193,20 @@ toggleCell coordinate model =
         |> setGame model
 
 
-stepSimulation : Model -> Model
-stepSimulation model =
+stepGame : Model -> Model
+stepGame model =
     History.record GameOfLife.step model.game
         |> setGame model
 
 
-maybeUndo : Model -> Maybe Model
-maybeUndo model =
+tryUndoStep : Model -> Maybe Model
+tryUndoStep model =
     History.undo model.game
         |> Maybe.map (setGame model)
 
 
-maybeRedo : Model -> Maybe Model
-maybeRedo model =
+tryRedoStep : Model -> Maybe Model
+tryRedoStep model =
     History.redo model.game
         |> Maybe.map (setGame model)
 
@@ -216,10 +216,10 @@ setGame model game =
     { model | game = game }
 
 
-pauseIfUnchanged : Model -> Model
-pauseIfUnchanged model =
+ifGameFinished : (Model -> Model) -> Model -> Model
+ifGameFinished updateModel model =
     if History.isUnchanged model.game then
-        pause model
+        updateModel model
 
     else
         model
@@ -255,35 +255,37 @@ viewGame model =
     GameOfLife.view
         (History.now model.game)
         model.zoom
-        gameEvents
+        model.theme
+        gameEventHandlers
 
 
 viewControls : Model -> Html Msg
 viewControls model =
     Controls.view
-        (History.now model.game)
         model.status
         model.speed
         model.zoom
+        model.theme
         model.importField
-        (controlEvents model)
+        (controlEventHandlers model)
 
 
-gameEvents : GameOfLife.Events Msg
-gameEvents =
+gameEventHandlers : GameOfLife.Events Msg
+gameEventHandlers =
     { onMouseOver = MouseOver
     , onMouseDown = MouseDown
     , onMouseUp = MouseUp
     }
 
 
-controlEvents : Model -> Controls.Events Msg
-controlEvents { speed, zoom, status } =
-    { onSpeedChange = ChangeSpeed (nextSpeed speed)
-    , onZoomChange = ChangeZoom (nextZoomLevel zoom)
-    , onStatusChange = ChangeStatus (nextStatus status)
-    , onUndo = Undo
+controlEventHandlers : Model -> Controls.Events Msg
+controlEventHandlers { speed, zoom, theme, status } =
+    { onUndo = Undo
     , onRedo = Redo
+    , onSpeedChange = ChangeSpeed (nextSpeed speed)
+    , onZoomChange = ChangeZoom (nextZoomLevel zoom)
+    , onThemeChange = ChangeTheme (nextTheme theme)
+    , onStatusChange = ChangeStatus (nextStatus status)
     , onRandomize = RandomPatternRequest
     , onImportFieldOpen = ImportFieldOpen
     , onImportFieldChange = ImportFieldChange
@@ -315,6 +317,16 @@ nextZoomLevel zoom =
 
         Close ->
             Far
+
+
+nextTheme : Theme -> Theme
+nextTheme theme =
+    case theme of
+        Light ->
+            Dark
+
+        Dark ->
+            Light
 
 
 nextStatus : Status -> Status
@@ -373,11 +385,7 @@ keyDownSubscription model =
             Decode.field "key" Decode.string
 
         onKeyDown =
-            Controls.onKeyDown
-                model.status
-                model.speed
-                model.zoom
-                (controlEvents model)
+            Controls.onKeyDown (controlEventHandlers model)
     in
     Events.onKeyDown keyDecoder
         |> Sub.map onKeyDown

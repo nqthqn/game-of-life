@@ -23,8 +23,8 @@ type alias Coordinate =
 
 
 toCoordinates : Pattern -> List Coordinate
-toCoordinates (Pattern pattern) =
-    pattern
+toCoordinates (Pattern coordinates) =
+    coordinates
 
 
 
@@ -54,8 +54,7 @@ stripOptionalHeader lines =
 
 parseCoordinate : String -> Maybe Coordinate
 parseCoordinate line =
-    line
-        |> String.split " "
+    String.split " " line
         |> toPair
         |> Maybe.andThen toCoordinate
 
