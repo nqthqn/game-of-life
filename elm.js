@@ -5101,35 +5101,20 @@ var author$project$Controls$view = F6(
 	function (status, speed, zoom, theme, importField, events) {
 		return A2(
 			elm$html$Html$div,
-			_List_Nil,
 			_List_fromArray(
 				[
-					A2(
-					elm$html$Html$div,
-					_List_fromArray(
-						[
-							elm$html$Html$Attributes$class('bottom-left-overlay')
-						]),
-					_List_fromArray(
-						[
-							A2(author$project$Controls$viewStatusButton, status, events.ab),
-							A2(author$project$Controls$viewSpeedButton, speed, events.aa),
-							A2(author$project$Controls$viewZoomButton, zoom, events.ae),
-							A2(author$project$Controls$viewThemeButton, theme, events.ac),
-							A3(author$project$Controls$viewImportField, importField, events.ax, events.aw)
-						])),
-					A2(
-					elm$html$Html$div,
-					_List_fromArray(
-						[
-							elm$html$Html$Attributes$class('bottom-right-overlay')
-						]),
-					_List_fromArray(
-						[
-							A2(author$project$Controls$viewUndoButton, status, events.ad),
-							A2(author$project$Controls$viewRedoButton, status, events._),
-							author$project$Controls$viewRandomizeButton(events.Z)
-						]))
+					elm$html$Html$Attributes$class('control-panel')
+				]),
+			_List_fromArray(
+				[
+					A2(author$project$Controls$viewStatusButton, status, events.ab),
+					A2(author$project$Controls$viewSpeedButton, speed, events.aa),
+					A2(author$project$Controls$viewZoomButton, zoom, events.ae),
+					A2(author$project$Controls$viewThemeButton, theme, events.ac),
+					A3(author$project$Controls$viewImportField, importField, events.ax, events.aw),
+					A2(author$project$Controls$viewUndoButton, status, events.ad),
+					A2(author$project$Controls$viewRedoButton, status, events._),
+					author$project$Controls$viewRandomizeButton(events.Z)
 				]));
 	});
 var author$project$Main$ChangeSpeed = function (a) {
