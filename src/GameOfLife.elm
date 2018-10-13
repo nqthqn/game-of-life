@@ -1,10 +1,10 @@
-module Simulation exposing
+module GameOfLife exposing
     ( Cell(..)
-    , Simulation
-    , Speed(..)
+    , Events
+    , GameOfLife
     , Zoom(..)
-    , create
-    , createWithPattern
+    , begin
+    , beginWithPattern
     , isFinished
     , step
     , toggleCell
@@ -31,22 +31,22 @@ type alias Cells =
     Matrix Cell
 
 
-type Simulation
-    = Simulation Cells
+type GameOfLife
+    = GameOfLife Cells
 
 
 
 -- CREATE
 
 
-create : Simulation
-create =
+begin : GameOfLife
+begin =
     Matrix.create { width = 18, height = 18 } Dead
-        |> Simulation
+        |> GameOfLife
 
 
-createWithPattern : Pattern -> Simulation
-createWithPattern pattern =
+beginWithPattern : Pattern -> GameOfLife
+beginWithPattern pattern =
     let
         size =
             max (Pattern.width pattern) (Pattern.height pattern)
@@ -66,7 +66,7 @@ createWithPattern pattern =
         deadCells =
             Matrix.create { width = size, height = size } Dead
     in
-    Simulation <|
+    GameOfLife <|
         List.foldl
             (Matrix.set Alive)
             deadCells
@@ -77,10 +77,10 @@ createWithPattern pattern =
 -- OPERATIONS
 
 
-step : Simulation -> Simulation
-step (Simulation cells) =
+step : GameOfLife -> GameOfLife
+step (GameOfLife cells) =
     Matrix.coordinateMap (stepCell cells) cells
-        |> Simulation
+        |> GameOfLife
 
 
 stepCell : Cells -> Coordinate -> Cell -> Cell
@@ -106,8 +106,8 @@ countLiveNeighbours cells coordinate =
         |> List.length
 
 
-toggleCell : Coordinate -> Simulation -> Simulation
-toggleCell coordinate (Simulation cells) =
+toggleCell : Coordinate -> GameOfLife -> GameOfLife
+toggleCell coordinate (GameOfLife cells) =
     let
         toggle cell =
             case cell of
@@ -118,11 +118,11 @@ toggleCell coordinate (Simulation cells) =
                     Alive
     in
     Matrix.update toggle coordinate cells
-        |> Simulation
+        |> GameOfLife
 
 
-isFinished : Simulation -> Bool
-isFinished (Simulation cells) =
+isFinished : GameOfLife -> Bool
+isFinished (GameOfLife cells) =
     Matrix.all ((==) Dead) cells
 
 
@@ -134,21 +134,11 @@ type alias Percentage =
     Float
 
 
-type alias Milliseconds =
-    Float
-
-
-type alias Handlers msg =
-    { mouseOver : Coordinate -> msg
-    , mouseDown : Coordinate -> msg
-    , mouseUp : msg
+type alias Events msg =
+    { onMouseOver : Coordinate -> msg
+    , onMouseDown : Coordinate -> msg
+    , onMouseUp : msg
     }
-
-
-type Speed
-    = Slow
-    | Medium
-    | Fast
 
 
 type Zoom
@@ -157,19 +147,19 @@ type Zoom
     | Close
 
 
-view : Milliseconds -> Simulation -> Zoom -> Handlers msg -> Html msg
-view transitionDuration simulation zoom handlers =
+view : GameOfLife -> Zoom -> Events msg -> Html msg
+view game zoom events =
     div
         [ class "square-container" ]
-        [ viewCells transitionDuration simulation zoom handlers ]
+        [ viewCells game zoom events ]
 
 
-viewCells : Milliseconds -> Simulation -> Zoom -> Handlers msg -> Html msg
-viewCells transitionDuration (Simulation cells) zoom handlers =
+viewCells : GameOfLife -> Zoom -> Events msg -> Html msg
+viewCells (GameOfLife cells) zoom events =
     div
         ([ class "cells-container" ] ++ zoomStyles zoom)
         (cells
-            |> Matrix.coordinateMap (viewCell transitionDuration (cellSize cells) handlers)
+            |> Matrix.coordinateMap (viewCell (cellSize cells) events)
             |> Matrix.toList
         )
 
@@ -193,28 +183,28 @@ zoomStyles zoom =
     ]
 
 
-viewCell : Milliseconds -> Percentage -> Handlers msg -> Coordinate -> Cell -> Html msg
-viewCell transitionDuration relativeSize handlers coordinate cell =
+viewCell : Percentage -> Events msg -> Coordinate -> Cell -> Html msg
+viewCell relativeSize events coordinate cell =
     div
         [ class "center-content"
         , style "width" (percentageStyle relativeSize)
         , style "height" (percentageStyle relativeSize)
-        , onMouseDown (handlers.mouseDown coordinate)
-        , onMouseUp handlers.mouseUp
-        , onMouseEnter (handlers.mouseOver coordinate)
+        , onMouseDown (events.onMouseDown coordinate)
+        , onMouseUp events.onMouseUp
+        , onMouseEnter (events.onMouseOver coordinate)
         ]
-        [ viewCellContent transitionDuration cell coordinate ]
+        [ viewCellContent cell coordinate ]
 
 
-viewCellContent : Milliseconds -> Cell -> Coordinate -> Html msg
-viewCellContent transitionDuration cell coordinate =
+viewCellContent : Cell -> Coordinate -> Html msg
+viewCellContent cell coordinate =
     let
         size =
             cellContentSize cell
     in
     div
         [ class "cell-content"
-        , class (cellColor cell coordinate)
+        , cellBackgroundColor cell coordinate
         , style "width" (percentageStyle size)
         , style "height" (percentageStyle size)
         ]
@@ -241,22 +231,39 @@ cellContentSize cell =
             40
 
 
-cellColor : Cell -> Coordinate -> String
-cellColor cell { x, y } =
+cellBackgroundColor : Cell -> Coordinate -> Attribute msg
+cellBackgroundColor cell { x, y } =
     case cell of
         Dead ->
-            "dead-cell"
+            backgroundColor 244 245 247 1.0
 
         Alive ->
             case ( modBy 2 x == 0, modBy 2 y == 0 ) of
                 ( True, True ) ->
-                    "live-cell-1"
+                    backgroundColor 255 171 0 0.8
 
                 ( True, False ) ->
-                    "live-cell-2"
+                    backgroundColor 54 179 126 0.8
 
                 ( False, True ) ->
-                    "live-cell-3"
+                    backgroundColor 0 184 217 0.8
 
                 ( False, False ) ->
-                    "live-cell-4"
+                    backgroundColor 101 84 192 0.8
+
+
+backgroundColor : Int -> Int -> Int -> Float -> Attribute msg
+backgroundColor red green blue alpha =
+    let
+        colorString =
+            "rgba("
+                ++ String.fromInt red
+                ++ ", "
+                ++ String.fromInt green
+                ++ ", "
+                ++ String.fromInt blue
+                ++ ", "
+                ++ String.fromFloat alpha
+                ++ ")"
+    in
+    style "background-color" colorString
