@@ -4372,13 +4372,9 @@ var author$project$Main$backgroundColor = function (theme) {
 	if (!theme) {
 		return 'white';
 	} else {
-		return 'black';
+		return 'rgb(15, 15, 15)';
 	}
 };
-var elm$core$Basics$apL = F2(
-	function (f, x) {
-		return f(x);
-	});
 var elm$core$Elm$JsArray$foldr = _JsArray_foldr;
 var elm$core$Array$foldr = F3(
 	function (func, baseCase, _n0) {
@@ -4565,6 +4561,10 @@ var elm$core$Array$treeFromBuilder = F2(
 		}
 	});
 var elm$core$Basics$add = _Basics_add;
+var elm$core$Basics$apL = F2(
+	function (f, x) {
+		return f(x);
+	});
 var elm$core$Basics$floor = _Basics_floor;
 var elm$core$Basics$gt = _Utils_gt;
 var elm$core$Basics$max = F2(
@@ -4876,14 +4876,14 @@ var elm$html$Html$node = elm$virtual_dom$VirtualDom$node;
 var elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var elm$html$Html$text = elm$virtual_dom$VirtualDom$text;
 var author$project$Main$bodyStyles = function (theme) {
+	var backgroundColorStyle = 'body { background-color: ' + (author$project$Main$backgroundColor(theme) + '; }');
 	return A3(
 		elm$html$Html$node,
 		'style',
 		_List_Nil,
 		_List_fromArray(
 			[
-				elm$html$Html$text(
-				'body { background-color: ' + (author$project$Main$backgroundColor(theme) + '; }'))
+				elm$html$Html$text(backgroundColorStyle)
 			]));
 };
 var elm$html$Html$button = _VirtualDom_node('button');
@@ -5130,14 +5130,14 @@ var author$project$Controls$view = F6(
 				]),
 			_List_fromArray(
 				[
-					A2(author$project$Controls$viewStatusButton, status, events.ab),
-					A2(author$project$Controls$viewSpeedButton, speed, events.aa),
+					A2(author$project$Controls$viewStatusButton, status, events.aa),
+					A2(author$project$Controls$viewUndoButton, status, events.ab),
 					A2(author$project$Controls$viewZoomButton, zoom, events.ae),
-					A2(author$project$Controls$viewThemeButton, theme, events.ac),
-					A3(author$project$Controls$viewImportField, importField, events.ax, events.aw),
-					A2(author$project$Controls$viewUndoButton, status, events.ad),
-					A2(author$project$Controls$viewRedoButton, status, events._),
-					author$project$Controls$viewRandomizeButton(events.Z)
+					A2(author$project$Controls$viewThemeButton, theme, events.ad),
+					A2(author$project$Controls$viewSpeedButton, speed, events._),
+					A2(author$project$Controls$viewRedoButton, status, events.ac),
+					author$project$Controls$viewRandomizeButton(events.Z),
+					A3(author$project$Controls$viewImportField, importField, events.ax, events.aw)
 				]));
 	});
 var author$project$Main$ChangeSpeed = function (a) {
@@ -5158,8 +5158,8 @@ var author$project$Main$ImportFieldChange = function (a) {
 var author$project$Main$ImportFieldOpen = {$: 10};
 var author$project$Main$NoOp = {$: 14};
 var author$project$Main$RandomPatternRequest = {$: 12};
-var author$project$Main$Redo = {$: 2};
-var author$project$Main$Undo = {$: 1};
+var author$project$Main$StepBack = {$: 1};
+var author$project$Main$StepForward = {$: 2};
 var author$project$Controls$Fast = 2;
 var author$project$Controls$Medium = 1;
 var author$project$Controls$Slow = 0;
@@ -5214,14 +5214,14 @@ var author$project$Main$controlEventHandlers = function (_n0) {
 		aw: author$project$Main$ImportFieldChange,
 		ax: author$project$Main$ImportFieldOpen,
 		Z: author$project$Main$RandomPatternRequest,
-		_: author$project$Main$Redo,
-		aa: author$project$Main$ChangeSpeed(
+		_: author$project$Main$ChangeSpeed(
 			author$project$Main$nextSpeed(speed)),
-		ab: author$project$Main$ChangeStatus(
+		aa: author$project$Main$ChangeStatus(
 			author$project$Main$nextStatus(status)),
-		ac: author$project$Main$ChangeTheme(
+		ab: author$project$Main$StepBack,
+		ac: author$project$Main$StepForward,
+		ad: author$project$Main$ChangeTheme(
 			author$project$Main$nextTheme(theme)),
-		ad: author$project$Main$Undo,
 		ae: author$project$Main$ChangeZoom(
 			author$project$Main$nextZoomLevel(zoom))
 	};
@@ -5244,8 +5244,8 @@ var author$project$GameOfLife$cellSize = function (cells) {
 	return 100.0 / author$project$Matrix$width(cells);
 };
 var elm$core$String$fromFloat = _String_fromNumber;
-var author$project$GameOfLife$percentageStyle = function (value) {
-	return elm$core$String$fromFloat(value) + '%';
+var author$project$GameOfLife$percentString = function (percentage) {
+	return elm$core$String$fromFloat(percentage) + '%';
 };
 var elm$core$Basics$modBy = _Basics_modBy;
 var author$project$GameOfLife$cellColorClass = F3(
@@ -5254,9 +5254,9 @@ var author$project$GameOfLife$cellColorClass = F3(
 		var y = _n0.aQ;
 		if (cell === 1) {
 			if (!theme) {
-				return 'light-grey-background';
+				return 'light-grey-cell';
 			} else {
-				return 'dark-grey-background';
+				return 'dark-grey-cell';
 			}
 		} else {
 			var _n3 = _Utils_Tuple2(
@@ -5264,20 +5264,20 @@ var author$project$GameOfLife$cellColorClass = F3(
 				!A2(elm$core$Basics$modBy, 2, y));
 			if (_n3.a) {
 				if (_n3.b) {
-					return 'orange-background';
+					return 'orange-cell';
 				} else {
-					return 'green-background';
+					return 'green-cell';
 				}
 			} else {
 				if (_n3.b) {
-					return 'blue-background';
+					return 'blue-cell';
 				} else {
-					return 'purple-background';
+					return 'purple-cell';
 				}
 			}
 		}
 	});
-var author$project$GameOfLife$cellContentSize = function (cell) {
+var author$project$GameOfLife$innerCellSize = function (cell) {
 	if (!cell) {
 		return 70;
 	} else {
@@ -5286,24 +5286,24 @@ var author$project$GameOfLife$cellContentSize = function (cell) {
 };
 var elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
 var elm$html$Html$Attributes$style = elm$virtual_dom$VirtualDom$style;
-var author$project$GameOfLife$viewCellContent = F3(
+var author$project$GameOfLife$viewInnerCell = F3(
 	function (cell, coordinate, theme) {
-		var size = author$project$GameOfLife$cellContentSize(cell);
+		var size = author$project$GameOfLife$innerCellSize(cell);
 		return A2(
 			elm$html$Html$div,
 			_List_fromArray(
 				[
-					elm$html$Html$Attributes$class('cell-content'),
+					elm$html$Html$Attributes$class('inner-cell'),
 					elm$html$Html$Attributes$class(
 					A3(author$project$GameOfLife$cellColorClass, cell, coordinate, theme)),
 					A2(
 					elm$html$Html$Attributes$style,
 					'width',
-					author$project$GameOfLife$percentageStyle(size)),
+					author$project$GameOfLife$percentString(size)),
 					A2(
 					elm$html$Html$Attributes$style,
 					'height',
-					author$project$GameOfLife$percentageStyle(size))
+					author$project$GameOfLife$percentString(size))
 				]),
 			_List_Nil);
 	});
@@ -5331,15 +5331,15 @@ var author$project$GameOfLife$viewCell = F5(
 			elm$html$Html$div,
 			_List_fromArray(
 				[
-					elm$html$Html$Attributes$class('center-content'),
+					elm$html$Html$Attributes$class('cell'),
 					A2(
 					elm$html$Html$Attributes$style,
 					'width',
-					author$project$GameOfLife$percentageStyle(relativeSize)),
+					author$project$GameOfLife$percentString(relativeSize)),
 					A2(
 					elm$html$Html$Attributes$style,
 					'height',
-					author$project$GameOfLife$percentageStyle(relativeSize)),
+					author$project$GameOfLife$percentString(relativeSize)),
 					elm$html$Html$Events$onMouseDown(
 					events.ay(coordinate)),
 					elm$html$Html$Events$onMouseUp(events.aA),
@@ -5348,18 +5348,18 @@ var author$project$GameOfLife$viewCell = F5(
 				]),
 			_List_fromArray(
 				[
-					A3(author$project$GameOfLife$viewCellContent, cell, coordinate, theme)
+					A3(author$project$GameOfLife$viewInnerCell, cell, coordinate, theme)
 				]));
 	});
 var author$project$GameOfLife$zoomStyles = function (zoom) {
 	var percentage = function () {
 		switch (zoom) {
 			case 0:
-				return author$project$GameOfLife$percentageStyle(100);
+				return author$project$GameOfLife$percentString(100);
 			case 1:
-				return author$project$GameOfLife$percentageStyle(150);
+				return author$project$GameOfLife$percentString(150);
 			default:
-				return author$project$GameOfLife$percentageStyle(200);
+				return author$project$GameOfLife$percentString(200);
 		}
 	}();
 	return _List_fromArray(
@@ -5449,14 +5449,15 @@ var author$project$Matrix$toList = function (_n0) {
 var author$project$GameOfLife$viewCells = F4(
 	function (_n0, zoom, theme, events) {
 		var cells = _n0;
+		var attributes = _Utils_ap(
+			_List_fromArray(
+				[
+					elm$html$Html$Attributes$class('cells')
+				]),
+			author$project$GameOfLife$zoomStyles(zoom));
 		return A2(
 			elm$html$Html$div,
-			_Utils_ap(
-				_List_fromArray(
-					[
-						elm$html$Html$Attributes$class('cells-container')
-					]),
-				author$project$GameOfLife$zoomStyles(zoom)),
+			attributes,
 			author$project$Matrix$toList(
 				A2(
 					author$project$Matrix$coordinateMap,
@@ -5503,10 +5504,7 @@ var author$project$Main$viewGame = function (model) {
 var author$project$Main$view = function (model) {
 	return A2(
 		elm$html$Html$div,
-		_List_fromArray(
-			[
-				elm$html$Html$Attributes$class('center-content')
-			]),
+		_List_Nil,
 		_List_fromArray(
 			[
 				author$project$Main$bodyStyles(model.v),
@@ -5571,19 +5569,19 @@ var author$project$Controls$onKeyDown = F2(
 	function (events, key) {
 		switch (key) {
 			case 'ArrowLeft':
-				return events.ad;
-			case 'ArrowRight':
-				return events._;
-			case 'p':
 				return events.ab;
-			case 's':
+			case 'ArrowRight':
+				return events.ac;
+			case 'p':
 				return events.aa;
+			case 's':
+				return events._;
 			case 'r':
 				return events.Z;
 			case 'z':
 				return events.ae;
 			case 't':
-				return events.ac;
+				return events.ad;
 			default:
 				return events.au;
 		}
@@ -6562,6 +6560,20 @@ var author$project$Matrix$set = F3(
 				value,
 				array));
 	});
+var author$project$Pattern$toCoordinates = function (_n0) {
+	var coordinates = _n0;
+	return coordinates;
+};
+var author$project$GameOfLife$initializeCells = F2(
+	function (gameSize, pattern) {
+		var patternCoordinates = author$project$Pattern$toCoordinates(pattern);
+		var makeAlive = author$project$Matrix$set(0);
+		var deadCells = A2(
+			author$project$Matrix$create,
+			{aq: gameSize, aO: gameSize},
+			1);
+		return A3(elm$core$List$foldl, makeAlive, deadCells, patternCoordinates);
+	});
 var author$project$Pattern$Pattern = elm$core$Basics$identity;
 var elm$core$List$maximum = function (list) {
 	if (list.b) {
@@ -6663,13 +6675,9 @@ var author$project$Pattern$centerAt = F2(
 			A2(author$project$Pattern$offsetBy, xDistance, yDistance),
 			coordinates);
 	});
-var author$project$Pattern$toCoordinates = function (_n0) {
-	var coordinates = _n0;
-	return coordinates;
-};
 var author$project$GameOfLife$beginWithPattern = F2(
 	function (padding, pattern) {
-		var paddingAmount = function () {
+		var paddingCells = function () {
 			if (!padding) {
 				return 6;
 			} else {
@@ -6679,21 +6687,13 @@ var author$project$GameOfLife$beginWithPattern = F2(
 		var size = A2(
 			elm$core$Basics$max,
 			18,
-			paddingAmount + A2(
+			paddingCells + A2(
 				elm$core$Basics$max,
 				author$project$Pattern$width(pattern),
 				author$project$Pattern$height(pattern)));
-		var deadCells = A2(
-			author$project$Matrix$create,
-			{aq: size, aO: size},
-			1);
 		var center = {aP: (size / 2) | 0, aQ: (size / 2) | 0};
 		var centeredPattern = A2(author$project$Pattern$centerAt, center, pattern);
-		return A3(
-			elm$core$List$foldl,
-			author$project$Matrix$set(0),
-			deadCells,
-			author$project$Pattern$toCoordinates(centeredPattern));
+		return A2(author$project$GameOfLife$initializeCells, size, centeredPattern);
 	});
 var author$project$History$record = F2(
 	function (step, _n0) {
