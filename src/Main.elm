@@ -66,8 +66,8 @@ initialGame =
 
 type Msg
     = ClockTick
-    | Undo
-    | Redo
+    | StepBack
+    | StepForward
     | ChangeStatus Status
     | ChangeSpeed Speed
     | ChangeZoom Zoom
@@ -96,13 +96,13 @@ update msg model =
                 |> ifGameFinished pauseGame
                 |> withoutCmd
 
-        Undo ->
+        StepBack ->
             tryUndoStep model
                 |> Maybe.withDefault model
                 |> pauseGame
                 |> withoutCmd
 
-        Redo ->
+        StepForward ->
             tryRedoStep model
                 |> Maybe.withDefault (stepGame model)
                 |> pauseGame
@@ -147,7 +147,7 @@ update msg model =
                 |> withoutCmd
 
         ImportFieldChange userInput ->
-            case Pattern.parseLife106 userInput of
+            case Pattern.parseLife106Format userInput of
                 Nothing ->
                     { model | importField = Open userInput }
                         |> withoutCmd
@@ -161,7 +161,7 @@ update msg model =
             ( model, requestRandomPattern )
 
         RandomPatternResponse randomPattern ->
-            displayPattern NoPadding randomPattern model
+            displayPattern WithoutPadding randomPattern model
                 |> withoutCmd
 
         NoOp ->
@@ -249,7 +249,7 @@ document model =
 view : Model -> Html Msg
 view model =
     div
-        [ class "center-content" ]
+        []
         [ bodyStyles model.theme
         , viewGame model
         , viewControls model
@@ -258,9 +258,13 @@ view model =
 
 bodyStyles : Theme -> Html msg
 bodyStyles theme =
+    let
+        backgroundColorStyle =
+            "body { background-color: " ++ backgroundColor theme ++ "; }"
+    in
     node "style"
         []
-        [ text <| "body { background-color: " ++ backgroundColor theme ++ "; }" ]
+        [ text backgroundColorStyle ]
 
 
 backgroundColor : Theme -> String
@@ -270,7 +274,7 @@ backgroundColor theme =
             "white"
 
         Dark ->
-            "black"
+            "rgb(15, 15, 15)"
 
 
 viewGame : Model -> Html Msg
@@ -303,8 +307,8 @@ gameEventHandlers =
 
 controlEventHandlers : Model -> Controls.Events Msg
 controlEventHandlers { speed, zoom, theme, status } =
-    { onUndo = Undo
-    , onRedo = Redo
+    { onStepBack = StepBack
+    , onStepForward = StepForward
     , onSpeedChange = ChangeSpeed (nextSpeed speed)
     , onZoomChange = ChangeZoom (nextZoomLevel zoom)
     , onThemeChange = ChangeTheme (nextTheme theme)
