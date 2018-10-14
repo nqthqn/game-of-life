@@ -6486,8 +6486,8 @@ var author$project$Main$subscriptions = function (model) {
 var author$project$Controls$Open = function (a) {
 	return {$: 0, a: a};
 };
-var author$project$GameOfLife$NoPadding = 1;
 var author$project$GameOfLife$WithPadding = 0;
+var author$project$GameOfLife$WithoutPadding = 1;
 var author$project$Main$Down = 1;
 var author$project$GameOfLife$Alive = 0;
 var author$project$Matrix$wrap = F3(
@@ -6670,10 +6670,10 @@ var author$project$Pattern$toCoordinates = function (_n0) {
 var author$project$GameOfLife$beginWithPattern = F2(
 	function (padding, pattern) {
 		var paddingAmount = function () {
-			if (padding === 1) {
-				return 0;
-			} else {
+			if (!padding) {
 				return 6;
+			} else {
+				return 0;
 			}
 		}();
 		var size = A2(
@@ -7253,7 +7253,7 @@ var elm_community$maybe_extra$Maybe$Extra$traverse = function (f) {
 		elm$core$Maybe$Just(_List_Nil));
 };
 var elm_community$maybe_extra$Maybe$Extra$combine = elm_community$maybe_extra$Maybe$Extra$traverse(elm$core$Basics$identity);
-var author$project$Pattern$parseLife106 = function (text) {
+var author$project$Pattern$parseLife106Format = function (text) {
 	return A2(
 		elm$core$Maybe$map,
 		elm$core$Basics$identity,
@@ -7349,7 +7349,7 @@ var author$project$Main$update = F2(
 						}));
 			case 11:
 				var userInput = msg.a;
-				var _n2 = author$project$Pattern$parseLife106(userInput);
+				var _n2 = author$project$Pattern$parseLife106Format(userInput);
 				if (_n2.$ === 1) {
 					return author$project$Main$withoutCmd(
 						_Utils_update(
