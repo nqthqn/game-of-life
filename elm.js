@@ -586,11 +586,11 @@ function _Debug_crash_UNUSED(identifier, fact1, fact2, fact3, fact4)
 
 function _Debug_regionToString(region)
 {
-	if (region.ag.L === region.an.L)
+	if (region.ag.K === region.an.K)
 	{
-		return 'on line ' + region.ag.L;
+		return 'on line ' + region.ag.K;
 	}
-	return 'on lines ' + region.ag.L + ' through ' + region.an.L;
+	return 'on lines ' + region.ag.K + ' through ' + region.an.K;
 }
 
 
@@ -3940,7 +3940,7 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 		impl.ba,
 		impl.a8,
 		function(sendToApp, initialModel) {
-			var divertHrefToApp = impl.N && impl.N(sendToApp)
+			var divertHrefToApp = impl.M && impl.M(sendToApp)
 			var view = impl.bc;
 			var title = _VirtualDom_doc.title;
 			var bodyNode = _VirtualDom_doc.body;
@@ -4010,7 +4010,7 @@ function _Browser_application(impl)
 	var key = function() { key.a(onUrlChange(_Browser_getUrl())); };
 
 	return _Browser_document({
-		N: function(sendToApp)
+		M: function(sendToApp)
 		{
 			key.a = sendToApp;
 			_Browser_window.addEventListener('popstate', key);
@@ -4108,17 +4108,17 @@ var _Browser_decodeEvent = F2(function(decoder, event)
 function _Browser_visibilityInfo()
 {
 	return (typeof _VirtualDom_doc.hidden !== 'undefined')
-		? { a0: 'hidden', K: 'visibilitychange' }
+		? { a0: 'hidden', J: 'visibilitychange' }
 		:
 	(typeof _VirtualDom_doc.mozHidden !== 'undefined')
-		? { a0: 'mozHidden', K: 'mozvisibilitychange' }
+		? { a0: 'mozHidden', J: 'mozvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.msHidden !== 'undefined')
-		? { a0: 'msHidden', K: 'msvisibilitychange' }
+		? { a0: 'msHidden', J: 'msvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.webkitHidden !== 'undefined')
-		? { a0: 'webkitHidden', K: 'webkitvisibilitychange' }
-		: { a0: 'hidden', K: 'visibilitychange' };
+		? { a0: 'webkitHidden', J: 'webkitvisibilitychange' }
+		: { a0: 'hidden', J: 'visibilitychange' };
 }
 
 
@@ -4932,13 +4932,21 @@ var author$project$Controls$viewButton = F3(
 	});
 var author$project$Controls$viewBackButton = F2(
 	function (status, clickMsg) {
-		return A3(author$project$Controls$viewButton, '⬅︎', clickMsg, _List_Nil);
+		return A3(author$project$Controls$viewButton, '⇦', clickMsg, _List_Nil);
 	});
 var author$project$Controls$viewForwardButton = F2(
 	function (status, clickMsg) {
-		return A3(author$project$Controls$viewButton, '➡︎', clickMsg, _List_Nil);
+		return A3(author$project$Controls$viewButton, '⇨', clickMsg, _List_Nil);
 	});
-var elm$html$Html$div = _VirtualDom_node('div');
+var author$project$Controls$viewImportButton = F3(
+	function (importField, openMsg, cancelMsg) {
+		if (!importField.$) {
+			var text = importField.a;
+			return A3(author$project$Controls$viewButton, 'Cancel', cancelMsg, _List_Nil);
+		} else {
+			return A3(author$project$Controls$viewButton, 'Import', openMsg, _List_Nil);
+		}
+	});
 var elm$html$Html$textarea = _VirtualDom_node('textarea');
 var elm$json$Json$Encode$bool = _Json_wrap;
 var elm$html$Html$Attributes$boolProperty = F2(
@@ -4949,19 +4957,7 @@ var elm$html$Html$Attributes$boolProperty = F2(
 			elm$json$Json$Encode$bool(bool));
 	});
 var elm$html$Html$Attributes$autofocus = elm$html$Html$Attributes$boolProperty('autofocus');
-var elm$html$Html$Attributes$cols = function (n) {
-	return A2(
-		_VirtualDom_attribute,
-		'cols',
-		elm$core$String$fromInt(n));
-};
 var elm$html$Html$Attributes$placeholder = elm$html$Html$Attributes$stringProperty('placeholder');
-var elm$html$Html$Attributes$rows = function (n) {
-	return A2(
-		_VirtualDom_attribute,
-		'rows',
-		elm$core$String$fromInt(n));
-};
 var elm$html$Html$Attributes$value = elm$html$Html$Attributes$stringProperty('value');
 var elm$html$Html$Events$alwaysStop = function (x) {
 	return _Utils_Tuple2(x, true);
@@ -5051,100 +5047,78 @@ var elm$html$Html$Events$onInput = function (tagger) {
 			elm$html$Html$Events$alwaysStop,
 			A2(elm$json$Json$Decode$map, tagger, elm$html$Html$Events$targetValue)));
 };
-var author$project$Controls$viewImportField = F4(
-	function (importField, openMsg, changeMsg, cancelMsg) {
-		if (importField.$ === 1) {
-			return A3(author$project$Controls$viewButton, 'Import', openMsg, _List_Nil);
-		} else {
+var author$project$Controls$viewImportField = F2(
+	function (importField, changeMsg) {
+		if (!importField.$) {
 			var text = importField.a;
 			return A2(
-				elm$html$Html$div,
-				_List_Nil,
+				elm$html$Html$textarea,
 				_List_fromArray(
 					[
-						A2(
-						elm$html$Html$textarea,
-						_List_fromArray(
-							[
-								elm$html$Html$Attributes$rows(10),
-								elm$html$Html$Attributes$cols(30),
-								elm$html$Html$Attributes$autofocus(true),
-								elm$html$Html$Attributes$placeholder('Paste a \'Life 1.06\' pattern here'),
-								elm$html$Html$Attributes$class('import-field'),
-								elm$html$Html$Attributes$value(text),
-								elm$html$Html$Events$onInput(changeMsg)
-							]),
-						_List_Nil),
-						A3(author$project$Controls$viewButton, 'Cancel', cancelMsg, _List_Nil)
-					]));
+						elm$html$Html$Attributes$autofocus(true),
+						elm$html$Html$Attributes$placeholder('Paste a \'Life 1.06\' pattern here...'),
+						elm$html$Html$Attributes$class('import-field'),
+						elm$html$Html$Attributes$value(text),
+						elm$html$Html$Events$onInput(changeMsg)
+					]),
+				_List_Nil);
+		} else {
+			return elm$html$Html$text('');
 		}
 	});
 var author$project$Controls$viewRandomizeButton = function (clickMsg) {
-	return A3(author$project$Controls$viewButton, 'Randomize', clickMsg, _List_Nil);
+	return A3(author$project$Controls$viewButton, '🎲', clickMsg, _List_Nil);
 };
-var author$project$Controls$viewSpeedButton = F2(
-	function (speed, clickMsg) {
-		switch (speed) {
-			case 0:
-				return A3(author$project$Controls$viewButton, 'Slow', clickMsg, _List_Nil);
-			case 1:
-				return A3(author$project$Controls$viewButton, 'Medium', clickMsg, _List_Nil);
-			default:
-				return A3(author$project$Controls$viewButton, 'Fast', clickMsg, _List_Nil);
-		}
-	});
+var author$project$Controls$viewSpeedButton = function (clickMsg) {
+	return A3(author$project$Controls$viewButton, '🏃\u200d♀️', clickMsg, _List_Nil);
+};
 var author$project$Controls$viewStatusButton = F2(
 	function (status, clickMsg) {
 		if (!status) {
 			return A3(
 				author$project$Controls$viewButton,
-				'Play',
+				'Start',
 				clickMsg,
 				_List_fromArray(
 					[
 						elm$html$Html$Attributes$class('play-button')
 					]));
 		} else {
-			return A3(author$project$Controls$viewButton, 'Pause', clickMsg, _List_Nil);
+			return A3(author$project$Controls$viewButton, 'Stop', clickMsg, _List_Nil);
 		}
 	});
-var author$project$Controls$viewThemeButton = F2(
-	function (theme, clickMsg) {
-		if (!theme) {
-			return A3(author$project$Controls$viewButton, 'Light', clickMsg, _List_Nil);
-		} else {
-			return A3(author$project$Controls$viewButton, 'Dark', clickMsg, _List_Nil);
-		}
-	});
-var author$project$Controls$viewZoomButton = F2(
-	function (zoom, clickMsg) {
-		switch (zoom) {
-			case 0:
-				return A3(author$project$Controls$viewButton, '1X', clickMsg, _List_Nil);
-			case 1:
-				return A3(author$project$Controls$viewButton, '1.5X', clickMsg, _List_Nil);
-			default:
-				return A3(author$project$Controls$viewButton, '2X', clickMsg, _List_Nil);
-		}
-	});
-var author$project$Controls$view = F6(
-	function (status, speed, zoom, theme, importField, events) {
+var author$project$Controls$viewThemeButton = function (clickMsg) {
+	return A3(author$project$Controls$viewButton, '🎨', clickMsg, _List_Nil);
+};
+var author$project$Controls$viewZoomButton = function (clickMsg) {
+	return A3(author$project$Controls$viewButton, '🔬', clickMsg, _List_Nil);
+};
+var elm$html$Html$div = _VirtualDom_node('div');
+var author$project$Controls$view = F3(
+	function (status, importField, events) {
 		return A2(
 			elm$html$Html$div,
+			_List_Nil,
 			_List_fromArray(
 				[
-					elm$html$Html$Attributes$class('control-panel')
-				]),
-			_List_fromArray(
-				[
-					A2(author$project$Controls$viewStatusButton, status, events.aa),
-					A2(author$project$Controls$viewBackButton, status, events.ab),
-					A2(author$project$Controls$viewForwardButton, status, events.ac),
-					A2(author$project$Controls$viewZoomButton, zoom, events.ae),
-					A2(author$project$Controls$viewSpeedButton, speed, events._),
-					author$project$Controls$viewRandomizeButton(events.Z),
-					A2(author$project$Controls$viewThemeButton, theme, events.ad),
-					A4(author$project$Controls$viewImportField, importField, events.ay, events.ax, events.aw)
+					A2(
+					elm$html$Html$div,
+					_List_fromArray(
+						[
+							elm$html$Html$Attributes$class('control-panel')
+						]),
+					_List_fromArray(
+						[
+							A2(author$project$Controls$viewStatusButton, status, events.aa),
+							A2(author$project$Controls$viewBackButton, status, events.ab),
+							A2(author$project$Controls$viewForwardButton, status, events.ac),
+							author$project$Controls$viewRandomizeButton(events.Z),
+							author$project$Controls$viewSpeedButton(events._),
+							author$project$Controls$viewZoomButton(events.ae),
+							author$project$Controls$viewThemeButton(events.ad),
+							A3(author$project$Controls$viewImportButton, importField, events.ay, events.aw)
+						])),
+					A2(author$project$Controls$viewImportField, importField, events.ax)
 				]));
 	});
 var author$project$Main$ChangeSpeed = function (a) {
@@ -5213,9 +5187,9 @@ var author$project$Main$nextZoomLevel = function (zoom) {
 	}
 };
 var author$project$Main$controlEventHandlers = function (_n0) {
-	var speed = _n0.H;
-	var zoom = _n0.y;
-	var theme = _n0.w;
+	var speed = _n0.N;
+	var zoom = _n0.H;
+	var theme = _n0.F;
 	var status = _n0.v;
 	return {
 		au: author$project$Main$NoOp,
@@ -5236,12 +5210,9 @@ var author$project$Main$controlEventHandlers = function (_n0) {
 	};
 };
 var author$project$Main$viewControls = function (model) {
-	return A6(
+	return A3(
 		author$project$Controls$view,
 		model.v,
-		model.H,
-		model.y,
-		model.w,
 		model.r,
 		author$project$Main$controlEventHandlers(model));
 };
@@ -5506,8 +5477,8 @@ var author$project$Main$viewGame = function (model) {
 	return A4(
 		author$project$GameOfLife$view,
 		author$project$History$now(model.g),
-		model.y,
-		model.w,
+		model.H,
+		model.F,
 		author$project$Main$gameEventHandlers);
 };
 var author$project$Main$view = function (model) {
@@ -5516,7 +5487,7 @@ var author$project$Main$view = function (model) {
 		_List_Nil,
 		_List_fromArray(
 			[
-				author$project$Main$bodyStyles(model.w),
+				author$project$Main$bodyStyles(model.F),
 				author$project$Main$viewGame(model),
 				author$project$Main$viewControls(model)
 			]));
@@ -5554,7 +5525,7 @@ var author$project$GameOfLife$begin = function (dimensions) {
 };
 var author$project$History$History = elm$core$Basics$identity;
 var author$project$History$begin = function (present) {
-	return {B: _List_Nil, o: _List_Nil, j: present};
+	return {z: _List_Nil, o: _List_Nil, j: present};
 };
 var author$project$Main$Up = 0;
 var author$project$Main$defaultGameSize = {aq: 18, aP: 18};
@@ -5562,11 +5533,11 @@ var author$project$Main$initialModel = {
 	g: author$project$History$begin(
 		author$project$GameOfLife$begin(author$project$Main$defaultGameSize)),
 	r: author$project$Controls$Closed,
-	M: 0,
-	H: 0,
+	L: 0,
+	N: 0,
 	v: 0,
-	w: 1,
-	y: 0
+	F: 1,
+	H: 0
 };
 var elm$core$Platform$Cmd$batch = _Platform_batch;
 var elm$core$Platform$Cmd$none = elm$core$Platform$Cmd$batch(_List_Nil);
@@ -6487,7 +6458,7 @@ var author$project$Main$subscriptions = function (model) {
 		_List_fromArray(
 			[
 				author$project$Main$keyDownSubscription(model),
-				A2(author$project$Main$tickSubscription, model.v, model.H)
+				A2(author$project$Main$tickSubscription, model.v, model.N)
 			]));
 };
 var author$project$Controls$Open = function (a) {
@@ -6709,7 +6680,7 @@ var author$project$History$record = F2(
 		var past = _n0.o;
 		var present = _n0.j;
 		return {
-			B: _List_Nil,
+			z: _List_Nil,
 			o: A2(elm$core$List$cons, present, past),
 			j: step(present)
 		};
@@ -7139,7 +7110,7 @@ var author$project$Main$toggleCell = F2(
 var author$project$History$redo = function (_n0) {
 	var past = _n0.o;
 	var present = _n0.j;
-	var future = _n0.B;
+	var future = _n0.z;
 	if (!future.b) {
 		return elm$core$Maybe$Nothing;
 	} else {
@@ -7147,7 +7118,7 @@ var author$project$History$redo = function (_n0) {
 		var newFuture = future.b;
 		return A2(elm$core$Basics$composeL, elm$core$Maybe$Just, elm$core$Basics$identity)(
 			{
-				B: newFuture,
+				z: newFuture,
 				o: A2(elm$core$List$cons, present, past),
 				j: newPresent
 			});
@@ -7162,7 +7133,7 @@ var author$project$Main$tryRedoStep = function (model) {
 var author$project$History$undo = function (_n0) {
 	var past = _n0.o;
 	var present = _n0.j;
-	var future = _n0.B;
+	var future = _n0.z;
 	if (!past.b) {
 		return elm$core$Maybe$Nothing;
 	} else {
@@ -7170,7 +7141,7 @@ var author$project$History$undo = function (_n0) {
 		var newPast = past.b;
 		return A2(elm$core$Basics$composeL, elm$core$Maybe$Just, elm$core$Basics$identity)(
 			{
-				B: A2(elm$core$List$cons, present, future),
+				z: A2(elm$core$List$cons, present, future),
 				o: newPast,
 				j: newPresent
 			});
@@ -7315,19 +7286,19 @@ var author$project$Main$update = F2(
 				return author$project$Main$withoutCmd(
 					_Utils_update(
 						model,
-						{H: speed}));
+						{N: speed}));
 			case 5:
 				var zoom = msg.a;
 				return author$project$Main$withoutCmd(
 					_Utils_update(
 						model,
-						{y: zoom}));
+						{H: zoom}));
 			case 6:
 				var theme = msg.a;
 				return author$project$Main$withoutCmd(
 					_Utils_update(
 						model,
-						{w: theme}));
+						{F: theme}));
 			case 7:
 				var coordinate = msg.a;
 				return author$project$Main$withoutCmd(
@@ -7336,10 +7307,10 @@ var author$project$Main$update = F2(
 						coordinate,
 						_Utils_update(
 							model,
-							{M: 1})));
+							{L: 1})));
 			case 8:
 				var coordinate = msg.a;
-				var _n1 = model.M;
+				var _n1 = model.L;
 				if (_n1 === 1) {
 					return author$project$Main$withoutCmd(
 						A2(author$project$Main$toggleCell, coordinate, model));
@@ -7350,7 +7321,7 @@ var author$project$Main$update = F2(
 				return author$project$Main$withoutCmd(
 					_Utils_update(
 						model,
-						{M: 0}));
+						{L: 0}));
 			case 10:
 				return author$project$Main$withoutCmd(
 					_Utils_update(
@@ -7377,7 +7348,7 @@ var author$project$Main$update = F2(
 							importedPattern,
 							_Utils_update(
 								model,
-								{r: author$project$Controls$Closed, y: 0})));
+								{r: author$project$Controls$Closed, H: 0})));
 				}
 			case 12:
 				return author$project$Main$withoutCmd(
