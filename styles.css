@@ -41,7 +41,7 @@ body {
     padding: 0 16px;
     margin: 0;
     border: none;
-    color: rgba(255, 255, 255, 0.9);
+    color: white;
     background-color: rgba(94, 98, 110, 0.685);
     font-size: 20px;
     transition: background-color 300ms ease-in-out,
@@ -99,9 +99,13 @@ body {
 }
 
 .import-field {
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
+    position: fixed;
+    bottom: 0;
+    right: 0;
     border-radius: 4px;
     resize: none;
+    padding: 8px;
+    height: 24px;
+    width: 250px;
+    font-size: 16px;
 }
