@@ -23,6 +23,12 @@ type Mouse
     | Down
 
 
+type alias Dimensions =
+    { width : Int
+    , height : Int
+    }
+
+
 type alias Model =
     { game : History GameOfLife
     , status : Status
@@ -46,7 +52,7 @@ init =
 initialModel : Model
 initialModel =
     { status = Paused
-    , game = History.begin initialGame
+    , game = History.begin (GameOfLife.begin defaultGameSize)
     , mouse = Up
     , speed = Slow
     , zoom = Far
@@ -55,9 +61,11 @@ initialModel =
     }
 
 
-initialGame : GameOfLife
-initialGame =
-    GameOfLife.begin { width = 18, height = 18 }
+defaultGameSize : Dimensions
+defaultGameSize =
+    { width = 18
+    , height = 18
+    }
 
 
 
@@ -77,6 +85,7 @@ type Msg
     | MouseUp
     | ImportFieldOpen
     | ImportFieldChange UserInput
+    | ImportFieldCancel
     | RandomPatternRequest
     | RandomPatternResponse Pattern
     | NoOp
@@ -152,10 +161,14 @@ update msg model =
                     { model | importField = Open userInput }
                         |> withoutCmd
 
-                Just parsedPattern ->
+                Just importedPattern ->
                     { model | importField = Closed, zoom = Far }
-                        |> displayPattern WithPadding parsedPattern
+                        |> displayPattern WithPadding importedPattern
                         |> withoutCmd
+
+        ImportFieldCancel ->
+            { model | importField = Closed }
+                |> withoutCmd
 
         RandomPatternRequest ->
             ( model, requestRandomPattern )
@@ -232,7 +245,8 @@ ifGameFinished updateModel model =
 
 requestRandomPattern : Cmd Msg
 requestRandomPattern =
-    Random.generate RandomPatternResponse Pattern.generator
+    Pattern.generator defaultGameSize
+        |> Random.generate RandomPatternResponse
 
 
 
@@ -316,6 +330,7 @@ controlEventHandlers { speed, zoom, theme, status } =
     , onRandomize = RandomPatternRequest
     , onImportFieldOpen = ImportFieldOpen
     , onImportFieldChange = ImportFieldChange
+    , onImportFieldCancel = ImportFieldCancel
     , noOp = NoOp
     }
 
