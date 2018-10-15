@@ -4896,6 +4896,7 @@ var elm$html$Html$Attributes$stringProperty = F2(
 			elm$json$Json$Encode$string(string));
 	});
 var elm$html$Html$Attributes$class = elm$html$Html$Attributes$stringProperty('className');
+var elm$html$Html$Attributes$title = elm$html$Html$Attributes$stringProperty('title');
 var elm$virtual_dom$VirtualDom$Normal = function (a) {
 	return {$: 0, a: a};
 };
@@ -4913,12 +4914,13 @@ var elm$html$Html$Events$onClick = function (msg) {
 		'click',
 		elm$json$Json$Decode$succeed(msg));
 };
-var author$project$Controls$viewButton = F3(
-	function (description, clickMsg, customAttributes) {
+var author$project$Controls$viewButton = F4(
+	function (description, tooltip, clickMsg, customAttributes) {
 		var attributes = _Utils_ap(
 			_List_fromArray(
 				[
 					elm$html$Html$Attributes$class('button'),
+					elm$html$Html$Attributes$title(tooltip),
 					elm$html$Html$Events$onClick(clickMsg)
 				]),
 			customAttributes);
@@ -4932,19 +4934,19 @@ var author$project$Controls$viewButton = F3(
 	});
 var author$project$Controls$viewBackButton = F2(
 	function (status, clickMsg) {
-		return A3(author$project$Controls$viewButton, '⇦', clickMsg, _List_Nil);
+		return A4(author$project$Controls$viewButton, '⇦', 'Back', clickMsg, _List_Nil);
 	});
 var author$project$Controls$viewForwardButton = F2(
 	function (status, clickMsg) {
-		return A3(author$project$Controls$viewButton, '⇨', clickMsg, _List_Nil);
+		return A4(author$project$Controls$viewButton, '⇨', 'Forward', clickMsg, _List_Nil);
 	});
 var author$project$Controls$viewImportButton = F3(
 	function (importField, openMsg, cancelMsg) {
 		if (!importField.$) {
 			var text = importField.a;
-			return A3(author$project$Controls$viewButton, 'Cancel', cancelMsg, _List_Nil);
+			return A4(author$project$Controls$viewButton, 'Cancel', 'Cancel import', cancelMsg, _List_Nil);
 		} else {
-			return A3(author$project$Controls$viewButton, 'Import', openMsg, _List_Nil);
+			return A4(author$project$Controls$viewButton, 'Import', 'Import pattern', openMsg, _List_Nil);
 		}
 	});
 var elm$html$Html$textarea = _VirtualDom_node('textarea');
@@ -5067,31 +5069,32 @@ var author$project$Controls$viewImportField = F2(
 		}
 	});
 var author$project$Controls$viewRandomizeButton = function (clickMsg) {
-	return A3(author$project$Controls$viewButton, '🎲', clickMsg, _List_Nil);
+	return A4(author$project$Controls$viewButton, '🎲', 'Randomize', clickMsg, _List_Nil);
 };
 var author$project$Controls$viewSpeedButton = function (clickMsg) {
-	return A3(author$project$Controls$viewButton, '🏃\u200d♀️', clickMsg, _List_Nil);
+	return A4(author$project$Controls$viewButton, '🏃\u200d♀️', 'Speed', clickMsg, _List_Nil);
 };
 var author$project$Controls$viewStatusButton = F2(
 	function (status, clickMsg) {
 		if (!status) {
-			return A3(
+			return A4(
 				author$project$Controls$viewButton,
 				'Start',
+				'Start simulation',
 				clickMsg,
 				_List_fromArray(
 					[
 						elm$html$Html$Attributes$class('play-button')
 					]));
 		} else {
-			return A3(author$project$Controls$viewButton, 'Stop', clickMsg, _List_Nil);
+			return A4(author$project$Controls$viewButton, 'Stop', 'Stop simulation', clickMsg, _List_Nil);
 		}
 	});
 var author$project$Controls$viewThemeButton = function (clickMsg) {
-	return A3(author$project$Controls$viewButton, '🎨', clickMsg, _List_Nil);
+	return A4(author$project$Controls$viewButton, '🎨', 'Theme', clickMsg, _List_Nil);
 };
 var author$project$Controls$viewZoomButton = function (clickMsg) {
-	return A3(author$project$Controls$viewButton, '🔬', clickMsg, _List_Nil);
+	return A4(author$project$Controls$viewButton, '🔬', 'Zoom', clickMsg, _List_Nil);
 };
 var elm$html$Html$div = _VirtualDom_node('div');
 var author$project$Controls$view = F3(
