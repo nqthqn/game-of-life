@@ -4934,11 +4934,11 @@ var author$project$Controls$viewButton = F4(
 	});
 var author$project$Controls$viewBackButton = F2(
 	function (status, clickMsg) {
-		return A4(author$project$Controls$viewButton, '⇦', 'Back', clickMsg, _List_Nil);
+		return A4(author$project$Controls$viewButton, '⇦', 'Back (←)', clickMsg, _List_Nil);
 	});
 var author$project$Controls$viewForwardButton = F2(
 	function (status, clickMsg) {
-		return A4(author$project$Controls$viewButton, '⇨', 'Forward', clickMsg, _List_Nil);
+		return A4(author$project$Controls$viewButton, '⇨', 'Forward (→)', clickMsg, _List_Nil);
 	});
 var author$project$Controls$viewImportButton = F3(
 	function (importField, openMsg, cancelMsg) {
@@ -5069,10 +5069,10 @@ var author$project$Controls$viewImportField = F2(
 		}
 	});
 var author$project$Controls$viewRandomizeButton = function (clickMsg) {
-	return A4(author$project$Controls$viewButton, '🎲', 'Randomize', clickMsg, _List_Nil);
+	return A4(author$project$Controls$viewButton, '🎲', 'Randomize (R)', clickMsg, _List_Nil);
 };
 var author$project$Controls$viewSpeedButton = function (clickMsg) {
-	return A4(author$project$Controls$viewButton, '🏃\u200d♀️', 'Speed', clickMsg, _List_Nil);
+	return A4(author$project$Controls$viewButton, '🏃\u200d♀️', 'Speed (S)', clickMsg, _List_Nil);
 };
 var author$project$Controls$viewStatusButton = F2(
 	function (status, clickMsg) {
@@ -5080,21 +5080,21 @@ var author$project$Controls$viewStatusButton = F2(
 			return A4(
 				author$project$Controls$viewButton,
 				'Start',
-				'Start simulation',
+				'Start simulation (P)',
 				clickMsg,
 				_List_fromArray(
 					[
 						elm$html$Html$Attributes$class('play-button')
 					]));
 		} else {
-			return A4(author$project$Controls$viewButton, 'Stop', 'Stop simulation', clickMsg, _List_Nil);
+			return A4(author$project$Controls$viewButton, 'Stop', 'Stop simulation (P)', clickMsg, _List_Nil);
 		}
 	});
 var author$project$Controls$viewThemeButton = function (clickMsg) {
-	return A4(author$project$Controls$viewButton, '🎨', 'Theme', clickMsg, _List_Nil);
+	return A4(author$project$Controls$viewButton, '🎨', 'Theme (T)', clickMsg, _List_Nil);
 };
 var author$project$Controls$viewZoomButton = function (clickMsg) {
-	return A4(author$project$Controls$viewButton, '🔬', 'Zoom', clickMsg, _List_Nil);
+	return A4(author$project$Controls$viewButton, '🔬', 'Zoom (Z)', clickMsg, _List_Nil);
 };
 var elm$html$Html$div = _VirtualDom_node('div');
 var author$project$Controls$view = F3(
@@ -5124,18 +5124,10 @@ var author$project$Controls$view = F3(
 					A2(author$project$Controls$viewImportField, importField, events.ax)
 				]));
 	});
-var author$project$Main$ChangeSpeed = function (a) {
-	return {$: 4, a: a};
-};
-var author$project$Main$ChangeStatus = function (a) {
-	return {$: 3, a: a};
-};
-var author$project$Main$ChangeTheme = function (a) {
-	return {$: 6, a: a};
-};
-var author$project$Main$ChangeZoom = function (a) {
-	return {$: 5, a: a};
-};
+var author$project$Main$ChangeSpeed = {$: 4};
+var author$project$Main$ChangeStatus = {$: 3};
+var author$project$Main$ChangeTheme = {$: 6};
+var author$project$Main$ChangeZoom = {$: 5};
 var author$project$Main$ImportFieldCancel = {$: 12};
 var author$project$Main$ImportFieldChange = function (a) {
 	return {$: 11, a: a};
@@ -5145,79 +5137,9 @@ var author$project$Main$NoOp = {$: 15};
 var author$project$Main$RandomPatternRequest = {$: 13};
 var author$project$Main$StepBack = {$: 1};
 var author$project$Main$StepForward = {$: 2};
-var author$project$Controls$Fast = 2;
-var author$project$Controls$Medium = 1;
-var author$project$Controls$Slow = 0;
-var author$project$Main$nextSpeed = function (speed) {
-	switch (speed) {
-		case 0:
-			return 1;
-		case 1:
-			return 2;
-		default:
-			return 0;
-	}
-};
-var author$project$Controls$Paused = 0;
-var author$project$Controls$Playing = 1;
-var author$project$Main$nextStatus = function (status) {
-	if (status === 1) {
-		return 0;
-	} else {
-		return 1;
-	}
-};
-var author$project$Common$Dark = 1;
-var author$project$Common$Light = 0;
-var author$project$Main$nextTheme = function (theme) {
-	if (!theme) {
-		return 1;
-	} else {
-		return 0;
-	}
-};
-var author$project$Common$Close = 2;
-var author$project$Common$Far = 0;
-var author$project$Common$Normal = 1;
-var author$project$Main$nextZoomLevel = function (zoom) {
-	switch (zoom) {
-		case 0:
-			return 1;
-		case 1:
-			return 2;
-		default:
-			return 0;
-	}
-};
-var author$project$Main$controlEventHandlers = function (_n0) {
-	var speed = _n0.N;
-	var zoom = _n0.H;
-	var theme = _n0.F;
-	var status = _n0.v;
-	return {
-		au: author$project$Main$NoOp,
-		aw: author$project$Main$ImportFieldCancel,
-		ax: author$project$Main$ImportFieldChange,
-		ay: author$project$Main$ImportFieldOpen,
-		Z: author$project$Main$RandomPatternRequest,
-		_: author$project$Main$ChangeSpeed(
-			author$project$Main$nextSpeed(speed)),
-		aa: author$project$Main$ChangeStatus(
-			author$project$Main$nextStatus(status)),
-		ab: author$project$Main$StepBack,
-		ac: author$project$Main$StepForward,
-		ad: author$project$Main$ChangeTheme(
-			author$project$Main$nextTheme(theme)),
-		ae: author$project$Main$ChangeZoom(
-			author$project$Main$nextZoomLevel(zoom))
-	};
-};
+var author$project$Main$controlEventHandlers = {au: author$project$Main$NoOp, aw: author$project$Main$ImportFieldCancel, ax: author$project$Main$ImportFieldChange, ay: author$project$Main$ImportFieldOpen, Z: author$project$Main$RandomPatternRequest, _: author$project$Main$ChangeSpeed, aa: author$project$Main$ChangeStatus, ab: author$project$Main$StepBack, ac: author$project$Main$StepForward, ad: author$project$Main$ChangeTheme, ae: author$project$Main$ChangeZoom};
 var author$project$Main$viewControls = function (model) {
-	return A3(
-		author$project$Controls$view,
-		model.v,
-		model.r,
-		author$project$Main$controlEventHandlers(model));
+	return A3(author$project$Controls$view, model.v, model.r, author$project$Main$controlEventHandlers);
 };
 var author$project$Matrix$width = function (_n0) {
 	var dimensions = _n0.a;
@@ -5484,27 +5406,22 @@ var author$project$Main$viewGame = function (model) {
 		model.F,
 		author$project$Main$gameEventHandlers);
 };
-var author$project$Main$view = function (model) {
-	return A2(
-		elm$html$Html$div,
-		_List_Nil,
-		_List_fromArray(
-			[
-				author$project$Main$bodyStyles(model.F),
-				author$project$Main$viewGame(model),
-				author$project$Main$viewControls(model)
-			]));
-};
 var author$project$Main$document = function (model) {
 	return {
 		aU: _List_fromArray(
 			[
-				author$project$Main$view(model)
+				author$project$Main$bodyStyles(model.F),
+				author$project$Main$viewGame(model),
+				author$project$Main$viewControls(model)
 			]),
 		a9: 'Game of Life'
 	};
 };
+var author$project$Common$Dark = 1;
+var author$project$Common$Far = 0;
 var author$project$Controls$Closed = {$: 1};
+var author$project$Controls$Paused = 0;
+var author$project$Controls$Slow = 0;
 var author$project$GameOfLife$Dead = 1;
 var author$project$GameOfLife$GameOfLife = elm$core$Basics$identity;
 var elm$core$Array$repeat = F2(
@@ -6205,15 +6122,14 @@ var elm$browser$Browser$Events$on = F3(
 	});
 var elm$browser$Browser$Events$onKeyDown = A2(elm$browser$Browser$Events$on, 0, 'keydown');
 var elm$core$Platform$Sub$map = _Platform_map;
-var author$project$Main$keyDownSubscription = function (model) {
-	var onKeyDown = author$project$Controls$onKeyDown(
-		author$project$Main$controlEventHandlers(model));
+var author$project$Main$keyDownSubscription = function () {
+	var onKeyDown = author$project$Controls$onKeyDown(author$project$Main$controlEventHandlers);
 	var keyDecoder = A2(elm$json$Json$Decode$field, 'key', elm$json$Json$Decode$string);
 	return A2(
 		elm$core$Platform$Sub$map,
 		onKeyDown,
 		elm$browser$Browser$Events$onKeyDown(keyDecoder));
-};
+}();
 var author$project$Main$ClockTick = {$: 0};
 var author$project$Main$tickInterval = function (speed) {
 	switch (speed) {
@@ -6460,8 +6376,8 @@ var author$project$Main$subscriptions = function (model) {
 	return elm$core$Platform$Sub$batch(
 		_List_fromArray(
 			[
-				author$project$Main$keyDownSubscription(model),
-				A2(author$project$Main$tickSubscription, model.v, model.N)
+				A2(author$project$Main$tickSubscription, model.v, model.N),
+				author$project$Main$keyDownSubscription
 			]));
 };
 var author$project$Controls$Open = function (a) {
@@ -6739,6 +6655,46 @@ var author$project$Main$ifGameFinished = F2(
 	function (updateModel, model) {
 		return author$project$History$isUnchanged(model.g) ? updateModel(model) : model;
 	});
+var author$project$Controls$Fast = 2;
+var author$project$Controls$Medium = 1;
+var author$project$Main$nextSpeed = function (speed) {
+	switch (speed) {
+		case 0:
+			return 1;
+		case 1:
+			return 2;
+		default:
+			return 0;
+	}
+};
+var author$project$Controls$Playing = 1;
+var author$project$Main$nextStatus = function (status) {
+	if (status === 1) {
+		return 0;
+	} else {
+		return 1;
+	}
+};
+var author$project$Common$Light = 0;
+var author$project$Main$nextTheme = function (theme) {
+	if (!theme) {
+		return 1;
+	} else {
+		return 0;
+	}
+};
+var author$project$Common$Close = 2;
+var author$project$Common$Normal = 1;
+var author$project$Main$nextZoom = function (zoom) {
+	switch (zoom) {
+		case 0:
+			return 1;
+		case 1:
+			return 2;
+		default:
+			return 0;
+	}
+};
 var author$project$Main$pauseGame = function (model) {
 	return _Utils_update(
 		model,
@@ -7279,29 +7235,33 @@ var author$project$Main$update = F2(
 							author$project$Main$stepGame(model),
 							author$project$Main$tryRedoStep(model))));
 			case 3:
-				var status = msg.a;
 				return author$project$Main$withoutCmd(
 					_Utils_update(
 						model,
-						{v: status}));
+						{
+							v: author$project$Main$nextStatus(model.v)
+						}));
 			case 4:
-				var speed = msg.a;
 				return author$project$Main$withoutCmd(
 					_Utils_update(
 						model,
-						{N: speed}));
+						{
+							N: author$project$Main$nextSpeed(model.N)
+						}));
 			case 5:
-				var zoom = msg.a;
 				return author$project$Main$withoutCmd(
 					_Utils_update(
 						model,
-						{H: zoom}));
+						{
+							H: author$project$Main$nextZoom(model.H)
+						}));
 			case 6:
-				var theme = msg.a;
 				return author$project$Main$withoutCmd(
 					_Utils_update(
 						model,
-						{F: theme}));
+						{
+							F: author$project$Main$nextTheme(model.F)
+						}));
 			case 7:
 				var coordinate = msg.a;
 				return author$project$Main$withoutCmd(
