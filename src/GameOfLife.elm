@@ -3,6 +3,8 @@ module GameOfLife exposing
     , Events
     , GameOfLife
     , Padding(..)
+    , Theme(..)
+    , Zoom(..)
     , begin
     , beginWithPattern
     , isFinished
@@ -11,7 +13,6 @@ module GameOfLife exposing
     , view
     )
 
-import Common exposing (Theme(..), Zoom(..))
 import Html exposing (Attribute, Html, div)
 import Html.Attributes exposing (class, style)
 import Html.Events exposing (onMouseDown, onMouseEnter, onMouseUp)
@@ -164,6 +165,17 @@ type alias ClassName =
     String
 
 
+type Zoom
+    = Far
+    | Normal
+    | Close
+
+
+type Theme
+    = Light
+    | Dark
+
+
 type alias Events msg =
     { onMouseOver : Coordinate -> msg
     , onMouseDown : Coordinate -> msg
@@ -183,11 +195,14 @@ viewCells (GameOfLife cells) zoom theme events =
     let
         attributes =
             [ class "cells" ] ++ zoomStyles zoom
+
+        size =
+            outerCellSize cells
     in
     div
         attributes
         (cells
-            |> Matrix.coordinateMap (viewCell (cellSize cells) theme events)
+            |> Matrix.coordinateMap (viewCell size theme events)
             |> Matrix.toList
         )
 
@@ -244,8 +259,8 @@ percentString percentage =
     String.fromFloat percentage ++ "%"
 
 
-cellSize : Cells -> Percentage
-cellSize cells =
+outerCellSize : Cells -> Percentage
+outerCellSize cells =
     100.0 / (Matrix.width cells |> toFloat)
 
 

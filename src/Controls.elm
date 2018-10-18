@@ -8,7 +8,6 @@ module Controls exposing
     , view
     )
 
-import Common exposing (Theme(..), Zoom(..))
 import Html exposing (Attribute, Html, button, div, text, textarea)
 import Html.Attributes exposing (autofocus, class, placeholder, title, value)
 import Html.Events exposing (onClick, onInput)
@@ -104,7 +103,7 @@ viewThemeButton clickMsg =
 viewImportButton : ImportField -> msg -> msg -> Html msg
 viewImportButton importField openMsg cancelMsg =
     case importField of
-        Open text ->
+        Open _ ->
             viewButton "Cancel" "Cancel import" cancelMsg []
 
         Closed ->
