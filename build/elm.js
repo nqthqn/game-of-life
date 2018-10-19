@@ -586,11 +586,11 @@ function _Debug_crash_UNUSED(identifier, fact1, fact2, fact3, fact4)
 
 function _Debug_regionToString(region)
 {
-	if (region.ag.K === region.an.K)
+	if (region.ah.K === region.ap.K)
 	{
-		return 'on line ' + region.ag.K;
+		return 'on line ' + region.ah.K;
 	}
-	return 'on lines ' + region.ag.K + ' through ' + region.an.K;
+	return 'on lines ' + region.ah.K + ' through ' + region.ap.K;
 }
 
 
@@ -2644,8 +2644,8 @@ var _VirtualDom_mapEventRecord = F2(function(func, record)
 {
 	return {
 		m: func(record.m),
-		ah: record.ah,
-		af: record.af
+		ai: record.ai,
+		ag: record.ag
 	}
 });
 
@@ -2914,10 +2914,10 @@ function _VirtualDom_makeCallback(eventNode, initialHandler)
 
 		var value = result.a;
 		var message = !tag ? value : tag < 3 ? value.a : value.m;
-		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.ah;
+		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.ai;
 		var currentEventNode = (
 			stopPropagation && event.stopPropagation(),
-			(tag == 2 ? value.b : tag == 3 && value.af) && event.preventDefault(),
+			(tag == 2 ? value.b : tag == 3 && value.ag) && event.preventDefault(),
 			eventNode
 		);
 		var tagger;
@@ -4026,9 +4026,9 @@ function _Browser_application(impl)
 					var next = elm$url$Url$fromString(href).a;
 					sendToApp(onUrlRequest(
 						(next
-							&& curr.aH === next.aH
-							&& curr.ar === next.ar
-							&& curr.aE.a === next.aE.a
+							&& curr.aI === next.aI
+							&& curr.as === next.as
+							&& curr.aF.a === next.aF.a
 						)
 							? elm$browser$Browser$Internal(next)
 							: elm$browser$Browser$External(href)
@@ -4199,12 +4199,12 @@ var _Browser_call = F2(function(functionName, id)
 function _Browser_getViewport()
 {
 	return {
-		aL: _Browser_getScene(),
-		aO: {
+		aM: _Browser_getScene(),
+		aP: {
 			aQ: _Browser_window.pageXOffset,
 			aR: _Browser_window.pageYOffset,
-			aP: _Browser_doc.documentElement.clientWidth,
-			aq: _Browser_doc.documentElement.clientHeight
+			ak: _Browser_doc.documentElement.clientWidth,
+			W: _Browser_doc.documentElement.clientHeight
 		}
 	};
 }
@@ -4214,8 +4214,8 @@ function _Browser_getScene()
 	var body = _Browser_doc.body;
 	var elem = _Browser_doc.documentElement;
 	return {
-		aP: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
-		aq: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
+		ak: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
+		W: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
 	};
 }
 
@@ -4238,15 +4238,15 @@ function _Browser_getViewportOf(id)
 	return _Browser_withNode(id, function(node)
 	{
 		return {
-			aL: {
-				aP: node.scrollWidth,
-				aq: node.scrollHeight
+			aM: {
+				ak: node.scrollWidth,
+				W: node.scrollHeight
 			},
-			aO: {
+			aP: {
 				aQ: node.scrollLeft,
 				aR: node.scrollTop,
-				aP: node.clientWidth,
-				aq: node.clientHeight
+				ak: node.clientWidth,
+				W: node.clientHeight
 			}
 		};
 	});
@@ -4276,18 +4276,18 @@ function _Browser_getElement(id)
 		var x = _Browser_window.pageXOffset;
 		var y = _Browser_window.pageYOffset;
 		return {
-			aL: _Browser_getScene(),
-			aO: {
+			aM: _Browser_getScene(),
+			aP: {
 				aQ: x,
 				aR: y,
-				aP: _Browser_doc.documentElement.clientWidth,
-				aq: _Browser_doc.documentElement.clientHeight
+				ak: _Browser_doc.documentElement.clientWidth,
+				W: _Browser_doc.documentElement.clientHeight
 			},
 			aZ: {
 				aQ: x + rect.left,
 				aR: y + rect.top,
-				aP: rect.width,
-				aq: rect.height
+				ak: rect.width,
+				W: rect.height
 			}
 		};
 	});
@@ -5111,16 +5111,16 @@ var author$project$Controls$view = F3(
 						]),
 					_List_fromArray(
 						[
-							A2(author$project$Controls$viewStatusButton, status, events.aa),
-							A2(author$project$Controls$viewBackButton, status, events.ab),
-							A2(author$project$Controls$viewForwardButton, status, events.ac),
-							author$project$Controls$viewRandomizeButton(events.Z),
-							author$project$Controls$viewSpeedButton(events._),
-							author$project$Controls$viewZoomButton(events.ae),
-							author$project$Controls$viewThemeButton(events.ad),
-							A3(author$project$Controls$viewImportButton, importField, events.ay, events.aw)
+							A2(author$project$Controls$viewStatusButton, status, events.ab),
+							A2(author$project$Controls$viewBackButton, status, events.ac),
+							A2(author$project$Controls$viewForwardButton, status, events.ad),
+							author$project$Controls$viewRandomizeButton(events._),
+							author$project$Controls$viewSpeedButton(events.aa),
+							author$project$Controls$viewZoomButton(events.af),
+							author$project$Controls$viewThemeButton(events.ae),
+							A3(author$project$Controls$viewImportButton, importField, events.az, events.ax)
 						])),
-					A2(author$project$Controls$viewImportField, importField, events.ax)
+					A2(author$project$Controls$viewImportField, importField, events.ay)
 				]));
 	});
 var author$project$Main$ChangeSpeed = {$: 4};
@@ -5136,19 +5136,24 @@ var author$project$Main$NoOp = {$: 15};
 var author$project$Main$RandomPatternRequest = {$: 13};
 var author$project$Main$StepBack = {$: 1};
 var author$project$Main$StepForward = {$: 2};
-var author$project$Main$controlEventHandlers = {au: author$project$Main$NoOp, aw: author$project$Main$ImportFieldCancel, ax: author$project$Main$ImportFieldChange, ay: author$project$Main$ImportFieldOpen, Z: author$project$Main$RandomPatternRequest, _: author$project$Main$ChangeSpeed, aa: author$project$Main$ChangeStatus, ab: author$project$Main$StepBack, ac: author$project$Main$StepForward, ad: author$project$Main$ChangeTheme, ae: author$project$Main$ChangeZoom};
+var author$project$Main$controlEventHandlers = {av: author$project$Main$NoOp, ax: author$project$Main$ImportFieldCancel, ay: author$project$Main$ImportFieldChange, az: author$project$Main$ImportFieldOpen, _: author$project$Main$RandomPatternRequest, aa: author$project$Main$ChangeSpeed, ab: author$project$Main$ChangeStatus, ac: author$project$Main$StepBack, ad: author$project$Main$StepForward, ae: author$project$Main$ChangeTheme, af: author$project$Main$ChangeZoom};
 var author$project$Main$viewControls = function (model) {
 	return A3(author$project$Controls$view, model.v, model.r, author$project$Main$controlEventHandlers);
 };
+var author$project$GameOfLife$Percentage = elm$core$Basics$identity;
 var author$project$Matrix$width = function (_n0) {
 	var dimensions = _n0.a;
-	return dimensions.aP;
+	return dimensions.ak;
 };
 var author$project$GameOfLife$outerCellSize = function (cells) {
-	return 100.0 / author$project$Matrix$width(cells);
+	return function (width) {
+		return 100 / width;
+	}(
+		author$project$Matrix$width(cells));
 };
 var elm$core$String$fromFloat = _String_fromNumber;
-var author$project$GameOfLife$percentString = function (percentage) {
+var author$project$GameOfLife$percentString = function (_n0) {
+	var percentage = _n0;
 	return elm$core$String$fromFloat(percentage) + '%';
 };
 var elm$core$Basics$modBy = _Basics_modBy;
@@ -5245,10 +5250,10 @@ var author$project$GameOfLife$viewCell = F5(
 					'height',
 					author$project$GameOfLife$percentString(relativeSize)),
 					elm$html$Html$Events$onMouseDown(
-					events.az(coordinate)),
-					elm$html$Html$Events$onMouseUp(events.aB),
+					events.aA(coordinate)),
+					elm$html$Html$Events$onMouseUp(events.aC),
 					elm$html$Html$Events$onMouseEnter(
-					events.aA(coordinate))
+					events.aB(coordinate))
 				]),
 			_List_fromArray(
 				[
@@ -5259,17 +5264,23 @@ var author$project$GameOfLife$zoomStyles = function (zoom) {
 	var percentage = function () {
 		switch (zoom) {
 			case 0:
-				return author$project$GameOfLife$percentString(100);
+				return 100;
 			case 1:
-				return author$project$GameOfLife$percentString(150);
+				return 150;
 			default:
-				return author$project$GameOfLife$percentString(200);
+				return 200;
 		}
 	}();
 	return _List_fromArray(
 		[
-			A2(elm$html$Html$Attributes$style, 'width', percentage),
-			A2(elm$html$Html$Attributes$style, 'height', percentage)
+			A2(
+			elm$html$Html$Attributes$style,
+			'width',
+			author$project$GameOfLife$percentString(percentage)),
+			A2(
+			elm$html$Html$Attributes$style,
+			'height',
+			author$project$GameOfLife$percentString(percentage))
 		]);
 };
 var author$project$Matrix$Matrix = F2(
@@ -5278,10 +5289,10 @@ var author$project$Matrix$Matrix = F2(
 	});
 var author$project$Matrix$toCoordinate = F2(
 	function (dimensions, index) {
-		return (_Utils_cmp(index, dimensions.aP * dimensions.aq) < 0) ? {
-			aQ: A2(elm$core$Basics$modBy, dimensions.aP, index),
-			aR: (index / dimensions.aP) | 0
-		} : {aQ: dimensions.aP - 1, aR: dimensions.aq - 1};
+		return (_Utils_cmp(index, dimensions.ak * dimensions.W) < 0) ? {
+			aQ: A2(elm$core$Basics$modBy, dimensions.ak, index),
+			aR: (index / dimensions.ak) | 0
+		} : {aQ: dimensions.ak - 1, aR: dimensions.W - 1};
 	});
 var elm$core$Bitwise$shiftLeftBy = _Bitwise_shiftLeftBy;
 var elm$core$Bitwise$shiftRightZfBy = _Bitwise_shiftRightZfBy;
@@ -5393,7 +5404,7 @@ var author$project$Main$MouseOver = function (a) {
 	return {$: 8, a: a};
 };
 var author$project$Main$MouseUp = {$: 9};
-var author$project$Main$gameEventHandlers = {az: author$project$Main$MouseDown, aA: author$project$Main$MouseOver, aB: author$project$Main$MouseUp};
+var author$project$Main$gameEventHandlers = {aA: author$project$Main$MouseDown, aB: author$project$Main$MouseOver, aC: author$project$Main$MouseUp};
 var author$project$Main$viewGame = function (model) {
 	return A4(
 		author$project$GameOfLife$view,
@@ -5434,7 +5445,7 @@ var author$project$Matrix$create = F2(
 		return A2(
 			author$project$Matrix$Matrix,
 			dimensions,
-			A2(elm$core$Array$repeat, dimensions.aP * dimensions.aq, defaultValue));
+			A2(elm$core$Array$repeat, dimensions.ak * dimensions.W, defaultValue));
 	});
 var author$project$GameOfLife$begin = function (dimensions) {
 	return A2(author$project$Matrix$create, dimensions, 1);
@@ -5444,7 +5455,7 @@ var author$project$History$begin = function (present) {
 	return {z: _List_Nil, o: _List_Nil, j: present};
 };
 var author$project$Main$Up = 0;
-var author$project$Main$defaultGameSize = {aq: 20, aP: 20};
+var author$project$Main$defaultGameSize = {W: 20, ak: 20};
 var author$project$Main$initialModel = {
 	g: author$project$History$begin(
 		author$project$GameOfLife$begin(author$project$Main$defaultGameSize)),
@@ -5465,21 +5476,21 @@ var author$project$Controls$onKeyDown = F2(
 	function (events, key) {
 		switch (key) {
 			case 'ArrowLeft':
-				return events.ab;
-			case 'ArrowRight':
 				return events.ac;
-			case 'p':
-				return events.aa;
-			case 's':
-				return events._;
-			case 'r':
-				return events.Z;
-			case 'z':
-				return events.ae;
-			case 't':
+			case 'ArrowRight':
 				return events.ad;
+			case 'p':
+				return events.ab;
+			case 's':
+				return events.aa;
+			case 'r':
+				return events._;
+			case 'z':
+				return events.af;
+			case 't':
+				return events.ae;
 			default:
-				return events.au;
+				return events.av;
 		}
 	});
 var elm$browser$Browser$Events$Document = 0;
@@ -5489,7 +5500,7 @@ var elm$browser$Browser$Events$MySub = F3(
 	});
 var elm$browser$Browser$Events$State = F2(
 	function (subs, pids) {
-		return {aD: pids, aM: subs};
+		return {aE: pids, aN: subs};
 	});
 var elm$core$Dict$RBEmpty_elm_builtin = {$: -2};
 var elm$core$Dict$empty = elm$core$Dict$RBEmpty_elm_builtin;
@@ -5514,7 +5525,7 @@ var elm$browser$Browser$Events$addKey = function (sub) {
 };
 var elm$browser$Browser$Events$Event = F2(
 	function (key, event) {
-		return {ao: event, as: key};
+		return {aq: event, at: key};
 	});
 var elm$core$Platform$sendToSelf = _Platform_sendToSelf;
 var elm$core$Task$andThen = _Scheduler_andThen;
@@ -5646,7 +5657,7 @@ var elm$core$String$contains = _String_contains;
 var elm$core$String$toInt = _String_toInt;
 var elm$url$Url$Url = F6(
 	function (protocol, host, port_, path, query, fragment) {
-		return {ap: fragment, ar: host, aC: path, aE: port_, aH: protocol, aI: query};
+		return {ar: fragment, as: host, aD: path, aF: port_, aI: protocol, aJ: query};
 	});
 var elm$url$Url$chompBeforePath = F5(
 	function (protocol, path, params, frag, str) {
@@ -6030,7 +6041,7 @@ var elm$browser$Browser$Events$onEffects = F3(
 			stepLeft,
 			stepBoth,
 			stepRight,
-			state.aD,
+			state.aE,
 			elm$core$Dict$fromList(newSubs),
 			_Utils_Tuple3(_List_Nil, elm$core$Dict$empty, _List_Nil));
 		var deadPids = _n0.a;
@@ -6076,8 +6087,8 @@ var elm$core$List$filterMap = F2(
 	});
 var elm$browser$Browser$Events$onSelfMsg = F3(
 	function (router, _n0, state) {
-		var key = _n0.as;
-		var event = _n0.ao;
+		var key = _n0.at;
+		var event = _n0.aq;
 		var toMessage = function (_n2) {
 			var subKey = _n2.a;
 			var _n3 = _n2.b;
@@ -6086,7 +6097,7 @@ var elm$browser$Browser$Events$onSelfMsg = F3(
 			var decoder = _n3.c;
 			return _Utils_eq(subKey, key) ? A2(_Browser_decodeEvent, decoder, event) : elm$core$Maybe$Nothing;
 		};
-		var messages = A2(elm$core$List$filterMap, toMessage, state.aM);
+		var messages = A2(elm$core$List$filterMap, toMessage, state.aN);
 		return A2(
 			elm$core$Task$andThen,
 			function (_n1) {
@@ -6149,7 +6160,7 @@ var elm$time$Time$Every = F2(
 	});
 var elm$time$Time$State = F2(
 	function (taggers, processes) {
-		return {aG: processes, aN: taggers};
+		return {aH: processes, aO: taggers};
 	});
 var elm$time$Time$init = elm$core$Task$succeed(
 	A2(elm$time$Time$State, elm$core$Dict$empty, elm$core$Dict$empty));
@@ -6242,7 +6253,7 @@ var elm$time$Time$spawnHelp = F3(
 	});
 var elm$time$Time$onEffects = F3(
 	function (router, subs, _n0) {
-		var processes = _n0.aG;
+		var processes = _n0.aH;
 		var rightStep = F3(
 			function (_n6, id, _n7) {
 				var spawns = _n7.a;
@@ -6311,7 +6322,7 @@ var elm$time$Time$millisToPosix = elm$core$Basics$identity;
 var elm$time$Time$now = _Time_now(elm$time$Time$millisToPosix);
 var elm$time$Time$onSelfMsg = F3(
 	function (router, interval, state) {
-		var _n0 = A2(elm$core$Dict$get, interval, state.aN);
+		var _n0 = A2(elm$core$Dict$get, interval, state.aO);
 		if (_n0.$ === 1) {
 			return elm$core$Task$succeed(state);
 		} else {
@@ -6391,9 +6402,9 @@ var author$project$Matrix$toIndex = F2(
 	function (dimensions, _n0) {
 		var x = _n0.aQ;
 		var y = _n0.aR;
-		var wrappedY = A3(author$project$Matrix$wrap, 0, dimensions.aq - 1, y);
-		var wrappedX = A3(author$project$Matrix$wrap, 0, dimensions.aP - 1, x);
-		return (wrappedY * dimensions.aP) + wrappedX;
+		var wrappedY = A3(author$project$Matrix$wrap, 0, dimensions.W - 1, y);
+		var wrappedX = A3(author$project$Matrix$wrap, 0, dimensions.ak - 1, x);
+		return (wrappedY * dimensions.ak) + wrappedX;
 	});
 var elm$core$Array$bitMask = 4294967295 >>> (32 - elm$core$Array$shiftStep);
 var elm$core$Bitwise$and = _Bitwise_and;
@@ -6459,15 +6470,11 @@ var author$project$Pattern$toCoordinates = function (_n0) {
 	var coordinates = _n0;
 	return coordinates;
 };
-var author$project$GameOfLife$initializeCells = F2(
-	function (gameSize, pattern) {
+var author$project$GameOfLife$bringPatternToLife = F2(
+	function (cells, pattern) {
 		var patternCoordinates = author$project$Pattern$toCoordinates(pattern);
 		var makeAlive = author$project$Matrix$set(0);
-		var deadCells = A2(
-			author$project$Matrix$create,
-			{aq: gameSize, aP: gameSize},
-			1);
-		return A3(elm$core$List$foldl, makeAlive, deadCells, patternCoordinates);
+		return A3(elm$core$List$foldl, makeAlive, cells, patternCoordinates);
 	});
 var author$project$Pattern$Pattern = elm$core$Basics$identity;
 var elm$core$List$maximum = function (list) {
@@ -6570,8 +6577,8 @@ var author$project$Pattern$centerAt = F2(
 			A2(author$project$Pattern$offsetBy, xDistance, yDistance),
 			coordinates);
 	});
-var author$project$GameOfLife$beginWithPattern = F2(
-	function (padding, pattern) {
+var author$project$GameOfLife$beginWithPattern = F3(
+	function (minDimensions, padding, pattern) {
 		var paddingCells = function () {
 			if (!padding) {
 				return 6;
@@ -6579,16 +6586,21 @@ var author$project$GameOfLife$beginWithPattern = F2(
 				return 0;
 			}
 		}();
-		var size = A2(
+		var width = A2(
 			elm$core$Basics$max,
-			18,
-			paddingCells + A2(
-				elm$core$Basics$max,
-				author$project$Pattern$width(pattern),
-				author$project$Pattern$height(pattern)));
-		var center = {aQ: (size / 2) | 0, aR: (size / 2) | 0};
+			author$project$Pattern$width(pattern) + paddingCells,
+			minDimensions.ak);
+		var height = A2(
+			elm$core$Basics$max,
+			author$project$Pattern$height(pattern) + paddingCells,
+			minDimensions.W);
+		var deadCells = A2(
+			author$project$Matrix$create,
+			{W: height, ak: width},
+			1);
+		var center = {aQ: (width / 2) | 0, aR: (height / 2) | 0};
 		var centeredPattern = A2(author$project$Pattern$centerAt, center, pattern);
-		return A2(author$project$GameOfLife$initializeCells, size, centeredPattern);
+		return A2(author$project$GameOfLife$bringPatternToLife, deadCells, centeredPattern);
 	});
 var author$project$History$record = F2(
 	function (step, _n0) {
@@ -6608,7 +6620,7 @@ var author$project$Main$setGame = F2(
 	});
 var author$project$Main$displayPattern = F3(
 	function (padding, pattern, model) {
-		var newGame = A2(author$project$GameOfLife$beginWithPattern, padding, pattern);
+		var newGame = A3(author$project$GameOfLife$beginWithPattern, author$project$Main$defaultGameSize, padding, pattern);
 		return A2(
 			author$project$Main$setGame,
 			model,
@@ -6773,8 +6785,8 @@ var author$project$Pattern$coordinateGenerator = function (boundingBox) {
 	return A3(
 		elm$random$Random$map2,
 		author$project$Pattern$Coordinate,
-		A2(elm$random$Random$int, 0, boundingBox.aP - 1),
-		A2(elm$random$Random$int, 0, boundingBox.aq - 1));
+		A2(elm$random$Random$int, 0, boundingBox.ak - 1),
+		A2(elm$random$Random$int, 0, boundingBox.W - 1));
 };
 var elm$random$Random$listHelp = F4(
 	function (revList, n, gen, seed) {
@@ -6818,7 +6830,7 @@ var elm$random$Random$map = F2(
 		};
 	});
 var author$project$Pattern$generator = function (boundingBox) {
-	var coordinateCount = ((boundingBox.aP * boundingBox.aq) / 4) | 0;
+	var coordinateCount = ((boundingBox.ak * boundingBox.W) / 4) | 0;
 	return A2(
 		elm$random$Random$map,
 		elm$core$Basics$identity,
