@@ -10,6 +10,7 @@ module Pattern exposing
 
 import Maybe.Extra as Maybe
 import Random exposing (Generator)
+import Result
 
 
 type Pattern
@@ -31,7 +32,11 @@ toCoordinates (Pattern coordinates) =
 -- PARSER
 
 
-parseLife106Format : String -> Maybe Pattern
+type ParseError
+    = ParseError String
+
+
+parseLife106Format : String -> Result ParseError Pattern
 parseLife106Format text =
     String.lines text
         |> List.map String.trim
@@ -39,7 +44,9 @@ parseLife106Format text =
         |> stripOptionalHeader
         |> List.map parseCoordinate
         |> Maybe.combine
+        |> Maybe.filter (\coordinates -> List.length coordinates > 0)
         |> Maybe.map Pattern
+        |> Result.fromMaybe (ParseError "Error parsing pattern")
 
 
 stripOptionalHeader : List String -> List String

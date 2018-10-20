@@ -58,8 +58,8 @@ begin dimensions =
         |> GameOfLife
 
 
-beginWithPattern : Dimensions -> Padding -> Pattern -> GameOfLife
-beginWithPattern minDimensions padding pattern =
+beginWithPattern : Int -> Padding -> Pattern -> GameOfLife
+beginWithPattern minSize padding pattern =
     let
         paddingCells =
             case padding of
@@ -69,22 +69,26 @@ beginWithPattern minDimensions padding pattern =
                 WithoutPadding ->
                     0
 
-        width =
-            max (Pattern.width pattern + paddingCells) minDimensions.width
+        size =
+            max (Pattern.width pattern) (Pattern.height pattern)
+                |> (+) paddingCells
+                |> max minSize
 
-        height =
-            max (Pattern.height pattern + paddingCells) minDimensions.height
+        dimensions =
+            { width = size
+            , height = size
+            }
 
         center =
-            { x = width // 2
-            , y = height // 2
+            { x = size // 2
+            , y = size // 2
             }
 
         centeredPattern =
             Pattern.centerAt center pattern
 
         deadCells =
-            Matrix.create { width = width, height = height } Dead
+            Matrix.create dimensions Dead
     in
     GameOfLife (bringPatternToLife deadCells centeredPattern)
 
@@ -162,8 +166,8 @@ type Percentage
     = Percentage Float
 
 
-type alias ClassName =
-    String
+type ClassName
+    = ClassName String
 
 
 type Zoom
@@ -245,10 +249,13 @@ viewInnerCell cell coordinate theme =
     let
         size =
             innerCellSize cell
+
+        (ClassName colorClass) =
+            cellColorClass cell coordinate theme
     in
     div
         [ class "inner-cell"
-        , class (cellColorClass cell coordinate theme)
+        , class colorClass
         , style "width" (percentString size)
         , style "height" (percentString size)
         ]
@@ -284,21 +291,21 @@ cellColorClass cell { x, y } theme =
         Dead ->
             case theme of
                 Light ->
-                    "light-grey-cell"
+                    ClassName "light-grey-cell"
 
                 Dark ->
-                    "dark-grey-cell"
+                    ClassName "dark-grey-cell"
 
         Alive ->
             case ( modBy 2 x == 0, modBy 2 y == 0 ) of
                 ( True, True ) ->
-                    "orange-cell"
+                    ClassName "orange-cell"
 
                 ( True, False ) ->
-                    "green-cell"
+                    ClassName "green-cell"
 
                 ( False, True ) ->
-                    "blue-cell"
+                    ClassName "blue-cell"
 
                 ( False, False ) ->
-                    "purple-cell"
+                    ClassName "purple-cell"

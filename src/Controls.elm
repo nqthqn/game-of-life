@@ -9,7 +9,7 @@ module Controls exposing
     )
 
 import Html exposing (Attribute, Html, button, div, text, textarea)
-import Html.Attributes exposing (autofocus, class, placeholder, title, value)
+import Html.Attributes exposing (autofocus, class, classList, placeholder, title, value)
 import Html.Events exposing (onClick, onInput)
 
 
@@ -29,8 +29,9 @@ type Speed
 
 
 type ImportField
-    = Open UserInput
-    | Closed
+    = Closed
+    | Empty
+    | Invalid UserInput
 
 
 type alias UserInput =
@@ -103,28 +104,39 @@ viewThemeButton clickMsg =
 viewImportButton : ImportField -> msg -> msg -> Html msg
 viewImportButton importField openMsg cancelMsg =
     case importField of
-        Open _ ->
-            viewButton "Cancel" "Cancel import" cancelMsg []
-
         Closed ->
             viewButton "Import" "Import pattern" openMsg []
+
+        Empty ->
+            viewButton "Cancel" "Cancel import" cancelMsg []
+
+        Invalid _ ->
+            viewButton "Cancel" "Cancel import" cancelMsg []
 
 
 viewImportField : ImportField -> (UserInput -> msg) -> Html msg
 viewImportField importField changeMsg =
     case importField of
-        Open text ->
-            textarea
-                [ autofocus True
-                , placeholder "Paste a 'Life 1.06' pattern here..."
-                , class "import-field"
-                , value text
-                , onInput changeMsg
-                ]
-                []
-
         Closed ->
             text ""
+
+        Empty ->
+            viewImportFieldTextArea "" changeMsg False
+
+        Invalid userInput ->
+            viewImportFieldTextArea userInput changeMsg True
+
+
+viewImportFieldTextArea : UserInput -> (UserInput -> msg) -> Bool -> Html msg
+viewImportFieldTextArea userInput changeMsg isInvalid =
+    textarea
+        [ autofocus True
+        , placeholder "Paste a 'Life 1.06' pattern here..."
+        , classList [ ( "import-field", True ), ( "invalid", isInvalid ) ]
+        , value userInput
+        , onInput changeMsg
+        ]
+        []
 
 
 viewBackButton : Status -> msg -> Html msg
