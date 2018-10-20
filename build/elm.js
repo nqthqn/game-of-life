@@ -4942,15 +4942,21 @@ var author$project$Controls$viewForwardButton = F2(
 	});
 var author$project$Controls$viewImportButton = F3(
 	function (importField, openMsg, cancelMsg) {
-		switch (importField.$) {
-			case 0:
-				return A4(author$project$Controls$viewButton, 'Import', 'Import pattern', openMsg, _List_Nil);
-			case 1:
-				return A4(author$project$Controls$viewButton, 'Cancel', 'Cancel import', cancelMsg, _List_Nil);
-			default:
-				return A4(author$project$Controls$viewButton, 'Cancel', 'Cancel import', cancelMsg, _List_Nil);
+		if (!importField.$) {
+			return A4(author$project$Controls$viewButton, 'Import', 'Import pattern', openMsg, _List_Nil);
+		} else {
+			return A4(author$project$Controls$viewButton, 'Cancel', 'Cancel import', cancelMsg, _List_Nil);
 		}
 	});
+var elm$core$Basics$composeL = F3(
+	function (g, f, x) {
+		return g(
+			f(x));
+	});
+var elm$core$Basics$not = _Basics_not;
+var elm$core$String$isEmpty = function (string) {
+	return string === '';
+};
 var elm$html$Html$textarea = _VirtualDom_node('textarea');
 var elm$json$Json$Encode$bool = _Json_wrap;
 var elm$html$Html$Attributes$boolProperty = F2(
@@ -5090,35 +5096,30 @@ var elm$html$Html$Events$onInput = function (tagger) {
 			elm$html$Html$Events$alwaysStop,
 			A2(elm$json$Json$Decode$map, tagger, elm$html$Html$Events$targetValue)));
 };
-var author$project$Controls$viewImportFieldTextArea = F3(
-	function (userInput, changeMsg, isInvalid) {
-		return A2(
-			elm$html$Html$textarea,
-			_List_fromArray(
-				[
-					elm$html$Html$Attributes$autofocus(true),
-					elm$html$Html$Attributes$placeholder('Paste a \'Life 1.06\' pattern here...'),
-					elm$html$Html$Attributes$classList(
-					_List_fromArray(
-						[
-							_Utils_Tuple2('import-field', true),
-							_Utils_Tuple2('invalid', isInvalid)
-						])),
-					elm$html$Html$Attributes$value(userInput),
-					elm$html$Html$Events$onInput(changeMsg)
-				]),
-			_List_Nil);
-	});
 var author$project$Controls$viewImportField = F2(
 	function (importField, changeMsg) {
-		switch (importField.$) {
-			case 0:
-				return elm$html$Html$text('');
-			case 1:
-				return A3(author$project$Controls$viewImportFieldTextArea, '', changeMsg, false);
-			default:
-				var userInput = importField.a;
-				return A3(author$project$Controls$viewImportFieldTextArea, userInput, changeMsg, true);
+		if (!importField.$) {
+			return elm$html$Html$text('');
+		} else {
+			var userInput = importField.a;
+			return A2(
+				elm$html$Html$textarea,
+				_List_fromArray(
+					[
+						elm$html$Html$Attributes$autofocus(true),
+						elm$html$Html$Attributes$placeholder('Paste a \'Life 1.06\' pattern here...'),
+						elm$html$Html$Attributes$classList(
+						_List_fromArray(
+							[
+								_Utils_Tuple2('import-field', true),
+								_Utils_Tuple2(
+								'invalid',
+								A2(elm$core$Basics$composeL, elm$core$Basics$not, elm$core$String$isEmpty)(userInput))
+							])),
+						elm$html$Html$Attributes$value(userInput),
+						elm$html$Html$Events$onInput(changeMsg)
+					]),
+				_List_Nil);
 		}
 	});
 var author$project$Controls$viewRandomizeButton = function (clickMsg) {
@@ -5503,7 +5504,9 @@ var author$project$Matrix$create = F2(
 			dimensions,
 			A2(elm$core$Array$repeat, dimensions.aP * dimensions.aq, defaultValue));
 	});
-var author$project$GameOfLife$begin = function (dimensions) {
+var author$project$GameOfLife$begin = function (_n0) {
+	var size = _n0;
+	var dimensions = {aq: size, aP: size};
 	return A2(author$project$Matrix$create, dimensions, 1);
 };
 var author$project$History$History = elm$core$Basics$identity;
@@ -5511,11 +5514,11 @@ var author$project$History$begin = function (present) {
 	return {z: _List_Nil, o: _List_Nil, j: present};
 };
 var author$project$Main$Up = 0;
+var author$project$GameOfLife$GameSize = elm$core$Basics$identity;
 var author$project$Main$defaultGameSize = 20;
-var author$project$Main$defaultGameDimensions = {aq: author$project$Main$defaultGameSize, aP: author$project$Main$defaultGameSize};
 var author$project$Main$initialModel = {
 	g: author$project$History$begin(
-		author$project$GameOfLife$begin(author$project$Main$defaultGameDimensions)),
+		author$project$GameOfLife$begin(author$project$Main$defaultGameSize)),
 	r: author$project$Controls$Closed,
 	L: 0,
 	N: 0,
@@ -5689,9 +5692,6 @@ var elm$core$String$startsWith = _String_startsWith;
 var elm$url$Url$Http = 0;
 var elm$url$Url$Https = 1;
 var elm$core$String$indexes = _String_indexes;
-var elm$core$String$isEmpty = function (string) {
-	return string === '';
-};
 var elm$core$String$left = F2(
 	function (n, string) {
 		return (n < 1) ? '' : A3(elm$core$String$slice, 0, n, string);
@@ -6390,11 +6390,6 @@ var elm$time$Time$onSelfMsg = F3(
 				A2(elm$core$Task$andThen, tellTaggers, elm$time$Time$now));
 		}
 	});
-var elm$core$Basics$composeL = F3(
-	function (g, f, x) {
-		return g(
-			f(x));
-	});
 var elm$time$Time$subMap = F2(
 	function (f, _n0) {
 		var interval = _n0.a;
@@ -6430,9 +6425,8 @@ var author$project$Main$subscriptions = function (model) {
 				author$project$Main$keyDownSubscription
 			]));
 };
-var author$project$Controls$Empty = {$: 1};
-var author$project$Controls$Invalid = function (a) {
-	return {$: 2, a: a};
+var author$project$Controls$Open = function (a) {
+	return {$: 1, a: a};
 };
 var author$project$GameOfLife$WithPadding = 0;
 var author$project$GameOfLife$WithoutPadding = 1;
@@ -6622,7 +6616,8 @@ var author$project$Pattern$centerAt = F2(
 			coordinates);
 	});
 var author$project$GameOfLife$beginWithPattern = F3(
-	function (minSize, padding, pattern) {
+	function (_n0, padding, pattern) {
+		var minimumSize = _n0;
 		var paddingCells = function () {
 			if (!padding) {
 				return 6;
@@ -6632,7 +6627,7 @@ var author$project$GameOfLife$beginWithPattern = F3(
 		}();
 		var size = A2(
 			elm$core$Basics$max,
-			minSize,
+			minimumSize,
 			paddingCells + A2(
 				elm$core$Basics$max,
 				author$project$Pattern$width(pattern),
@@ -6941,10 +6936,14 @@ var elm$random$Random$generate = F2(
 		return elm$random$Random$command(
 			A2(elm$random$Random$map, tagger, generator));
 	});
-var author$project$Main$requestRandomPattern = A2(
-	elm$random$Random$generate,
-	author$project$Main$RandomPatternResponse,
-	author$project$Pattern$generator(author$project$Main$defaultGameDimensions));
+var author$project$Main$requestRandomPattern = function (_n0) {
+	var size = _n0;
+	return A2(
+		elm$random$Random$generate,
+		author$project$Main$RandomPatternResponse,
+		author$project$Pattern$generator(
+			{aq: size, aP: size}));
+};
 var elm$core$Array$getHelp = F3(
 	function (shift, index, tree) {
 		getHelp:
@@ -7210,7 +7209,6 @@ var author$project$Pattern$stripOptionalHeader = function (lines) {
 		return lines;
 	}
 };
-var elm$core$Basics$not = _Basics_not;
 var elm$core$Result$fromMaybe = F2(
 	function (err, maybe) {
 		if (!maybe.$) {
@@ -7354,18 +7352,13 @@ var author$project$Main$update = F2(
 				return author$project$Main$withoutCmd(
 					_Utils_update(
 						model,
-						{r: author$project$Controls$Empty}));
+						{
+							r: author$project$Controls$Open('')
+						}));
 			case 11:
 				var userInput = msg.a;
 				var _n2 = author$project$Pattern$parseLife106Format(userInput);
-				if (_n2.$ === 1) {
-					return author$project$Main$withoutCmd(
-						_Utils_update(
-							model,
-							{
-								r: author$project$Controls$Invalid(userInput)
-							}));
-				} else {
+				if (!_n2.$) {
 					var parsedPattern = _n2.a;
 					return author$project$Main$withoutCmd(
 						A3(
@@ -7375,6 +7368,13 @@ var author$project$Main$update = F2(
 							_Utils_update(
 								model,
 								{r: author$project$Controls$Closed, H: 0})));
+				} else {
+					return author$project$Main$withoutCmd(
+						_Utils_update(
+							model,
+							{
+								r: author$project$Controls$Open(userInput)
+							}));
 				}
 			case 12:
 				return author$project$Main$withoutCmd(
@@ -7382,7 +7382,9 @@ var author$project$Main$update = F2(
 						model,
 						{r: author$project$Controls$Closed}));
 			case 13:
-				return _Utils_Tuple2(model, author$project$Main$requestRandomPattern);
+				return _Utils_Tuple2(
+					model,
+					author$project$Main$requestRandomPattern(author$project$Main$defaultGameSize));
 			case 14:
 				var randomPattern = msg.a;
 				return author$project$Main$withoutCmd(
