@@ -5466,7 +5466,7 @@ var author$project$Main$document = function (model) {
 				author$project$Main$viewGame(model),
 				author$project$Main$viewControls(model)
 			]),
-		a9: 'Game of Life!!!##'
+		a9: 'Game of Life'
 	};
 };
 var author$project$Controls$Closed = {$: 0};
