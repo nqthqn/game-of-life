@@ -3,7 +3,7 @@ module Main exposing (main)
 import Browser exposing (Document)
 import Browser.Events as Events
 import Controls exposing (ImportField(..), Speed(..), Status(..), UserInput)
-import GameOfLife exposing (GameOfLife, GameSize(..), Padding(..), Theme(..), Zoom(..))
+import GameOfLife exposing (GameOfLife, Padding(..), Size(..), Theme(..), Zoom(..))
 import History exposing (History)
 import Html exposing (Html, div, node, text)
 import Html.Attributes exposing (class, style)
@@ -22,12 +22,6 @@ type Mouse
     | Down
 
 
-type alias Dimensions =
-    { width : Int
-    , height : Int
-    }
-
-
 type alias Model =
     { game : History GameOfLife
     , status : Status
@@ -43,40 +37,38 @@ type alias Model =
 -- INIT
 
 
+defaultGameSize : Size
+defaultGameSize =
+    Size 20
+
+
 init : ( Model, Cmd Msg )
 init =
-    withoutCmd initialModel
-
-
-initialModel : Model
-initialModel =
-    { status = Paused
-    , game = History.begin (GameOfLife.begin defaultGameSize)
-    , mouse = Up
-    , speed = Slow
-    , zoom = Far
-    , theme = Dark
-    , importField = Closed
-    }
-
-
-defaultGameSize : GameSize
-defaultGameSize =
-    GameSize 20
+    withoutCmd
+        { game = GameOfLife.begin defaultGameSize |> History.begin
+        , status = Paused
+        , mouse = Up
+        , speed = Slow
+        , zoom = Far
+        , theme = Dark
+        , importField = Closed
+        }
 
 
 
 -- UPDATE
 
 
+type alias Coordinate =
+    { x : Int
+    , y : Int
+    }
+
+
 type Msg
     = ClockTick
     | StepBack
     | StepForward
-    | ChangeStatus
-    | ChangeSpeed
-    | ChangeZoom
-    | ChangeTheme
     | MouseDown Coordinate
     | MouseOver Coordinate
     | MouseUp
@@ -85,13 +77,11 @@ type Msg
     | ImportFieldCancel
     | RandomPatternRequest
     | RandomPatternResponse Pattern
+    | ChangeStatus
+    | ChangeSpeed
+    | ChangeZoom
+    | ChangeTheme
     | NoOp
-
-
-type alias Coordinate =
-    { x : Int
-    , y : Int
-    }
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -112,22 +102,6 @@ update msg model =
             tryRedoStep model
                 |> Maybe.withDefault (stepGame model)
                 |> pauseGame
-                |> withoutCmd
-
-        ChangeStatus ->
-            { model | status = nextStatus model.status }
-                |> withoutCmd
-
-        ChangeSpeed ->
-            { model | speed = nextSpeed model.speed }
-                |> withoutCmd
-
-        ChangeZoom ->
-            { model | zoom = nextZoom model.zoom }
-                |> withoutCmd
-
-        ChangeTheme ->
-            { model | theme = nextTheme model.theme }
                 |> withoutCmd
 
         MouseDown coordinate ->
@@ -174,12 +148,24 @@ update msg model =
             displayPattern WithoutPadding randomPattern model
                 |> withoutCmd
 
+        ChangeStatus ->
+            { model | status = nextStatus model.status }
+                |> withoutCmd
+
+        ChangeSpeed ->
+            { model | speed = nextSpeed model.speed }
+                |> withoutCmd
+
+        ChangeZoom ->
+            { model | zoom = nextZoom model.zoom }
+                |> withoutCmd
+
+        ChangeTheme ->
+            { model | theme = nextTheme model.theme }
+                |> withoutCmd
+
         NoOp ->
             withoutCmd model
-
-
-
--- UPDATE HELPERS
 
 
 withoutCmd : Model -> ( Model, Cmd msg )
@@ -192,25 +178,15 @@ pauseGame model =
     { model | status = Paused }
 
 
-displayPattern : Padding -> Pattern -> Model -> Model
-displayPattern padding pattern model =
-    let
-        newGame =
-            GameOfLife.beginWithPattern defaultGameSize padding pattern
-    in
-    History.record (always newGame) model.game
+stepGame : Model -> Model
+stepGame model =
+    History.record GameOfLife.step model.game
         |> setGame model
 
 
 toggleCell : Coordinate -> Model -> Model
 toggleCell coordinate model =
     History.record (GameOfLife.toggleCell coordinate) model.game
-        |> setGame model
-
-
-stepGame : Model -> Model
-stepGame model =
-    History.record GameOfLife.step model.game
         |> setGame model
 
 
@@ -226,9 +202,20 @@ tryRedoStep model =
         |> Maybe.map (setGame model)
 
 
-setGame : Model -> History GameOfLife -> Model
-setGame model game =
-    { model | game = game }
+displayPattern : Padding -> Pattern -> Model -> Model
+displayPattern padding pattern model =
+    let
+        gameWithPattern =
+            GameOfLife.beginWithPattern defaultGameSize padding pattern
+    in
+    History.record (always gameWithPattern) model.game
+        |> setGame model
+
+
+requestRandomPattern : Size -> Cmd Msg
+requestRandomPattern (Size size) =
+    Pattern.generator { width = size, height = size }
+        |> Random.generate RandomPatternResponse
 
 
 ifGameFinished : (Model -> Model) -> Model -> Model
@@ -240,10 +227,9 @@ ifGameFinished updateModel model =
         model
 
 
-requestRandomPattern : GameSize -> Cmd Msg
-requestRandomPattern (GameSize size) =
-    Pattern.generator { width = size, height = size }
-        |> Random.generate RandomPatternResponse
+setGame : Model -> History GameOfLife -> Model
+setGame model game =
+    { model | game = game }
 
 
 nextSpeed : Speed -> Speed
@@ -310,22 +296,18 @@ document model =
 bodyStyles : Theme -> Html msg
 bodyStyles theme =
     let
+        backgroundColor =
+            case theme of
+                Light ->
+                    "white"
+
+                Dark ->
+                    "rgb(15, 15, 15)"
+
         backgroundColorStyle =
-            "body { background-color: " ++ backgroundColor theme ++ "; }"
+            "body { background-color: " ++ backgroundColor ++ "; }"
     in
-    node "style"
-        []
-        [ text backgroundColorStyle ]
-
-
-backgroundColor : Theme -> String
-backgroundColor theme =
-    case theme of
-        Light ->
-            "white"
-
-        Dark ->
-            "rgb(15, 15, 15)"
+    node "style" [] [ text backgroundColorStyle ]
 
 
 viewGame : Model -> Html Msg
