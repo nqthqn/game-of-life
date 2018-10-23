@@ -6,12 +6,13 @@ echo "- Checking out deployment branch..."
 git checkout gh-pages
 echo
 
-echo "- Merging master into deployment branch"
+echo "- Merging master into deployment branch..."
 git merge master -m "Merging master"
 echo
 
 echo "- Installing dependencies..."
 yarn install
+echo
 
 echo "- Building..."
 yarn build --optimize
